@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+	<head>
+		<title>PHAC Connect</title>
+		<link href="styles/style.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div id="banner"><img src="images/gov.png" style="float: left;"/><button style="float:right;margin:3px;border-radius:5px;font-weight:bold;border:none;padding:2px" id="login">Login</button></div>
+		<form action="" id="form">
+			<div id="legend">
+				<table>
+					<tr>
+						<td style="font-size: 1.2em;"><strong>Legend</strong></td>
+						<td style="background-color:#FFE74C;
+							padding:5px;overflow:hidden;
+							border-radius:5px;">Government Broadcast</td>
+						<td style="background-color:#6BF178;
+							overflow:hidden;padding:5px;
+							border-radius:5px;">Department Broadcast</td>
+						<td style="background-color:#35A7FF;padding:5px;
+							overflow:hidden; border-radius:5px;">Subscribed Group</td>
+						<td style="border:1px solid #bbb;
+							border-radius:5px;padding:5px;
+							background: linear-gradient(135deg, #bbb 0%, #bbb 50%, #fff 51%, #fff 100%);">
+							General
+						</td>
+					</tr>
+				</table>
+			</div><div id="loginMsg">Please login to send messages ...</div><div id="control" style="display:none;">
+			<select id="ddlMsgType">
+				<option value="General" selected="selected">General</option>
+				<option value="Government">Government</option>
+				<option value="Department">Department</option>
+				<option value="Group">Group</option>
+			</select>
+			<input id="m" autocomplete="off" maxlength="140" placeholder="Broadcast a message ..."/>
+			<button>Send</button></div>
+		</form>
+		<div id="messages"></div>
+		<script src="//cdn.auth0.com/js/lock-7.12.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+		<script src="scripts/script.js"></script>
+	</body>
+</html>

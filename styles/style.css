@@ -1,0 +1,71 @@
+* {
+    font-family: Verdana, Tahoma;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    color: #333;
+    margin-top: 116px;
+	min-width: 700px;
+}
+#banner {
+	z-index: 100;
+    font-size: 30px;
+    text-align: center;
+    color: #fff;
+    background-color: #000;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+form {
+    background: black;
+    padding: 3px;
+    position: absolute;
+	top: 33px;
+    width: 100%;
+	min-width: 700px;
+}
+form input {
+    padding: 10px;
+    height: 45px;
+    width: 67%;
+    border-radius: 5px;
+}
+#loginMsg { height: 45px;}
+form button,
+form #ddlMsgType {
+    color: #333;
+    height: 45px;
+    padding: 10px;
+    border-radius: 5px;
+}
+form #ddlMsgType {
+    width: 22%;
+}
+form button {
+    width: 9%;
+}
+form #messages {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+#messages div {
+    padding: 4px 4px;
+    font-size: .8em;
+}
+#legend {
+    border-radius: 5px;
+    background-color: #fff;
+    margin-bottom: 3px;
+    font-size: .6em;
+}
+table {
+    width: 100%;
+    text-align: center;
+}
+td {
+    width: 20%;
+}
