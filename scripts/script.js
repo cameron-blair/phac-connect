@@ -1,7 +1,7 @@
-var lock = null;
+/**var lock = null;
 			$(document).ready(function() {
 				lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
-			});
+			}); **/
 			var userProfile;
 			var msgText = "";
 			var type = "";
@@ -9,23 +9,23 @@ var lock = null;
 			var username = "Guest";
 			$('#login').click(function(e) {
 				e.preventDefault();
-				lock.show(function(err, profile, token) {
+				/**lock.show(function(err, profile, token) {
 					if (err) {
 						alert('There was an error');
 						alert(err);
-					} else {
+					} else {**/
 						$('#control').css("display", "");
 						$('#loginMsg').css("display", "none");
-						userToken = token;
-						localStorage.setItem('userToken', token);
-						userProfile = profile;
-						$('#login').html(profile.email);
-						var emailArr = profile.email.split("@");
-						username = emailArr[0];
-					}
-				})
+						//userToken = token;
+						//localStorage.setItem('userToken', token);
+						//userProfile = profile;
+						//$('#login').html(profile.email);
+						//var emailArr = profile.email.split("@");
+						//username = emailArr[0];
+					//}
+				//})
 			});
-			var socket = io();
+			var socket = io.connect("http://nodejs-phacconnect.rhcloud.com:8000");
 			$('form').submit(function(e) {
 			e.preventDefault();
 				if ($('#m').val() !== "") {
@@ -37,15 +37,15 @@ var lock = null;
 				}
 				return false;
 			});
-			socket.on('connect', function() {}).emit('authenticate', {
-				token: userToken
-			}); // send the jwt
+			//socket.on('connect', function() {}).emit('authenticate', {
+			//	token: userToken
+			//}); // send the jwt
 			
-			socket.on('load history', function(msgs){
-				for(var i=msgs.length-1; i >= 0; i--){
-					handleMsg(msgs[i]);
-				}
-			});
+			//socket.on('load history', function(msgs){
+			//	for(var i=msgs.length-1; i >= 0; i--){
+			//		handleMsg(msgs[i]);
+			//	}
+			//});
 
 			socket.on('chat message', function(msg) {
 				handleMsg(msg);
