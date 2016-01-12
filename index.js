@@ -3,7 +3,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var socketioJwt = require('socketio-jwt');
 var jwt = require('express-jwt');
-//var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
 //server.listen(3001);
 
@@ -63,17 +63,16 @@ io.sockets.on('connection', socketioJwt.authorize({
 
 io.sockets.on('connection', function(socket) {
 
-	/**var query = Chat.find({});
+	var query = Chat.find({});
 	query.sort('-created').limit(80).exec(function(err,msgs) {
 		if(err) throw err;
 		socket.emit('load history', msgs);
 	});
-	**/
 	socket.on('chat message', function(msg){
-		//var newMsg = new Chat({user: msg.user, msg: msg.msg, type: msg.type});
-		//newMsg.save(function(err){
-		//	if(err) throw err;
+		var newMsg = new Chat({user: msg.user, msg: msg.msg, type: msg.type});
+		newMsg.save(function(err){
+			if(err) throw err;
 			io.sockets.emit('chat message', msg);
-		//});
+		});
 	});
 });

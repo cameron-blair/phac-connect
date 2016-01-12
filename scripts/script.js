@@ -43,13 +43,13 @@
 			socket.on('connect', function() {}).emit('authenticate', {
 				token: userToken
 			}); // send the jwt
-/**
+			
 			socket.on('load history', function(msgs){
 				for(var i=msgs.length-1; i >= 0; i--){
 					handleMsg(msgs[i]);
 				}
 			});
-**/
+
 			socket.on('chat message', function(msg) {
 				handleMsg(msg);
 			});
