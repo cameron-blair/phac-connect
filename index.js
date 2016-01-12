@@ -4,8 +4,8 @@ var io = require('socket.io').listen(server);
 var socketioJwt = require('socketio-jwt');
 var jwt = require('express-jwt');
 //var mongoose = require('mongoose');
-//server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
-server.listen(3001);
+server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
+//server.listen(3001);
 
 var jwtCheck = jwt({
   secret: new Buffer('HO_BSpKmYZWaYuXRbhuC0zbDUE6dWeMLkdqVTrOzvV8wmMnwBgj8vijMHPBsXVwe', 'base64'),
