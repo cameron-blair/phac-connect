@@ -1,9 +1,10 @@
 var app = require('express')();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
-
-app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 3000);  
-app.set('ipaddr', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");  
+//var socketioJwt = require('socketio-jwt');
+//var jwt = require('express-jwt');
+//var mongoose = require('mongoose');
+server.listen(3001);
 /**
 var jwtCheck = jwt({
   secret: new Buffer('HO_BSpKmYZWaYuXRbhuC0zbDUE6dWeMLkdqVTrOzvV8wmMnwBgj8vijMHPBsXVwe', 'base64'),
@@ -65,10 +66,10 @@ io.sockets.on('connection', socketioJwt.authorize({
     timeout: 15000 // 15 seconds to send the authentication message
   })).on('authenticated', function(socket) {
   });
-  **/
+**/
 io.sockets.on('connection', function(socket) {
-/**
-	var query = Chat.find({});
+
+	/**var query = Chat.find({});
 	query.sort('-created').limit(80).exec(function(err,msgs) {
 		if(err) throw err;
 		socket.emit('load history', msgs);

@@ -33,7 +33,12 @@ form input {
     width: 67%;
     border-radius: 5px;
 }
-#loginMsg { height: 45px;}
+#loginMsg {
+			line-height: 45px;
+			vertical-align: middle;
+			color: #bbb;
+			text-align: center;
+			font-weight: bold;}
 form button,
 form #ddlMsgType {
     color: #333;
