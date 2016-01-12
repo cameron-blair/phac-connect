@@ -1,16 +1,17 @@
 var app = require('express')();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
-//var socketioJwt = require('socketio-jwt');
-//var jwt = require('express-jwt');
+var socketioJwt = require('socketio-jwt');
+var jwt = require('express-jwt');
 //var mongoose = require('mongoose');
-server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
-/**
+//server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
+server.listen(3001);
+
 var jwtCheck = jwt({
   secret: new Buffer('HO_BSpKmYZWaYuXRbhuC0zbDUE6dWeMLkdqVTrOzvV8wmMnwBgj8vijMHPBsXVwe', 'base64'),
   audience: 'TjWERMTxpeB9snWo1rSRjLrEhPNNWziz'
 });
-
+/**
 mongoose.connect('mongodb://localhost/chat', function(error) {
 	if (error) {
 		console.log(error);
@@ -28,9 +29,9 @@ var chatSchema = mongoose.Schema({
 	});
 	
 var Chat = mongoose.model('Message', chatSchema);
-
-app.use('/index.html', jwtCheck);
 **/
+app.use('/index.html', jwtCheck);
+
 app.get('/', function(req, res) {
       res.sendFile(__dirname + '/index.html');  
     });
@@ -60,13 +61,13 @@ app.get('/users/av/Cameron.png', function(req, res){
    res.sendFile(__dirname + '/users/av/Cameron.png');
 });
 
-/**
+
 io.sockets.on('connection', socketioJwt.authorize({
     secret: Buffer('HO_BSpKmYZWaYuXRbhuC0zbDUE6dWeMLkdqVTrOzvV8wmMnwBgj8vijMHPBsXVwe', 'base64'),
     timeout: 15000 // 15 seconds to send the authentication message
   })).on('authenticated', function(socket) {
   });
-**/
+
 io.sockets.on('connection', function(socket) {
 
 	/**var query = Chat.find({});

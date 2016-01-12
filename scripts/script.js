@@ -1,9 +1,7 @@
-/**
 			var lock = null;
 			$(document).ready(function() {
 				lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
 			});
-**/
 			var userProfile;
 			var msgText = "";
 			var type = "";
@@ -11,15 +9,15 @@
 			var username = "Guest";
 			$('#login').click(function(e) {
 				e.preventDefault();
-				/**lock.show(function(err, profile, token) {
+				lock.show(function(err, profile, token) {
 					if (err) {
 						alert('There was an error');
 						alert(err);
 					} else {
-				**/
+				
 						$('#control').css("display", "");
 						$('#loginMsg').css("display", "none");
-				/**		userToken = token;
+						userToken = token;
 						localStorage.setItem('userToken', token);
 						userProfile = profile;
 						$('#login').html(profile.email);
@@ -27,7 +25,7 @@
 						username = emailArr[0];
 					}
 				 })
-				 **/
+				 
 			});
 			var socket = io();
 			$('form').submit(function(e) {
@@ -41,10 +39,11 @@
 				}
 				return false;
 			});
-/**
+
 			socket.on('connect', function() {}).emit('authenticate', {
 				token: userToken
 			}); // send the jwt
+/**
 			socket.on('load history', function(msgs){
 				for(var i=msgs.length-1; i >= 0; i--){
 					handleMsg(msgs[i]);
