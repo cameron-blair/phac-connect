@@ -11,15 +11,8 @@ var jwtCheck = jwt({
   secret: new Buffer('HO_BSpKmYZWaYuXRbhuC0zbDUE6dWeMLkdqVTrOzvV8wmMnwBgj8vijMHPBsXVwe', 'base64'),
   audience: 'TjWERMTxpeB9snWo1rSRjLrEhPNNWziz'
 });
-/**
-mongoose.connect('mongodb://localhost/chat', function(error) {
-	if (error) {
-		console.log(error);
-	}
-	else {
-		console.log('[MongoDB] Connection: Success');
-	}
-});
+
+mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
 
 var chatSchema = mongoose.Schema({
 	user: String,
@@ -29,7 +22,7 @@ var chatSchema = mongoose.Schema({
 	});
 	
 var Chat = mongoose.model('Message', chatSchema);
-**/
+
 app.use('/index.html', jwtCheck);
 
 app.get('/', function(req, res) {
