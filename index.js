@@ -73,7 +73,7 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('load history', msgs);
 	});
 	socket.on('chat message', function(msg){
-		var newMsg = new Chat({user: msg.user, msg: msg.msg, type: msg.type});
+		var newMsg = new Chat({user: msg.user, msg: msg.msg, type: msg.type, created: msg.created});
 		newMsg.save(function(err){
 			if(err) throw err;
 			io.sockets.emit('chat message', msg);

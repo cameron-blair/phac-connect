@@ -5,6 +5,7 @@
 			var userProfile;
 			var msgText = "";
 			var type = "";
+			var now = "";
 			var userToken;
 			var username = "Guest";
 			$('#login').click(function(e) {
@@ -33,7 +34,8 @@
 				if ($('#m').val() !== "") {
 					msgText = $('#m').val();
 					type = $('#ddlMsgType').val();
-					socket.emit('chat message', {user: username, msg: msgText, type: type});
+					now = new Date();
+					socket.emit('chat message', {user: username, msg: msgText, type: type, created: now});
 					$('#m').val('');
 					$('#ddlMsgType').val("General");
 				}
@@ -58,7 +60,7 @@
 				var u = msg.user;
 				var style = msg.type;
 				var userMsg = msg.msg;
-				var date = msg.created.substring(0,10);
+				var date = msg.created;
 				userMsg = userMsg.replace(/;/g, "");
 				userMsg = userMsg.replace(/&/g, "and");
 				var styleString = '';
@@ -89,11 +91,11 @@
 				$('#messages').prepend($('<div onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</span>"));
 				$('.msgSpan').first().text(userMsg); // This is to ensure no html can be applied to the messages.
 				var share = "<span style='margin-left:10px;'>";
-				share += "<span id=\"imgSpan\" style=\"visibility:hidden\"><a target='_blank' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + userMsg + " - " + u + " (PHAC Connect, " + date + ")'><button class='shareButton'><img style='width:18px;height:12px;' src='images/tweet.png'/> Twitter</button></a> ";
+				share += "<span id=\"imgSpan\" style=\"visibility:hidden\"><a target='_blank' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + userMsg + " - " + u + " (PHAC Connect, " + date.substring(0,10) + ")'><button class='shareButton'><img style='width:18px;height:12px;' src='images/tweet.png'/> Twitter</button></a> ";
 				share += "<a style='display:inline-block;' href='mailto:?subject=PHAC Connect&body=";
-				share += userMsg + " - " + u + "(PHAC Connect, " + date + ")";
+				share += userMsg + " - " + u + "(PHAC Connect, " + date.substring(0,10) + ")";
 				share += "'><button class='shareButton'><img style='width:18px;height:12px;' src='images/mail.png'/> Email</button></a> ";
-				share += "<em>Posted: " + date + "</em>";
+				share += "<em>Posted: " + date.substring(0,10) + "</em>";
 				share += "</span></span>";
 				var msg = $('#messages div').first().html() + share + "</span>";
 				$('#messages div').first().html(msg);
