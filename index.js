@@ -13,6 +13,7 @@ var jwtCheck = jwt({
 });
 
 mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
+//mongoose.connect('mongodb://localhost/messages');
 
 var chatSchema = mongoose.Schema({
 	user: String,
@@ -48,6 +49,9 @@ app.get('/users/users.txt', function(req, res){
 
 app.get('/images/tweet.png', function(req, res){
    res.sendFile(__dirname + '/images/tweet.png');
+});
+app.get('/images/mail.png', function(req, res){
+   res.sendFile(__dirname + '/images/mail.png');
 });
 
 app.get('/users/av/Cameron.png', function(req, res){

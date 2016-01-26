@@ -6,9 +6,16 @@
 }
 body {
     color: #333;
-    margin-top: 116px;
+    margin-top: 115px;
 	min-width: 700px;
 }
+
+@-moz-document url-prefix() {
+	body {
+		margin-top: 116px;
+	}
+}
+
 #banner {
 	z-index: 100;
     font-size: 30px;
@@ -33,6 +40,10 @@ form input {
     width: 67%;
     border-radius: 5px;
 }
+button::-moz-focus-inner {
+	border: 0;
+	padding: 0;
+}
 #loginMsg {
 			line-height: 45px;
 			vertical-align: middle;
@@ -52,6 +63,15 @@ form #ddlMsgType {
 form button {
     width: 9%;
 }
+
+.shareButton {
+	padding:2px;
+	border-radius:5px;
+	color:#333;
+	font-size:.8em;
+	border:1px solid #aaa;
+}
+
 form #messages {
     margin: 0;
     padding: 0;

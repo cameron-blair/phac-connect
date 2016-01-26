@@ -58,6 +58,7 @@
 				var u = msg.user;
 				var style = msg.type;
 				var userMsg = msg.msg;
+				var date = msg.created.substring(0,10);
 				userMsg = userMsg.replace(/;/g, "");
 				userMsg = userMsg.replace(/&/g, "and");
 				var styleString = '';
@@ -88,10 +89,14 @@
 				$('#messages').prepend($('<div onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</span>"));
 				$('.msgSpan').first().text(userMsg); // This is to ensure no html can be applied to the messages.
 				var share = "<span style='margin-left:10px;'>";
-				share += "<span id=\"imgSpan\" style=\"visibility:hidden\"><a target='_blank' style='display:inline-block;' href=\"https://twitter.com/intent/tweet?&text=" + userMsg + " - Shared via PHAC Connect\"><button style='border-radius:5px;color:#333;font-size:.8em;border:1px solid #aaa'><img style=\"width:18px;height:12px;\" src=\"images/tweet.png\"/> Share</button></a></span></span>";
+				share += "<span id=\"imgSpan\" style=\"visibility:hidden\"><a target='_blank' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + userMsg + " - " + u + " (PHAC Connect, " + date + ")'><button class='shareButton'><img style='width:18px;height:12px;' src='images/tweet.png'/> Twitter</button></a> ";
+				share += "<a style='display:inline-block;' href='mailto:?subject=PHAC Connect&body=";
+				share += userMsg + " - " + u + "(PHAC Connect, " + date + ")";
+				share += "'><button class='shareButton'><img style='width:18px;height:12px;' src='images/mail.png'/> Email</button></a> ";
+				share += "<em>Posted: " + date + "</em>";
+				share += "</span></span>";
 				var msg = $('#messages div').first().html() + share + "</span>";
 				$('#messages div').first().html(msg);
-				
 			}
 
 			function showButton(span) {
