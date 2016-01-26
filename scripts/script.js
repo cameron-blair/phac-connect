@@ -91,11 +91,11 @@
 				$('#messages').prepend($('<div onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</span>"));
 				$('.msgSpan').first().text(userMsg); // This is to ensure no html can be applied to the messages.
 				var share = "<span style='margin-left:10px;'>";
-				share += "<span id=\"imgSpan\" style=\"visibility:hidden\"><a target='_blank' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + userMsg + " - " + u + " (PHAC Connect, " + date.substring(0,10) + ")'><button class='shareButton'><img style='width:18px;height:12px;' src='images/tweet.png'/> Twitter</button></a> ";
+				share += "<span id=\"imgSpan\" style=\"visibility:hidden\"><a target='_blank' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + userMsg + " - " + u + " (PHAC Connect, " + date.substring(0,10) + ", " + date.substring(11,16) + ")'><button class='shareButton'><img style='width:18px;height:12px;' src='images/tweet.png'/> Twitter</button></a> ";
 				share += "<a style='display:inline-block;' href='mailto:?subject=PHAC Connect&body=";
-				share += userMsg + " - " + u + "(PHAC Connect, " + date.substring(0,10) + ")";
+				share += userMsg + " - " + u + "(PHAC Connect, " + date.substring(0,10) + ", " + date.substring(11,16) + ")";
 				share += "'><button class='shareButton'><img style='width:18px;height:12px;' src='images/mail.png'/> Email</button></a> ";
-				share += "<em>Posted: " + date.substring(0,10) + "</em>";
+				share += "<em>Posted: " + date.substring(0,10) + ", " + date.substring(11,16) + "</em>";
 				share += "</span></span>";
 				var msg = $('#messages div').first().html() + share + "</span>";
 				$('#messages div').first().html(msg);
