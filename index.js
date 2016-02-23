@@ -19,6 +19,7 @@ var chatSchema = mongoose.Schema({
 	user: String,
 	msg: String,
 	type: String,
+	avatar: String,
 	created: {type: Date, default: Date.now}
 	});
 	
@@ -54,8 +55,8 @@ app.get('/images/mail.png', function(req, res){
    res.sendFile(__dirname + '/images/mail.png');
 });
 
-app.get('/users/av/Cameron.png', function(req, res){
-   res.sendFile(__dirname + '/users/av/Cameron.png');
+app.get('/users/av/Default.png', function(req, res){
+   res.sendFile(__dirname + '/users/av/Default.png');
 });
 
 
@@ -73,7 +74,7 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('load history', msgs);
 	});
 	socket.on('chat message', function(msg){
-		var newMsg = new Chat({user: msg.user, msg: msg.msg, type: msg.type, created: msg.created});
+		var newMsg = new Chat({user: msg.user, msg: msg.msg, type: msg.type, avatar: msg.avatar, created: msg.created});
 		newMsg.save(function(err){
 			if(err) throw err;
 			io.sockets.emit('chat message', msg);
