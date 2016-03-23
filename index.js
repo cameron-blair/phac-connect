@@ -18,7 +18,7 @@ mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
 var chatSchema = mongoose.Schema({
 	user: String,
 	msg: String,
-	type: String,
+	tags: [String],
 	avatar: String,
 	created: {type: Date, default: Date.now}
 	});
@@ -51,8 +51,24 @@ app.get('/users/users.txt', function(req, res){
 app.get('/images/tweet.png', function(req, res){
    res.sendFile(__dirname + '/images/tweet.png');
 });
+
+app.get('/images/tags/hr.png', function(req, res){
+   res.sendFile(__dirname + '/images/tags/hr.png');
+});
+
+app.get('/images/tags/announcements.png', function(req, res){
+   res.sendFile(__dirname + '/images/tags/announcements.png');
+});
+
+app.get('/images/tags/publichealth.png', function(req, res){
+   res.sendFile(__dirname + '/images/tags/publichealth.png');
+});
+
 app.get('/images/mail.png', function(req, res){
    res.sendFile(__dirname + '/images/mail.png');
+});
+app.get('/images/time.png', function(req, res){
+   res.sendFile(__dirname + '/images/time.png');
 });
 
 app.get('/users/av/Default.png', function(req, res){
@@ -74,7 +90,7 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('load history', msgs);
 	});
 	socket.on('chat message', function(msg){
-		var newMsg = new Chat({user: msg.user, msg: msg.msg, type: msg.type, avatar: msg.avatar, created: msg.created});
+		var newMsg = new Chat({user: msg.user, msg: msg.msg, tags: msg.tags, avatar: msg.avatar, created: msg.created});
 		newMsg.save(function(err){
 			if(err) throw err;
 			io.sockets.emit('chat message', msg);

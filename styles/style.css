@@ -6,13 +6,13 @@
 }
 body {
     color: #333;
-    margin-top: 115px;
+    margin-top: 119px;
 	min-width: 700px;
 }
 
 @-moz-document url-prefix() {
 	body {
-		margin-top: 116px;
+		margin-top: 120px;
 	}
 }
 
@@ -29,62 +29,105 @@ body {
 form {
     background: black;
     padding: 3px;
+	padding-bottom: 0px;
     position: absolute;
 	top: 33px;
     width: 100%;
 	min-width: 700px;
 }
-form input {
+form #msgControl input {
     padding: 10px;
     height: 45px;
-    width: 67%;
+	margin-bottom: 5px;
+	border: 2px;
+    width: 100%;
     border-radius: 5px;
+	margin-top: 5px;
 }
-button::-moz-focus-inner {
+#msgControl {
+width: 77%;
+}
+#btnSubmit::-moz-focus-inner {
 	border: 0;
 	padding: 0;
 }
 #loginMsg {
-			line-height: 45px;
+			line-height: 55px;
 			vertical-align: middle;
 			color: #bbb;
 			text-align: center;
 			font-weight: bold;}
-form button,
-form #ddlMsgType {
+#btnSubmit {
     color: #333;
     height: 45px;
-    padding: 10px;
+	margin-top: 5px;
     border-radius: 5px;
 }
-form #ddlMsgType {
-    width: 22%;
+#tags {
+width: 12%;
+height: 45px;
 }
-form button {
-    width: 9%;
+legend {
+color: #bbb;
+font-size: .6em;
+margin-left: 4px;
+}
+fieldset {
+color: #fff;
+height: 50px;
+border-radius: 5px;
+border-color: #bbb;
 }
 
-.shareButton {
-	padding:2px;
-	border-radius:5px;
-	color:#333;
-	font-size:.8em;
-	border:1px solid #aaa;
+#messagesHR, #messagesA, #messagesPH, #messagesALL {
+width: 20%;
+font-size: .8em;
+overflow-y:scroll;
 }
 
-form #messages {
-    margin: 0;
-    padding: 0;
+#btnSubmit {
     width: 100%;
 }
-#messages div {
-    padding: 4px 4px;
-    font-size: .8em;
+#tags, #btnControl {
+margin-left: 5px;
 }
+#btnControl {
+width: 10%;
+}
+
+ul {
+cursor: pointer;
+	list-style-type: none;
+	margin-left: 10px;
+	padding: 0;
+	font-size: .6em;
+}
+
+li {
+line-height: 8px;
+margin: 4px;
+vertical-align: middle;
+}
+
+.checkboxes {
+display: none;
+}
+
+.inline, .inlineIMG {
+	float: left;
+	width: auto;
+}
+.inlineIMG {
+	margin-right: 10px !important;
+}
+
+.borderBottom {
+outline: 1px solid #888;
+}
+
 #legend {
     border-radius: 5px;
     background-color: #fff;
-    margin-bottom: 3px;
     font-size: .6em;
 }
 table {
@@ -93,4 +136,14 @@ table {
 }
 td {
     width: 20%;
+}
+
+.messageDivs {
+	width:auto;
+	margin: 0;
+	padding: 4px 4px;
+}
+
+#twitter {
+	width: 20%;
 }
