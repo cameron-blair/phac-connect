@@ -127,16 +127,16 @@
 					case "A":
 						styleString = 'style="background-color:';
 						if (numDivs % 2 == 0)
-						styleString += '#59DF66"';
-						else
 						styleString += '#6BF178"';
+						else
+						styleString += '#59DF66"';
 						break;
 					case "PH":
 						styleString = 'style="background-color:';
 						if (numDivs % 2 == 0)
-						styleString += '#2695ED"';
-						else
 						styleString += '#35A7FF"';
+						else
+						styleString += '#2695ED"';
 						break;
 				}
 				if (tag === 'ALL') {
@@ -152,11 +152,11 @@
 				$('#messages' + tag).prepend($('<div class="messageDivs" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</span>"));
 				$('#messages' + tag + ' .messageDivs .msgSpan').first().text(userMsg); // This is to ensure no html can be applied to the messages.
 				var share = "<span style='margin-left:10px;'>";
-				share += "<span id=\"imgSpan\" style=\"opacity:0\"><a target='_blank' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + userMsg + " - " + u + " (PHAC Connect :: " + date + ")'><img style='width:18px;height:12px;' src='images/tweet.png'/></a> ";
+				share += "<span id=\"imgSpan\" style=\"opacity:0\"><a target='_blank' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + userMsg + " - " + u + " (PHAC Connect :: " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
 				share += "<a style='display:inline-block;' href='mailto:?subject=PHAC Connect&body=";
 				share += userMsg + " - " + u + "(PHAC Connect :: " + date + ")";
-				share += "'><img style='width:18px;height:12px;' src='images/mail.png'/></a> ";
-				share += "<img style='width:17px;height:12px;' title='Posted: " + date + "' src='images/time.png'/>";
+				share += "'><img style='width:12px;height:12px;' src='images/mail.png'/></a> ";
+				share += "<img style='width:12px;height:12px;' title='Posted: " + date + "' src='images/time.png'/>";
 				share += "</span></span>";
 				var msg = $('#messages' + tag + ' div').first().html() + share + "</span>";
 				$('#messages' + tag + ' div').first().html(msg);
