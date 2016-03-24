@@ -8,26 +8,7 @@
 	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 		<div id="banner"><img src="images/gov.png" style="float: left;"/><button style="float:right;margin:3px;border-radius:5px;font-weight:bold;border:none;padding:2px" id="login">Login</button></div>
 		<form action="" id="form">
-			<div id="legend">
-				<table>
-					<tr>
-						<td>Health Topics</td>
-						<td style="background-color:#FFE74C;
-							padding:5px;overflow:hidden;
-							border-radius:5px;">Human Resources</td>
-						<td style="background-color:#6BF178;
-							overflow:hidden;padding:5px;
-							border-radius:5px;">Announcements</td>
-						<td style="background-color:#35A7FF;padding:5px;
-							overflow:hidden; border-radius:5px;">Public Health</td>
-						<td style="border:1px solid #bbb;
-							border-radius:5px;padding:5px;
-							background: linear-gradient(135deg, #bbb 0%, #bbb 50%, #fff 51%, #fff 100%);">
-							General
-						</td>
-					</tr>
-				</table>
-			</div>
+			
 			<div id="loginMsg">Please login to send messages ...</div>
 			
 			<div id="control" style="display:none">
@@ -43,10 +24,28 @@
 				</div>
 				<div id="btnControl" class="inline"><input id="btnSubmit" type="submit" text="Send"/></div>
 			</div>
-			
+			<div id="legend">
+				<table>
+					<tr>
+						<td style="padding:5px;
+							background: linear-gradient(135deg, #ededed 50%, #ededed 50%, #fff 51%, #fff 100%);">
+							Main
+						</td>
+						<td style="background-color:#6BF178;padding:5px;">Announcements</td>
+						<td style="background-color:#FFE74C;
+							padding:5px;">Human Resources</td>
+						<td style="background-color:#35A7FF;padding:5px;">Public Health</td>
+						
+						<td style="background-color:#fff;">Health Topics</td>
+					</tr>
+				</table>
+			</div>
 		</form>
-		<div id="twitter" class="inline"><a id="twitterA" class="twitter-timeline" href="https://twitter.com/PHAC_Connect/lists/health-topics" height="873px" data-chrome="transparent noborders nofooter noheader" data-widget-id="702625028114935808">Tweets from https://twitter.com/PHAC_Connect/lists/health-topics</a></div><div id="messagesHR" class="inline"></div><div id="messagesA" class="inline"></div><div id="messagesPH" class="inline"></div><div id="messagesALL" class="inline"></div>
-
+		<div id="messagesALL" class="inline"></div>
+		<div id="messagesA" class="inline"></div>
+		<div id="messagesHR" class="inline"></div>		
+		<div id="messagesPH" class="inline"></div>
+		<div id="twitter" class="inline"><a id="twitterA" class="twitter-timeline" href="https://twitter.com/PHAC_Connect/lists/health-topics" height="873px" data-chrome="transparent noborders nofooter noheader" data-widget-id="702625028114935808">Tweets from https://twitter.com/PHAC_Connect/lists/health-topics</a></div>
 
 		<script src="//cdn.auth0.com/js/lock-7.12.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>

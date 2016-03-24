@@ -1,4 +1,4 @@
-			var height = window.innerHeight - 122;
+			var height = window.innerHeight - 114;
 			document.getElementById("messagesHR").style.height = height + "px";
 			document.getElementById("messagesA").style.height = height + "px";
 			document.getElementById("messagesPH").style.height = height + "px";

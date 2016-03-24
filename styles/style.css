@@ -6,7 +6,7 @@
 }
 body {
     color: #333;
-    margin-top: 119px;
+    margin-top: 114px;
 	min-width: 700px;
 }
 
@@ -27,8 +27,7 @@ body {
     width: 100%;
 }
 form {
-    background: black;
-    padding: 3px;
+    background-color: #000;
 	padding-bottom: 0px;
     position: absolute;
 	top: 33px;
@@ -70,7 +69,6 @@ height: 45px;
 legend {
 color: #bbb;
 font-size: .6em;
-margin-left: 4px;
 }
 fieldset {
 color: #fff;
@@ -82,7 +80,7 @@ border-color: #bbb;
 #messagesHR, #messagesA, #messagesPH, #messagesALL {
 width: 20%;
 font-size: .8em;
-overflow-y:scroll;
+overflow-y: scroll;
 }
 
 #btnSubmit {
@@ -126,13 +124,16 @@ outline: 1px solid #888;
 }
 
 #legend {
-    border-radius: 5px;
-    background-color: #fff;
-    font-size: .6em;
+    background-color: #000;
+    font-size: .8em;
+	font-weight: bold;
 }
 table {
+	left: 0;
+	right: 0;
     width: 100%;
     text-align: center;
+	border-collapse: collapse;
 }
 td {
     width: 20%;
