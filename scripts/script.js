@@ -1,11 +1,31 @@
 			var height = window.innerHeight - 114;
-			document.getElementById("messagesHR").style.height = height + "px";
-			document.getElementById("messagesA").style.height = height + "px";
-			document.getElementById("messagesPH").style.height = height + "px";
-			document.getElementById("messagesALL").style.height = height + "px";
+			
+			$('#messagesALL').slimScroll({
+				height: height + 'px',
+				width: '20%'
+			});
+			$('#messagesPH').slimScroll({
+				height: height + 'px',
+				width: '20%'
+			});
+			$('#messagesA').slimScroll({
+				height: height + 'px',
+				width: '20%'
+			});
+			$('#messagesHR').slimScroll({
+				height: height + 'px',
+				width: '20%'
+			});
+			
+			$('#login').button();
+			$('#login').html('Log in');
+			$('#btnSubmit').button();
 			
 			var lock = null;
 			$(document).ready(function() {
+				setTimeout(function() {
+					$('#twitter-widget-0').height(height-3);
+				},3000);
 				lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
 			});
 			var userProfile;
@@ -89,7 +109,6 @@
 			});
 			
 			function handleMsg(msg) {
-				console.log(msg.tags);
 				var u = msg.user;
 				var av = msg.avatar;
 				if (!av) {
@@ -97,7 +116,6 @@
 				}
 				var tags = msg.tags;
 				var userMsg = msg.msg;
-				console.log(userMsg);
 				var date = msg.created;
 				date = date.substring(0,10) + ", " + date.substring(11,16);
 				userMsg = userMsg.replace(/;/g, "");
@@ -152,9 +170,22 @@
 				$('#messages' + tag).prepend($('<div class="messageDivs" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</span>"));
 				$('#messages' + tag + ' .messageDivs .msgSpan').first().text(userMsg); // This is to ensure no html can be applied to the messages.
 				var share = "<span style='margin-left:10px;'>";
-				share += "<span id=\"imgSpan\" style=\"opacity:0\"><a target='_blank' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + userMsg + " - " + u + " (PHAC Connect :: " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
+				var twitterMsg = userMsg.replace(/#/g, "%23");
+				/*
+				var hashSplit = userMsg.split("");
+				var hashStart = [];
+				var hashEnd = [];
+				var last = -1;
+				for (var i = 0; i < hashSplit.length; i++) {
+					if (hashSplit[i] == '#') {
+						hashStart.push(i);
+						last = i;
+					}
+				}
+				*/
+				share += "<span id=\"imgSpan\" style=\"opacity:0\"><a target='_blank' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
 				share += "<a style='display:inline-block;' href='mailto:?subject=PHAC Connect&body=";
-				share += userMsg + " - " + u + "(PHAC Connect :: " + date + ")";
+				share += userMsg + " - " + u + "(PHAC Connect // " + date + ")";
 				share += "'><img style='width:12px;height:12px;' src='images/mail.png'/></a> ";
 				share += "<img style='width:12px;height:12px;' title='Posted: " + date + "' src='images/time.png'/>";
 				share += "</span></span>";

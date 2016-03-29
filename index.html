@@ -3,17 +3,24 @@
 	<head>
 		<title>PHAC Connect</title>
 		<link href="styles/style.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		<link rel="icon" type="image/x-icon" href="images/favicon.ico?">
 	</head>
 	<body>
-	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-		<div id="banner"><img src="images/gov.png" style="float: left;"/><button style="float:right;margin:3px;border-radius:5px;font-weight:bold;border:none;padding:2px" id="login">Login</button></div>
+
+	<script>
+	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+	</script>
+		<div id="banner"><img src="images/gov.png" style="float: left;"/><button style="float:right;margin:3px;padding:2px 5px 2px 5px !important;font-size:.6em !important;" id="login"></button></div>
 		<form action="" id="form">
 			
 			<div id="loginMsg">Please login to send messages ...</div>
 			
 			<div id="control" style="display:none">
-				<div id="msgControl" class="inline"><input id="m" autocomplete="off" maxlength="140" placeholder="Broadcast a message ..."/></div>
-				<div id="tags" class="inline">
+				<div id="msgControl" class="inlineCTRL"><input id="m" autocomplete="off" maxlength="140" placeholder="Broadcast a message ..."/></div>
+				<div id="tags" class="inlineCTRL">
 				<fieldset><legend>[tags]</legend>
 					<ul>
 						<li id="liHR"><input id="chkHR" type="checkbox" name="tags" value="HR" class="checkboxes"/><img id="imgHR" class="inlineIMG" title="Human Resources" style="margin-right:5px;" src="/images/tags/hr.png" width="25px" height="25px"/></li>
@@ -22,7 +29,7 @@
 					</ul>
 					</fieldset>
 				</div>
-				<div id="btnControl" class="inline"><input id="btnSubmit" type="submit" text="Send"/></div>
+				<div id="btnControl" class="inlineCTRL"><input id="btnSubmit" type="submit" text="Send"/></div>
 			</div>
 			<div id="legend">
 				<table>
@@ -45,11 +52,11 @@
 		<div id="messagesA" class="inline"></div>
 		<div id="messagesHR" class="inline"></div>		
 		<div id="messagesPH" class="inline"></div>
-		<div id="twitter" class="inline"><a id="twitterA" class="twitter-timeline" href="https://twitter.com/PHAC_Connect/lists/health-topics" height="873px" data-chrome="transparent noborders nofooter noheader" data-widget-id="702625028114935808">Tweets from https://twitter.com/PHAC_Connect/lists/health-topics</a></div>
+		<div id="twitter" class="inline"><a id="twitterA" class="twitter-timeline" href="https://twitter.com/PHAC_Connect/lists/health-topics" data-chrome="transparent noborders nofooter noheader noscrollbar" data-widget-id="702625028114935808">Tweets from https://twitter.com/PHAC_Connect/lists/health-topics</a></div>
 
 		<script src="//cdn.auth0.com/js/lock-7.12.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+		<script src="scripts/jquery.slimscroll.js"></script>
 		<script src="scripts/script.js"></script>
 	</body>
 </html>

@@ -40,6 +40,10 @@ app.get('/scripts/script.js', function(req, res){
    res.sendFile(__dirname + '/scripts/script.js');
 });
 
+app.get('/scripts/jquery.slimscroll.js', function(req, res){
+   res.sendFile(__dirname + '/scripts/jquery.slimscroll.js');
+});
+
 app.get('/styles/style.css', function(req, res){
    res.sendFile(__dirname + '/styles/style.css');
 });
@@ -50,6 +54,10 @@ app.get('/users/users.txt', function(req, res){
 
 app.get('/images/tweet.png', function(req, res){
    res.sendFile(__dirname + '/images/tweet.png');
+});
+
+app.get('/images/favicon.ico', function(req, res){
+   res.sendFile(__dirname + '/images/favicon.ico');
 });
 
 app.get('/images/tags/hr.png', function(req, res){

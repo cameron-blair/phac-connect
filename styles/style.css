@@ -60,7 +60,6 @@ width: 77%;
     color: #333;
     height: 45px;
 	margin-top: 5px;
-    border-radius: 5px;
 }
 #tags {
 width: 12%;
@@ -78,9 +77,8 @@ border-color: #bbb;
 }
 
 #messagesHR, #messagesA, #messagesPH, #messagesALL {
-width: 20%;
 font-size: .8em;
-overflow-y: scroll;
+width: 100% !important;
 }
 
 #btnSubmit {
@@ -108,13 +106,14 @@ vertical-align: middle;
 }
 
 .checkboxes {
-display: none;
+	display: none;
 }
 
-.inline, .inlineIMG {
+.inlineCTRL, .inlineIMG  {
 	float: left;
 	width: auto;
 }
+
 .inlineIMG {
 	margin-right: 10px !important;
 }
@@ -140,11 +139,14 @@ td {
 }
 
 .messageDivs {
-	width:auto;
 	margin: 0;
+	line-height: 20px;
 	padding: 4px 4px;
 }
-
-#twitter {
+.slimScrollDiv {
+	float: left;
+}
+#twitterA , #twitter{
 	width: 20%;
+	float: left;
 }
