@@ -36,6 +36,10 @@ app.get('/images/gov.png', function(req, res){
    res.sendFile(__dirname + '/images/gov.png');
 });
 
+app.get('/images/columnSwitch.png', function(req, res){
+   res.sendFile(__dirname + '/images/columnSwitch.png');
+});
+
 app.get('/scripts/script.js', function(req, res){
    res.sendFile(__dirname + '/scripts/script.js');
 });
@@ -89,11 +93,12 @@ io.sockets.on('connection', socketioJwt.authorize({
     timeout: 15000 // 15 seconds to send the authentication message
   })).on('authenticated', function(socket) {
   });
+ 
 
 io.sockets.on('connection', function(socket) {
 
 	var query = Chat.find({});
-	query.sort('-created').limit(80).exec(function(err,msgs) {
+	query.sort('-created').limit(100).exec(function(err,msgs) {
 		if(err) throw err;
 		socket.emit('load history', msgs);
 	});
@@ -102,6 +107,14 @@ io.sockets.on('connection', function(socket) {
 		newMsg.save(function(err){
 			if(err) throw err;
 			io.sockets.emit('chat message', msg);
+		});
+	});
+	socket.on('reload', function(){
+		console.log("hello");
+		var query = Chat.find({});
+		query.sort('-created').limit(100).exec(function(err,msgs) {
+			if(err) throw err;
+			socket.emit('load history', msgs);
 		});
 	});
 });

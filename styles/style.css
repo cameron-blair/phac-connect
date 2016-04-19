@@ -138,6 +138,10 @@ td {
     width: 20%;
 }
 
+#columnSwitch {
+	transform: rotate(90deg);
+}
+
 .messageDivs {
 	margin: 0;
 	line-height: 20px;
