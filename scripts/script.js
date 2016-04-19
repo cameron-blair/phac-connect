@@ -74,6 +74,31 @@ $('#liPH').click(function() {
 	$('#chkPH').prop("checked", !$('#chkPH').prop("checked"));
 });
 
+$('#tdALL').click(function() {
+	if (all)
+		rotateColumn();
+	selectStream('ALL');
+});
+
+$('#tdHR').click(function() {
+	if (all)
+		rotateColumn();
+	selectStream('HR');
+});
+
+$('#tdA').click(function() {
+	if (all)
+		rotateColumn();
+	selectStream('A');
+});
+
+$('#tdPH').click(function() {
+	if (all)
+		rotateColumn();
+	selectStream('PH');
+});
+
+
 var socket = io();
 $('form').submit(function(e) {
 tags = [];
@@ -217,10 +242,13 @@ function hideButton(span) {
 }
 
 function rotateColumn() {
-    if (all)
+    if (all) {
+		$('td').attr("disabled",true);
 		all = false;
-	else
+		}
+	else {
 		all = true;
+		}
 	$('#messagesALL').empty();
 	$('#messagesA').empty();
 	$('#messagesHR').empty();
