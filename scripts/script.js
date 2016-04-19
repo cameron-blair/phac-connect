@@ -1,6 +1,7 @@
 var height = window.innerHeight - 114;
 var msgsSave = [];
 var all = false;
+var stream = true;
 
 $('#messagesALL').slimScroll({
 	height: height + 'px',
@@ -243,9 +244,56 @@ function rotateColumn() {
 			$('#columnSwitch').css('transform', 'rotate(' + i + 'deg)');
 		}
 		$('.slimScrollDiv').width('0%');
-		$('.slimScrollDiv').first().width('80%');
+		$('.slimScrollDiv').eq(0).width('80%');
 		$('#messagesA').css('display', 'none');
 		$('#messagesHR').css('display', 'none');
 		$('#messagesPH').css('display', 'none');
 	}	
+}
+
+function selectStream(context) {
+	if ($('#td' + context).css('display') !== 'none' && stream) {
+		$('#columnSwitch').css('display', 'none');
+		$('#tdALL').css('display','none');
+		$('#tdA').css('display','none');
+		$('#tdPH').css('display','none');
+		$('#tdHR').css('display','none');
+		$('#td' + context).css('display','');
+		$('#td' + context).css('width','80%');
+		$('.slimScrollDiv').width('0%');
+		$('#messagesALL').css('display', 'none');
+		$('#messagesA').css('display', 'none');
+		$('#messagesHR').css('display', 'none');
+		$('#messagesPH').css('display', 'none');
+		$('#messages' + context).css('display', '');
+		switch(context) {
+			case "ALL":
+				$('.slimScrollDiv').eq(0).width('80%');
+			break;
+			case "A":
+				$('.slimScrollDiv').eq(1).width('80%');
+			break;
+			case "HR":
+				$('.slimScrollDiv').eq(2).width('80%');
+			break;
+			case "PH":
+				$('.slimScrollDiv').eq(3).width('80%');
+			break;
+		}
+		stream = false;
+	}
+	else {
+		$('#columnSwitch').css('display', '');
+		$('#tdALL').css('display','');
+		$('#tdA').css('display','');
+		$('#tdPH').css('display','');
+		$('#tdHR').css('display','');
+		$('.slimScrollDiv').width('20%');
+		$('#td' + context).css('width','20%');
+		$('#messagesALL').css('display', '');
+		$('#messagesA').css('display', '');
+		$('#messagesHR').css('display', '');
+		$('#messagesPH').css('display', '');
+		stream = true;
+	}
 }

@@ -69,6 +69,8 @@ legend {
 color: #bbb;
 font-size: .6em;
 }
+.tdPointer {
+cursor: pointer; }
 fieldset {
 color: #fff;
 height: 50px;
