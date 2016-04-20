@@ -9,11 +9,11 @@
 		<link rel="icon" type="image/x-icon" href="images/favicon.ico?">
 	</head>
 	<body>
-
+<div id="dialog" title="User Information"><img id="userImg" style="float:left;height:200px;width:200px;"/><p><strong>Email: </strong></p><span id="userEmail"></span></div>
 	<script>
 	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 	</script>
-		<div id="banner"><img src="images/gov.png" style="float: left;"/><button style="float:right;margin:3px;padding:2px 5px 2px 5px !important;font-size:.6em !important;" id="login"></button><img onclick="rotateColumn()" id="columnSwitch" style="float:right;margin:3px;" src="images/columnSwitch.png" height="28px" width="28px"/></div>
+		<div id="banner"><img src="images/gov.png" style="float: left;"/><button style="float:right;margin:3px;padding:2px 5px 2px 5px !important;font-size:.6em !important;" id="login"></button><img title="Toggle single column or multiple columns." onclick="rotateColumn()" id="columnSwitch" style="float:right;margin:3px;" src="images/columnSwitch.png" height="28px" width="28px"/></div>
 		<form action="" id="form">
 			
 			<div id="loginMsg">Please login to send messages ...</div>
@@ -34,14 +34,14 @@
 			<div id="legend">
 				<table>
 					<tr>
-						<td id="tdALL" class="tdPointer" style="padding:5px;
+						<td title="Click to toggle stream focus." id="tdALL" class="tdPointer" style="padding:5px;
 							background: linear-gradient(135deg, #ededed 50%, #ededed 50%, #fff 51%, #fff 100%);">
 							Main
 						</td>
-						<td id="tdA" class="tdPointer" style="background-color:#6BF178;padding:5px;">Announcements</td>
-						<td id="tdHR" class="tdPointer" style="background-color:#FFE74C;
+						<td title="Click to toggle stream focus." id="tdA" class="tdPointer" style="background-color:#6BF178;padding:5px;">Announcements</td>
+						<td title="Click to toggle stream focus." id="tdHR" class="tdPointer" style="background-color:#FFE74C;
 							padding:5px;">Human Resources</td>
-						<td id="tdPH" class="tdPointer" style="background-color:#35A7FF;padding:5px;">Public Health</td>
+						<td title="Click to toggle stream focus." id="tdPH" class="tdPointer" style="background-color:#35A7FF;padding:5px;">Public Health</td>
 						
 						<td id="tdHT" style="background-color:#fff;">Health Topics</td>
 					</tr>

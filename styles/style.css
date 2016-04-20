@@ -156,3 +156,6 @@ td {
 	width: 20%;
 	float: left;
 }
+#dialog {
+	display: none;
+}

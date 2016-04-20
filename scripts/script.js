@@ -44,16 +44,18 @@ $('#login').click(function(e) {
 		if (err) {
 			alert('There was an error');
 			alert(err);
-		} else {				
-			$('#control').css("display", "");
-			$('#loginMsg').css("display", "none");
+		} else {
+			$(document).tooltip();
+			$('#control').show('slow');
+			$('#loginMsg').hide('slow')
 			userToken = token;
 			localStorage.setItem('userToken', token);
 			userProfile = profile;
 			image = profile.picture.toString();
 			$('#login').html(profile.email);
-			var emailArr = profile.email.split("@");
-			username = emailArr[0];
+			//var emailArr = profile.email.split("@");
+			//username = emailArr[0];
+			username = profile.email;
 		}
 	 })
 	 
@@ -201,9 +203,10 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	
 if (combined)
 	tag = "ALL";
-
-	var iden = '<span><span style="font-weight:bold;">' + u + '</span>: <span class="msgSpan">';
-	iden = '<img src="' + av + '" style="height:20px;width:20px;border-width:2px;border-style:solid;border-color:#333;border-radius:25px;margin-right:5px;float:left;"/>' + iden;
+	var arr = u.split("@");
+	var name = arr[0];
+	var iden = '<span><span style="font-weight:bold;">' + name + '</span>: <span class="msgSpan">';
+	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:20px;width:20px;border-width:2px;border-style:solid;border-color:#333;border-radius:25px;margin-right:5px;float:left;"/>' + iden;
 	$('#messages' + tag).prepend($('<div class="messageDivs" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</span>"));
 	$('#messages' + tag + ' .messageDivs .msgSpan').first().text(userMsg); // This is to ensure no html can be applied to the messages.
 	var share = "<span style='margin-left:10px;'>";
@@ -263,9 +266,9 @@ function rotateColumn() {
 			$('#columnSwitch').css('transform', 'rotate(' + i + 'deg)');
 		}
 		$('.slimScrollDiv').width('20%');
-		$('#messagesA').css('display', '');
-		$('#messagesHR').css('display', '');
-		$('#messagesPH').css('display', '');
+		$('#messagesA').show('fast');
+		$('#messagesHR').show('fast');
+		$('#messagesPH').show('fast');
 	}
 	else {
 		for (var i = 90; i >= 0 ; i--) {
@@ -273,27 +276,29 @@ function rotateColumn() {
 		}
 		$('.slimScrollDiv').width('0%');
 		$('.slimScrollDiv').eq(0).width('80%');
-		$('#messagesA').css('display', 'none');
-		$('#messagesHR').css('display', 'none');
-		$('#messagesPH').css('display', 'none');
+		$('#messagesA').hide('fast');
+		$('#messagesHR').hide('fast');
+		$('#messagesPH').hide('fast');
 	}	
 }
 
 function selectStream(context) {
 	if ($('#td' + context).css('display') !== 'none' && stream) {
-		$('#columnSwitch').css('display', 'none');
-		$('#tdALL').css('display','none');
-		$('#tdA').css('display','none');
-		$('#tdPH').css('display','none');
-		$('#tdHR').css('display','none');
-		$('#td' + context).css('display','');
+		$('#columnSwitch').hide("slow");
+		$('#tdALL').hide("fast");
+		$('#tdA').hide("fast");
+		$('#tdPH').hide("fast");
+		$('#tdHR').hide("fast");
+		$('#td' + context).stop();
+		$('#td' + context).show('fast');
 		$('#td' + context).css('width','80%');
 		$('.slimScrollDiv').width('0%');
-		$('#messagesALL').css('display', 'none');
-		$('#messagesA').css('display', 'none');
-		$('#messagesHR').css('display', 'none');
-		$('#messagesPH').css('display', 'none');
-		$('#messages' + context).css('display', '');
+		$('#messagesALL').hide("fast");
+		$('#messagesA').hide("fast");
+		$('#messagesHR').hide("fast");
+		$('#messagesPH').hide("fast");
+		$('#messages' + context).stop();
+		$('#messages' + context).show('fast');
 		switch(context) {
 			case "ALL":
 				$('.slimScrollDiv').eq(0).width('80%');
@@ -311,17 +316,27 @@ function selectStream(context) {
 		stream = false;
 	}
 	else {
-		$('#columnSwitch').css('display', '');
-		$('#tdALL').css('display','');
-		$('#tdA').css('display','');
-		$('#tdPH').css('display','');
-		$('#tdHR').css('display','');
+		$('#columnSwitch').show('slow');
+		$('#tdALL').show('fast');
+		$('#tdA').show('fast');
+		$('#tdPH').show('fast');
+		$('#tdHR').show('fast');
 		$('.slimScrollDiv').width('20%');
 		$('#td' + context).css('width','20%');
-		$('#messagesALL').css('display', '');
-		$('#messagesA').css('display', '');
-		$('#messagesHR').css('display', '');
-		$('#messagesPH').css('display', '');
+		$('#messagesALL').show('fast');
+		$('#messagesA').show('fast');
+		$('#messagesHR').show('fast');
+		$('#messagesPH').show('fast');
 		stream = true;
 	}
+}
+
+function showInfo(email,image) {
+	$('#userImg').attr('src', image);
+	$('#userEmail').html(email);
+	$('#dialog').dialog({
+		hide: 'fade',
+		show: 'fade'
+		});
+	$('.ui-dialog :button').blur();
 }
