@@ -28,6 +28,8 @@ var lock = null;
 $(document).ready(function() {
 	setTimeout(function() {
 		$('#twitter-widget-0').height(height-3);
+		$('#twitterA').show('fast');
+		$('#twitter').show('fast');
 	},3000);
 	lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
 });
@@ -45,7 +47,6 @@ $('#login').click(function(e) {
 			alert('There was an error');
 			alert(err);
 		} else {
-			$(document).tooltip();
 			$('#control').show('slow');
 			$('#loginMsg').hide('slow')
 			userToken = token;
@@ -53,8 +54,6 @@ $('#login').click(function(e) {
 			userProfile = profile;
 			image = profile.picture.toString();
 			$('#login').html(profile.email);
-			//var emailArr = profile.email.split("@");
-			//username = emailArr[0];
 			username = profile.email;
 		}
 	 })
@@ -62,17 +61,17 @@ $('#login').click(function(e) {
 });
 
 $('#liHR').click(function() {
-	$('#imgHR').toggleClass("borderBottom");
+	$('#imgHR').toggleClass("faded");
 	$('#chkHR').prop("checked", !$('#chkHR').prop("checked"));
 });
 
 $('#liA').click(function() {
-	$('#imgA').toggleClass("borderBottom");
+	$('#imgA').toggleClass("faded");
 	$('#chkA').prop("checked", !$('#chkA').prop("checked"));				
 });
 
 $('#liPH').click(function() {
-	$('#imgPH').toggleClass("borderBottom");
+	$('#imgPH').toggleClass("faded");
 	$('#chkPH').prop("checked", !$('#chkPH').prop("checked"));
 });
 
@@ -174,31 +173,31 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 		case "HR":
 			styleString = 'style="background-color:';
 			if (numDivs % 2 == 0)
-			styleString += '#FFE74C"';
+			styleString += '#44CCFF"';
 			else
-			styleString += '#EDD53A"';
+			styleString += '#37BFF2"';
 			break;
 		case "A":
 			styleString = 'style="background-color:';
 			if (numDivs % 2 == 0)
-			styleString += '#6BF178"';
+			styleString += '#F3DAD8"';
 			else
-			styleString += '#59DF66"';
+			styleString += '#E6CDCB"';
 			break;
 		case "PH":
 			styleString = 'style="background-color:';
 			if (numDivs % 2 == 0)
-			styleString += '#35A7FF"';
+			styleString += '#77B6EA"';
 			else
-			styleString += '#2695ED"';
+			styleString += '#6AA9DD"';
 			break;
 	}
 	if (tag === 'ALL') {
 	numDivs = $('#messagesALL .messageDivs').length;
 		if (numDivs % 2 == 0)
-			styleString = 'style="background-color:#fff"';
+			styleString = 'style="background-color:#BED8D4"';
 		else
-			styleString = 'style="background-color:#ededed"';
+			styleString = 'style="background-color:#B1CBC7"';
 	}
 	
 if (combined)
@@ -206,7 +205,7 @@ if (combined)
 	var arr = u.split("@");
 	var name = arr[0];
 	var iden = '<span><span style="font-weight:bold;">' + name + '</span>: <span class="msgSpan">';
-	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:20px;width:20px;border-width:2px;border-style:solid;border-color:#333;border-radius:25px;margin-right:5px;float:left;"/>' + iden;
+	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:20px;width:20px;border-width:2px;border-style:solid;border-color:#686868;border-radius:25px;margin-right:5px;float:left;"/>' + iden;
 	$('#messages' + tag).prepend($('<div class="messageDivs" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</span>"));
 	$('#messages' + tag + ' .messageDivs .msgSpan').first().text(userMsg); // This is to ensure no html can be applied to the messages.
 	var share = "<span style='margin-left:10px;'>";
@@ -224,8 +223,8 @@ if (combined)
 		}
 	}
 	*/
-	share += "<span id=\"imgSpan\" style=\"opacity:0\"><a target='_blank' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
-	share += "<a style='display:inline-block;' href='mailto:?subject=PHAC Connect&body=";
+	share += "<span id=\"imgSpan\" style=\"opacity:0\"><a target='_blank' title ='Share via Twitter' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
+	share += "<a style='display:inline-block;' title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
 	share += userMsg + " - " + u + "(PHAC Connect // " + date + ")";
 	share += "'><img style='width:12px;height:12px;' src='images/mail.png'/></a> ";
 	share += "<img style='width:12px;height:12px;' title='Posted: " + date + "' src='images/time.png'/>";
@@ -236,7 +235,7 @@ if (combined)
 
 function showButton(span) {
 	$(span).find("#imgSpan").stop();
-	$(span).find("#imgSpan").fadeTo(200,1);
+	$(span).find("#imgSpan").fadeTo(200,0.6);
 }
 
 function hideButton(span) {

@@ -13,7 +13,7 @@
 	<script>
 	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 	</script>
-		<div id="banner"><img src="images/gov.png" style="float: left;"/><button style="float:right;margin:3px;padding:2px 5px 2px 5px !important;font-size:.6em !important;" id="login"></button><img title="Toggle single column or multiple columns." onclick="rotateColumn()" id="columnSwitch" style="float:right;margin:3px;" src="images/columnSwitch.png" height="28px" width="28px"/></div>
+		<div id="banner"><img src="images/gov.png" width="240px" height="23px" style="margin:5px;float: left;"/><button style="float:right;margin:3px;padding:2px 5px 2px 5px !important;font-size:.6em !important;" id="login"></button><img title="Toggle single column or multiple columns." onclick="rotateColumn()" id="columnSwitch" style="float:right;margin:3px;" src="images/columnSwitch.png" height="28px" width="28px"/></div>
 		<form action="" id="form">
 			
 			<div id="loginMsg">Please login to send messages ...</div>
@@ -23,9 +23,9 @@
 				<div id="tags" class="inlineCTRL">
 				<fieldset><legend>[tags]</legend>
 					<ul>
-						<li id="liHR"><input id="chkHR" type="checkbox" name="tags" value="HR" class="checkboxes"/><img id="imgHR" class="inlineIMG" title="Human Resources" style="margin-right:5px;" src="/images/tags/hr.png" width="25px" height="25px"/></li>
-						<li id="liA"><input id="chkA" type="checkbox" name="tags" value="A" class="checkboxes"/><img id="imgA" class="inlineIMG" title="Announcements" style="margin-right:5px;"  src="/images/tags/announcements.png" width="25px" height="25px"/></li>
-						<li id="liPH"><input id="chkPH" type="checkbox" name="tags" value="PH" class="checkboxes"/><img id="imgPH" class="inlineIMG" title="Public Health" style="margin-right:5px;"  src="/images/tags/publichealth.png" width="25px" height="25px"/></li>
+						<li id="liA"><input id="chkA" type="checkbox" name="tags" value="A" class="checkboxes"/><img id="imgA" class="inlineIMG faded" title="Announcements" style="margin-right:5px;"  src="/images/tags/announcements.png" width="25px" height="25px"/></li>
+						<li id="liHR"><input id="chkHR" type="checkbox" name="tags" value="HR" class="checkboxes"/><img id="imgHR" class="inlineIMG faded" title="Human Resources" style="margin-right:5px;" src="/images/tags/hr.png" width="25px" height="25px"/></li>
+						<li id="liPH"><input id="chkPH" type="checkbox" name="tags" value="PH" class="checkboxes"/><img id="imgPH" class="inlineIMG faded" title="Public Health"  src="/images/tags/publichealth.png" width="25px" height="25px"/></li>
 					</ul>
 					</fieldset>
 				</div>
@@ -35,13 +35,13 @@
 				<table>
 					<tr>
 						<td title="Click to toggle stream focus." id="tdALL" class="tdPointer" style="padding:5px;
-							background: linear-gradient(135deg, #ededed 50%, #ededed 50%, #fff 51%, #fff 100%);">
+							background-color:#BED8D4;">
 							Main
 						</td>
-						<td title="Click to toggle stream focus." id="tdA" class="tdPointer" style="background-color:#6BF178;padding:5px;">Announcements</td>
-						<td title="Click to toggle stream focus." id="tdHR" class="tdPointer" style="background-color:#FFE74C;
+						<td title="Click to toggle stream focus." id="tdA" class="tdPointer" style="background-color:#F3DAD8;padding:5px;">Announcements</td>
+						<td title="Click to toggle stream focus." id="tdHR" class="tdPointer" style="background-color:#44CCFF;
 							padding:5px;">Human Resources</td>
-						<td title="Click to toggle stream focus." id="tdPH" class="tdPointer" style="background-color:#35A7FF;padding:5px;">Public Health</td>
+						<td title="Click to toggle stream focus." id="tdPH" class="tdPointer" style="background-color:#77B6EA;padding:5px;">Public Health</td>
 						
 						<td id="tdHT" style="background-color:#fff;">Health Topics</td>
 					</tr>
@@ -52,7 +52,7 @@
 		<div id="messagesA" class="inline"></div>
 		<div id="messagesHR" class="inline"></div>		
 		<div id="messagesPH" class="inline"></div>
-		<div id="twitter" class="inline"><a id="twitterA" class="twitter-timeline" href="https://twitter.com/PHAC_Connect/lists/health-topics" data-chrome="transparent noborders nofooter noheader noscrollbar" data-widget-id="702625028114935808">Tweets from https://twitter.com/PHAC_Connect/lists/health-topics</a></div>
+		<div id="twitter" class="inline"><a id="twitterA" class="twitter-timeline" href="https://twitter.com/PHAC_Connect/lists/health-topics" data-chrome="transparent noborders nofooter noheader noscrollbar" data-widget-id="702625028114935808"></a></div>
 
 		<script src="//cdn.auth0.com/js/lock-7.12.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>

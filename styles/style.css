@@ -5,9 +5,9 @@
     box-sizing: border-box;
 }
 body {
-    color: #333;
+    color: #686868;
     margin-top: 114px;
-	min-width: 700px;
+	min-width: 1400px;
 }
 
 @-moz-document url-prefix() {
@@ -21,18 +21,19 @@ body {
     font-size: 30px;
     text-align: center;
     color: #fff;
-    background-color: #000;
+    background-color: #686868;
     position: fixed;
     top: 0;
     width: 100%;
+	min-width: 600px;
 }
 form {
-    background-color: #000;
+    background-color: #686868;
 	padding-bottom: 0px;
     position: absolute;
 	top: 33px;
     width: 100%;
-	min-width: 700px;
+	min-width: 1400px;
 }
 form #msgControl input {
     padding: 10px;
@@ -44,7 +45,7 @@ form #msgControl input {
 	margin-top: 5px;
 }
 #msgControl {
-width: 77%;
+width: 80%;
 }
 #btnSubmit::-moz-focus-inner {
 	border: 0;
@@ -53,21 +54,22 @@ width: 77%;
 #loginMsg {
 			line-height: 55px;
 			vertical-align: middle;
-			color: #bbb;
+			color: #ddd;
 			text-align: center;
 			font-weight: bold;}
 #btnSubmit {
-    color: #333;
+    color: #686868;
     height: 45px;
 	margin-top: 5px;
 }
 #tags {
-width: 12%;
+width: 130px;
 height: 45px;
 }
 legend {
-color: #bbb;
+color: #ddd;
 font-size: .6em;
+border-color: #ddd;
 }
 .tdPointer {
 cursor: pointer; }
@@ -120,12 +122,12 @@ vertical-align: middle;
 	margin-right: 10px !important;
 }
 
-.borderBottom {
-outline: 1px solid #888;
+.faded {
+opacity: 0.25;
 }
 
 #legend {
-    background-color: #000;
+    background-color: #686868;
     font-size: .8em;
 	font-weight: bold;
 }
@@ -149,12 +151,14 @@ td {
 	line-height: 20px;
 	padding: 4px 4px;
 }
+
 .slimScrollDiv {
 	float: left;
 }
 #twitterA , #twitter{
 	width: 20%;
 	float: left;
+	display: none;
 }
 #dialog {
 	display: none;
