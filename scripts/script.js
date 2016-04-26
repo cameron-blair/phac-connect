@@ -116,9 +116,9 @@ e.preventDefault();
 		$('#chkHR').prop("checked", false);
 		$('#chkA').prop("checked", false);
 		$('#chkPH').prop("checked", false);
-		$('#imgHR').removeClass("borderBottom");
-		$('#imgA').removeClass("borderBottom");
-		$('#imgPH').removeClass("borderBottom");
+		$('#imgHR').addClass("faded");
+		$('#imgA').addClass("faded");
+		$('#imgPH').addClass("faded");
 	}
 	return false;
 });
@@ -173,9 +173,9 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 		case "HR":
 			styleString = 'style="background-color:';
 			if (numDivs % 2 == 0)
-			styleString += '#44CCFF"';
+			styleString += '#EAF0CE"';
 			else
-			styleString += '#37BFF2"';
+			styleString += '#DDE3C1"';
 			break;
 		case "A":
 			styleString = 'style="background-color:';
@@ -187,9 +187,9 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 		case "PH":
 			styleString = 'style="background-color:';
 			if (numDivs % 2 == 0)
-			styleString += '#77B6EA"';
+			styleString += '#C1EDCC"';
 			else
-			styleString += '#6AA9DD"';
+			styleString += '#B4E0BF"';
 			break;
 	}
 	if (tag === 'ALL') {
@@ -332,7 +332,7 @@ function selectStream(context) {
 
 function showInfo(email,image) {
 	$('#userImg').attr('src', image);
-	$('#userEmail').html(email);
+	$('#userEmail').html('<a href="mailto:' + email + '">' + email + '</a>');
 	$('#dialog').dialog({
 		hide: 'fade',
 		show: 'fade'

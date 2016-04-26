@@ -7,7 +7,7 @@
 body {
     color: #686868;
     margin-top: 114px;
-	min-width: 1400px;
+	min-width: 1450px;
 }
 
 @-moz-document url-prefix() {
@@ -17,7 +17,6 @@ body {
 }
 
 #banner {
-	z-index: 100;
     font-size: 30px;
     text-align: center;
     color: #fff;
@@ -33,7 +32,7 @@ form {
     position: absolute;
 	top: 33px;
     width: 100%;
-	min-width: 1400px;
+	min-width: 1450px;
 }
 form #msgControl input {
     padding: 10px;
@@ -88,7 +87,7 @@ width: 100% !important;
 #btnSubmit {
     width: 100%;
 }
-#tags, #btnControl {
+#tags, #btnControl, #msgControl {
 margin-left: 5px;
 }
 #btnControl {
@@ -162,4 +161,9 @@ td {
 }
 #dialog {
 	display: none;
+}
+
+#uInfoDiv {
+	padding-top: 10px;
+	font-size: .7em;
 }

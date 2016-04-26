@@ -98,7 +98,7 @@ io.sockets.on('connection', socketioJwt.authorize({
 io.sockets.on('connection', function(socket) {
 
 	var query = Chat.find({});
-	query.sort('-created').limit(100).exec(function(err,msgs) {
+	query.sort('-created').limit(250).exec(function(err,msgs) {
 		if(err) throw err;
 		socket.emit('load history', msgs);
 	});
