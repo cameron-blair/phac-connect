@@ -1,4 +1,36 @@
-var height = window.innerHeight - 114;
+$('button').button();
+$('#btnSubmit').button();
+$('#banner button').show("fast");
+
+var height = window.innerHeight - 131;
+var width = window.innerWidth;
+$('#msgControl').width((width-250) + 'px');
+if (width < 1450) {
+	$('#btnControl').width('75px');
+	height = height - 17;
+	if (width <= 600)
+		$('#msgControl').width('350px');
+}
+window.onresize = resize;
+
+function resize() {
+	height = window.innerHeight  - 131;
+	width = window.innerWidth;
+	$('#msgControl').width((width-250) + 'px');
+	if (width < 1450) {
+		$('#btnControl').width('75px');
+		height = height - 17;
+		if (width <= 600)
+			$('#msgControl').width('350px');
+		}
+	$('#messagesALL').height(height + 'px');
+	$('#messagesPH').height(height + 'px');
+	$('#messagesA').height(height + 'px');
+	$('#messagesHR').height(height + 'px');
+	$('.slimScrollDiv').height(height+'px');
+	$('#twitter-widget-0').height((height-3) + 'px');
+}
+
 var msgsSave = [];
 var all = false;
 var stream = true;
@@ -20,12 +52,38 @@ $('#messagesHR').slimScroll({
 	width: '20%'
 });
 
-$('#login').button();
-$('#login').html('Log in');
-$('#btnSubmit').button();
-
 var lock = null;
 $(document).ready(function() {
+	$('#dialog').dialog({
+		hide: 'fade',
+		show: 'fade',
+		modal: true,
+		draggable: false,
+		resizable: false,
+		open: function () {
+			$('.ui-widget-overlay').addClass('overlay');
+			$('.ui-widget-header').addClass('header');
+		},
+		close: function () {
+			$('.ui-widget-overlay').removeClass('overlay');
+		},
+		autoOpen: false
+		});
+	$('#personalInfo').dialog({
+		hide: 'fade',
+		show: 'fade',
+		modal: true,
+		draggable: false,
+		resizable: false,
+		open: function () {
+			$('.ui-widget-overlay').addClass('overlay');
+			$('.ui-widget-header').addClass('header');
+		},
+		close: function () {
+			$('.ui-widget-overlay').removeClass('overlay');
+		},
+		autoOpen: false
+		});
 	setTimeout(function() {
 		$('#twitter-widget-0').height(height-3);
 		$('#twitterA').show('fast');
@@ -48,15 +106,17 @@ $('#login').click(function(e) {
 			alert(err);
 		} else {
 			$('#control').show('slow');
-			$('#loginMsg').hide('slow')
+			$('#loginMsg').hide('slow');
+			$('#banner button').hide('slow');
 			userToken = token;
 			localStorage.setItem('userToken', token);
 			userProfile = profile;
 			image = profile.picture.toString();
-			$('#login').html(profile.email);
+			$('#profileIcon').attr('src', image);
+			$('#profileIcon').show("slow");
 			username = profile.email;
 		}
-	 })
+	 });
 	 
 });
 
@@ -207,7 +267,17 @@ if (combined)
 	var iden = '<span><span style="font-weight:bold;">' + name + '</span>: <span class="msgSpan">';
 	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:20px;width:20px;border-width:2px;border-style:solid;border-color:#686868;border-radius:25px;margin-right:5px;float:left;"/>' + iden;
 	$('#messages' + tag).prepend($('<div class="messageDivs" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</span>"));
-	$('#messages' + tag + ' .messageDivs .msgSpan').first().text(userMsg); // This is to ensure no html can be applied to the messages.
+	var splitMsg = userMsg.split(" ");
+	for (var i = 0; i < splitMsg.length; i++) {
+		if (splitMsg[i].indexOf("www") != -1) {
+			if (splitMsg[i].indexOf("http") != -1)
+				splitMsg[i] = "<a target='_blank' href='" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
+			else
+				splitMsg[i] = "<a target='_blank' href='http://" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
+		}
+	}
+	var htmlMsg = splitMsg.join(" ");
+	$('#messages' + tag + ' .messageDivs .msgSpan').first().html(htmlMsg);
 	var share = "<span style='margin-left:10px;'>";
 	var twitterMsg = userMsg.replace(/#/g, "%23");
 	/*
@@ -261,18 +331,14 @@ function rotateColumn() {
 	}
 
 	if ($('#messagesA').css('display') === 'none') {
-		for (var i = 0; i <= 90 ; i++) {
-			$('#columnSwitch').css('transform', 'rotate(' + i + 'deg)');
-		}
+		$('#columnSwitch').toggleClass('turn');
 		$('.slimScrollDiv').width('20%');
 		$('#messagesA').show('fast');
 		$('#messagesHR').show('fast');
 		$('#messagesPH').show('fast');
 	}
 	else {
-		for (var i = 90; i >= 0 ; i--) {
-			$('#columnSwitch').css('transform', 'rotate(' + i + 'deg)');
-		}
+		$('#columnSwitch').toggleClass('turn');
 		$('.slimScrollDiv').width('0%');
 		$('.slimScrollDiv').eq(0).width('80%');
 		$('#messagesA').hide('fast');
@@ -330,12 +396,22 @@ function selectStream(context) {
 	}
 }
 
+$('#profileIcon').click(function() {
+	$('#dialog').dialog("close");
+	$('#personalImg').attr('src', image);
+	$('#personalOptions').html('<br/><br/><a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+	$('#personalEmail').html('<a href="mailto:' + username + '">' + username + '</a>');
+	$('#personalInfo').dialog("open");
+});
+
+function reload() {
+	location.reload();
+}
+
 function showInfo(email,image) {
+	$('#personalInfo').dialog("close");
 	$('#userImg').attr('src', image);
+	$('#userOptions').html('');
 	$('#userEmail').html('<a href="mailto:' + email + '">' + email + '</a>');
-	$('#dialog').dialog({
-		hide: 'fade',
-		show: 'fade'
-		});
-	$('.ui-dialog :button').blur();
+	$('#dialog').dialog("open");
 }

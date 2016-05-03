@@ -1,61 +1,99 @@
 <!doctype html>
 <html>
-	<head>
-		<title>PHAC Connect</title>
-		<link href="styles/style.css" rel="stylesheet" type="text/css" />
-		<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-		<link rel="icon" type="image/x-icon" href="images/favicon.ico?">
-	</head>
-	<body>
-<div id="dialog" title="User Information"><img id="userImg" style="float:left;height:200px;width:200px;"/><div id="uInfoDiv" style="clear:both"><p><strong>Email: </strong></p><span id="userEmail"></span></div></div>
-	<script>
-	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-	</script>
-		<div id="banner"><img src="images/gov.png" width="240px" height="23px" style="margin:5px;float: left;"/><button style="float:right;margin:3px;padding:2px 5px 2px 5px !important;font-size:.6em !important;" id="login"></button><img title="Toggle single column or multiple columns." onclick="rotateColumn()" id="columnSwitch" style="float:right;margin:3px;" src="images/columnSwitch.png" height="28px" width="28px"/></div>
-		<form action="" id="form">
-			
-			<div id="loginMsg">Please login to send messages ...</div>
-			
-			<div id="control" style="display:none">
-				<div id="msgControl" class="inlineCTRL"><input id="m" autocomplete="off" maxlength="140" placeholder="Broadcast a message ..."/></div>
-				<div id="tags" class="inlineCTRL">
-				<fieldset><legend>[tags]</legend>
-					<ul>
-						<li id="liA"><input id="chkA" type="checkbox" name="tags" value="A" class="checkboxes"/><img id="imgA" class="inlineIMG faded" title="Announcements" style="margin-right:5px;"  src="/images/tags/announcements.png" width="25px" height="25px"/></li>
-						<li id="liHR"><input id="chkHR" type="checkbox" name="tags" value="HR" class="checkboxes"/><img id="imgHR" class="inlineIMG faded" title="Human Resources" style="margin-right:5px;" src="/images/tags/hr.png" width="25px" height="25px"/></li>
-						<li id="liPH"><input id="chkPH" type="checkbox" name="tags" value="PH" class="checkboxes"/><img id="imgPH" class="inlineIMG faded" title="Public Health"  src="/images/tags/publichealth.png" width="25px" height="25px"/></li>
-					</ul>
-					</fieldset>
-				</div>
-				<div id="btnControl" class="inlineCTRL"><input id="btnSubmit" type="submit" text="Send"/></div>
-			</div>
-			<div id="legend">
-				<table>
-					<tr>
-						<td title="Click to toggle stream focus." id="tdALL" class="tdPointer" style="padding:5px;
-							background-color:#BED8D4;">
-							Main
-						</td>
-						<td title="Click to toggle stream focus." id="tdA" class="tdPointer" style="background-color:#F3DAD8;padding:5px;">Announcements</td>
-						<td title="Click to toggle stream focus." id="tdHR" class="tdPointer" style="background-color:#EAF0CE;padding:5px;">Human Resources</td>
-						<td title="Click to toggle stream focus." id="tdPH" class="tdPointer" style="background-color:#C1EDCC;padding:5px;">Public Health</td>
-						
-						<td id="tdHT" style="background-color:#fff;">Health Topics</td>
-					</tr>
-				</table>
-			</div>
-		</form>
-		<div id="messagesALL" class="inline"></div>
-		<div id="messagesA" class="inline"></div>
-		<div id="messagesHR" class="inline"></div>		
-		<div id="messagesPH" class="inline"></div>
-		<div id="twitter" class="inline"><a id="twitterA" class="twitter-timeline" href="https://twitter.com/PHAC_Connect/lists/health-topics" data-chrome="transparent noborders nofooter noheader noscrollbar" data-widget-id="702625028114935808"></a></div>
 
-		<script src="//cdn.auth0.com/js/lock-7.12.min.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="scripts/jquery.slimscroll.js"></script>
-		<script src="scripts/script.js"></script>
-	</body>
+<head>
+    <title>PHAC Connect</title>
+    <link href="styles/style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico?">
+</head>
+
+<body>
+    <div id="dialog" title="User Info"><img id="userImg" style="float:left;height:200px;width:200px;" />
+        <div id="uInfoDiv" style="clear:both">
+            <p><strong>Email: </strong>
+            </p><span id="userEmail"></span><span id="userOptions"></span>
+        </div>
+    </div>
+	<div id="personalInfo" title="My Info"><img id="personalImg" style="float:left;height:200px;width:200px;" />
+        <div id="personalInfoDiv" style="clear:both">
+            <p><strong>Email: </strong>
+            </p><span id="personalEmail"></span><span id="personalOptions"></span>
+        </div>
+    </div>
+    <script>
+        ! function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0],
+                p = /^http:/.test(d.location) ? 'http' : 'https';
+            if (!d.getElementById(id)) {
+                js = d.createElement(s);
+                js.id = id;
+                js.src = p + "://platform.twitter.com/widgets.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }
+        }(document, "script", "twitter-wjs");
+    </script>
+    <div id="banner"><span class="centerImg"></span><img src="images/gov.png" width="240px" height="23px" style="margin:5px;vertical-align:middle;" />
+        <button style="float:right;margin:5px;padding-left:5px;padding-right:5px;" id="login">Login</button><img title="Customize your profile." id="profileIcon" style="float:right;margin:3px;" height="40px" width="40px" /><img title="Toggle single column or multiple columns." onclick="rotateColumn()" id="columnSwitch" class="turn" style="float:right;margin:3px;" src="images/columnSwitch.png" height="40px" width="40px" />
+    </div>
+    <form action="" id="form">
+
+        <div id="loginMsg">Please login to send messages ...</div>
+
+        <div id="control" style="display:none">
+            <div id="msgControl" class="inlineCTRL">
+                <input id="m" autocomplete="off" maxlength="300" placeholder="Broadcast a message ..." />
+            </div>
+            <div id="tags" class="inlineCTRL">
+                <fieldset>
+                    <legend>[tags]</legend>
+                    <ul>
+                        <li id="liA">
+                            <input id="chkA" type="checkbox" name="tags" value="A" class="checkboxes" /><img id="imgA" class="inlineIMG faded" title="Announcements" style="margin-right:5px;" src="/images/tags/announcements.png" width="25px" height="25px" />
+                        </li>
+                        <li id="liHR">
+                            <input id="chkHR" type="checkbox" name="tags" value="HR" class="checkboxes" /><img id="imgHR" class="inlineIMG faded" title="Human Resources" style="margin-right:5px;" src="/images/tags/hr.png" width="25px" height="25px" />
+                        </li>
+                        <li id="liPH">
+                            <input id="chkPH" type="checkbox" name="tags" value="PH" class="checkboxes" /><img id="imgPH" class="inlineIMG faded" title="Public Health" src="/images/tags/publichealth.png" width="25px" height="25px" />
+                        </li>
+                    </ul>
+                </fieldset>
+            </div>
+            <div id="btnControl" class="inlineCTRL">
+                <input id="btnSubmit" type="submit" text="Send" />
+            </div>
+        </div>
+    </form>
+    <div id="legend">
+        <table>
+            <tr>
+                <td title="Click to toggle stream focus." id="tdALL" class="tdPointer" style="padding:5px;
+							background-color:#BED8D4;">
+                    Main
+                </td>
+                <td title="Click to toggle stream focus." id="tdA" class="tdPointer" style="background-color:#F3DAD8;padding:5px;">Announcements</td>
+                <td title="Click to toggle stream focus." id="tdHR" class="tdPointer" style="background-color:#EAF0CE;padding:5px;">Human Resources</td>
+                <td title="Click to toggle stream focus." id="tdPH" class="tdPointer" style="background-color:#C1EDCC;padding:5px;">Public Health</td>
+
+                <td id="tdHT" style="background-color:#fff;">Health Topics</td>
+            </tr>
+        </table>
+    </div>
+    <div id="messagesALL" class="inline"></div>
+    <div id="messagesA" class="inline"></div>
+    <div id="messagesHR" class="inline"></div>
+    <div id="messagesPH" class="inline"></div>
+    <div id="twitter" class="inline">
+        <a id="twitterA" class="twitter-timeline" href="https://twitter.com/PHAC_Connect/lists/health-topics" data-chrome="transparent noborders nofooter noheader noscrollbar" data-widget-id="702625028114935808"></a>
+    </div>
+
+    <script src="//cdn.auth0.com/js/lock-7.12.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="scripts/jquery.slimscroll.js"></script>
+    <script src="scripts/script.js"></script>
+</body>
+
 </html>
