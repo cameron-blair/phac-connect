@@ -344,13 +344,25 @@ function msgEditBlur(div) {
 	$(div).parent().parent().parent().find('img').show();
 	$(div).parent().parent().parent().find('.msgCheck').hide();
 	var msgID = $(div).parent().parent().parent().attr('id');
-	socket.emit('edit message', msgID, msgText);
-	$('.' + msgID).each(function() {
-		$(this).find('.msgSpan').html(htmlMsg);
-	});
-	for(var i=msgsSave.length-1; i >= 0; i--) {
-		if (msgsSave[i].identifier == parseInt(msgID)) {
-			msgsSave[i].msg = msgText;
+	if (msgText !== "") {
+		socket.emit('edit message', msgID, msgText);
+		$('.' + msgID).each(function() {
+			$(this).find('.msgSpan').html(htmlMsg);
+		});
+		for(var i=msgsSave.length-1; i >= 0; i--) {
+			if (msgsSave[i].identifier == parseInt(msgID)) {
+				msgsSave[i].msg = msgText;
+			}
+		}
+	}
+	else {
+		$('#messagesALL').empty();
+		$('#messagesA').empty();
+		$('#messagesHR').empty();
+		$('#messagesPH').empty();
+
+		for(var i=msgsSave.length-1; i >= 0; i--){
+			handleMsg(msgsSave[i]);
 		}
 	}
 }
