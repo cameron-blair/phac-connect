@@ -98,6 +98,7 @@ var now = "";
 var userToken;
 var username = "Guest";
 var image = "";
+var uniqueID = "";
 $('#login').click(function(e) {
 	e.preventDefault();
 	lock.show(function(err, profile, token) {
@@ -115,6 +116,13 @@ $('#login').click(function(e) {
 			$('#profileIcon').attr('src', image);
 			$('#profileIcon').show("slow");
 			username = profile.email;
+			$('#messagesALL').empty();
+			$('#messagesA').empty();
+			$('#messagesHR').empty();
+			$('#messagesPH').empty();
+			for(var i=msgsSave.length-1; i >= 0; i--){
+				handleMsg(msgsSave[i]);
+			}
 		}
 	 });
 	 
@@ -159,13 +167,13 @@ $('#tdPH').click(function() {
 	selectStream('PH');
 });
 
-
 var socket = io();
 $('form').submit(function(e) {
 tags = [];
 e.preventDefault();
 	if ($('#m').val() !== "") {
 		msgText = $('#m').val();
+		msgText = msgText.replace(/<[^>]*>/g,"");
 		$("input[name='tags']:checked").each(function() {
 			tags.push($(this).val());
 		});
@@ -209,8 +217,8 @@ function handleMsg(msg) {
 	var userMsg = msg.msg;
 	var date = msg.created;
 	date = date.substring(0,10) + ", " + date.substring(11,16);
-	userMsg = userMsg.replace(/;/g, "");
 	userMsg = userMsg.replace(/&/g, "and");
+	uniqueID = msg.identifier + "";
 	if (tags.length == 0)
 		sendMessage('ALL', u, av, date, userMsg, false);
 	else {
@@ -226,7 +234,7 @@ function handleMsg(msg) {
 	}
 }
 
-function sendMessage(tag, u, av, date, userMsg, combined) {
+function sendMessage(tag, u, av, date, userMsg, combined, row) {
 	var styleString = "";
 		numDivs = $('#messages' + tag + ' .messageDivs').length;
 	switch (tag) {
@@ -266,7 +274,7 @@ if (combined)
 	var name = arr[0];
 	var iden = '<span><span style="font-weight:bold;">' + name + '</span>: <span class="msgSpan">';
 	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:20px;width:20px;border-width:2px;border-style:solid;border-color:#686868;border-radius:25px;margin-right:5px;float:left;"/>' + iden;
-	$('#messages' + tag).prepend($('<div class="messageDivs" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</span>"));
+	$('#messages' + tag).prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</span>"));
 	var splitMsg = userMsg.split(" ");
 	for (var i = 0; i < splitMsg.length; i++) {
 		if (splitMsg[i].indexOf("www") != -1) {
@@ -276,7 +284,7 @@ if (combined)
 				splitMsg[i] = "<a target='_blank' href='http://" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
 		}
 	}
-	var htmlMsg = splitMsg.join(" ");
+	htmlMsg = splitMsg.join(" ");
 	$('#messages' + tag + ' .messageDivs .msgSpan').first().html(htmlMsg);
 	var share = "<span style='margin-left:10px;'>";
 	var twitterMsg = userMsg.replace(/#/g, "%23");
@@ -293,14 +301,80 @@ if (combined)
 		}
 	}
 	*/
-	share += "<span id=\"imgSpan\" style=\"opacity:0\"><a target='_blank' title ='Share via Twitter' style='display:inline-block;' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
-	share += "<a style='display:inline-block;' title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
+	share += "<span id=\"imgSpan\" style=\"opacity:0\">";
+	if (u === username)
+		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/edit.png'/><img class='msgDelete' onclick='msgDelete(this)' title='Click to delete this message.' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/delete.png'/>";
+	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
+	share += "<a  title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
+	console.log(userMsg);
 	share += userMsg + " - " + u + "(PHAC Connect // " + date + ")";
 	share += "'><img style='width:12px;height:12px;' src='images/mail.png'/></a> ";
 	share += "<img style='width:12px;height:12px;' title='Posted: " + date + "' src='images/time.png'/>";
 	share += "</span></span>";
 	var msg = $('#messages' + tag + ' div').first().html() + share + "</span>";
 	$('#messages' + tag + ' div').first().html(msg);
+}
+
+function msgEdit(div) {
+	$(div).hide();
+	$(div).parent().find('img').hide();
+	$(div).parent().find('.msgCheck').show();
+	var msgText = $(div).parent().parent().parent().find('.msgSpan').html();
+	msgText = msgText.replace(/<[^>]*>/g,"");
+	var msgID = $(div).parent().parent().parent().attr('id');
+	var editText = "<input class='editingMsg' onblur='msgEditBlur(this)' type='textbox' value='" + msgText + "'/>";
+	$(div).parent().parent().parent().find('.msgSpan').html(editText);
+	$(div).parent().parent().parent().find('.editingMsg').focus();
+}
+
+function msgEditBlur(div) {
+	var msgText = $(div).val();
+	msgText = msgText.replace(/<[^>]*>/g,"");
+	var splitMsg = msgText.split(" ");
+	for (var i = 0; i < splitMsg.length; i++) {
+		if (splitMsg[i].indexOf("www") != -1) {
+			if (splitMsg[i].indexOf("http") != -1)
+				splitMsg[i] = "<a target='_blank' href='" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
+			else
+				splitMsg[i] = "<a target='_blank' href='http://" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
+		}
+	}
+	var htmlMsg = splitMsg.join(" ");
+	htmlMsg = htmlMsg;
+	$(div).parent().parent().parent().find('img').show();
+	$(div).parent().parent().parent().find('.msgCheck').hide();
+	var msgID = $(div).parent().parent().parent().attr('id');
+	socket.emit('edit message', msgID, msgText);
+	$('.' + msgID).each(function() {
+		$(this).find('.msgSpan').html(htmlMsg);
+	});
+	for(var i=msgsSave.length-1; i >= 0; i--) {
+		if (msgsSave[i].identifier == parseInt(msgID)) {
+			msgsSave[i].msg = msgText;
+		}
+	}
+}
+
+function msgDelete(div) {
+	var confirm = window.confirm("Do you want to delete the message?");
+	if (confirm) {
+		var msgID = $(div).parent().parent().parent().attr('id');
+		$('.' + msgID).remove();
+		socket.emit('delete message', msgID);
+	}
+	for(var i=msgsSave.length-1; i >= 0; i--) {
+		if (msgsSave[i].identifier == parseInt(msgID)) {
+			msgsSave.splice(i, 1);
+		}
+	}
+	$('#messagesALL').empty();
+	$('#messagesA').empty();
+	$('#messagesHR').empty();
+	$('#messagesPH').empty();
+
+	for(var i=msgsSave.length-1; i >= 0; i--){
+		handleMsg(msgsSave[i]);
+	}
 }
 
 function showButton(span) {

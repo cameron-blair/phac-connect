@@ -19,6 +19,7 @@ var jwtCheck = jwt({
 });
 
 var chatSchema = mongoose.Schema({
+	identifier: Number,
 	user: String,
 	msg: String,
 	tags: [String],
@@ -63,6 +64,14 @@ app.get('/images/tweet.png', function(req, res){
    res.sendFile(__dirname + '/images/tweet.png');
 });
 
+app.get('/images/delete.png', function(req, res){
+   res.sendFile(__dirname + '/images/delete.png');
+});
+
+app.get('/images/edit.png', function(req, res){
+   res.sendFile(__dirname + '/images/edit.png');
+});
+
 app.get('/images/favicon.ico', function(req, res){
    res.sendFile(__dirname + '/images/favicon.ico');
 });
@@ -82,8 +91,21 @@ app.get('/images/tags/publichealth.png', function(req, res){
 app.get('/images/mail.png', function(req, res){
    res.sendFile(__dirname + '/images/mail.png');
 });
+
 app.get('/images/time.png', function(req, res){
    res.sendFile(__dirname + '/images/time.png');
+});
+
+app.get('/images/checkmark.png', function(req, res){
+   res.sendFile(__dirname + '/images/checkmark.png');
+});
+
+app.get('/images/lt.png', function(req, res){
+   res.sendFile(__dirname + '/images/lt.png');
+});
+
+app.get('/images/gt.png', function(req, res){
+   res.sendFile(__dirname + '/images/gt.png');
 });
 
 app.get('/users/av/Default.png', function(req, res){
@@ -99,25 +121,44 @@ io.sockets.on('connection', socketioJwt.authorize({
  
 
 io.sockets.on('connection', function(socket) {
-
 	var query = Chat.find({});
 	query.sort('-created').limit(250).exec(function(err,msgs) {
 		if(err) throw err;
 		socket.emit('load history', msgs);
 	});
-	socket.on('chat message', function(msg){
-		var newMsg = new Chat({user: msg.user, msg: msg.msg, tags: msg.tags, avatar: msg.avatar, created: msg.created});
-		newMsg.save(function(err){
-			if(err) throw err;
-			io.sockets.emit('chat message', msg);
+	
+	socket.on('delete message', function(id){
+		Chat.remove({identifier: id}, function(err, result) {
+			if (err) {
+				console.log(err);
+			}
+			console.log(result);
 		});
 	});
-	socket.on('reload', function(){
-		console.log("hello");
-		var query = Chat.find({});
-		query.sort('-created').limit(100).exec(function(err,msgs) {
-			if(err) throw err;
-			socket.emit('load history', msgs);
+	
+	socket.on('edit message', function(id, msgText){
+		Chat.update({identifier: id}, {$set:{msg:msgText}}, function(err, result) {
+			if (err) {
+				console.log(err);
+			}
+			console.log(result);
 		});
+	});
+	
+	socket.on('chat message', function(msg){
+		var q = Chat.find({});
+		q.findOne().sort('-identifier').exec(function(err,msgOne) {
+			var count = 1;
+			if(err) throw err;
+			if (msgOne != null) {
+				count = msgOne.identifier;
+				count++;
+			}
+			var newMsg = new Chat({identifier: count, user: msg.user, msg: msg.msg, tags: msg.tags, avatar: msg.avatar, created: msg.created});
+			newMsg.save(function(err){
+				if(err) throw err;
+				io.sockets.emit('chat message', newMsg);
+			});		
+		});		
 	});
 });
