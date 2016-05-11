@@ -100,14 +100,6 @@ app.get('/images/checkmark.png', function(req, res){
    res.sendFile(__dirname + '/images/checkmark.png');
 });
 
-app.get('/images/lt.png', function(req, res){
-   res.sendFile(__dirname + '/images/lt.png');
-});
-
-app.get('/images/gt.png', function(req, res){
-   res.sendFile(__dirname + '/images/gt.png');
-});
-
 app.get('/users/av/Default.png', function(req, res){
    res.sendFile(__dirname + '/users/av/Default.png');
 });
