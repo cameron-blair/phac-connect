@@ -241,10 +241,10 @@ function handleMsg(msg) {
 function sendMessage(tag, u, av, date, userMsg, combined, row) {
 	var styleString = "";
 	if (filled)
-		styleString = 'style=" display:none; background-color:';
+		styleString = 'style="display:none;background-color:';
 	else
-		styleString = 'style="border-radius:3px;margin: 2px;border: 2px solid ';
-		numDivs = $('#messages' + tag + ' .messageDivs').length;
+		styleString = 'style="display:none;border-radius:3px;margin: 2px;border: 2px solid ';
+	numDivs = $('#messages' + tag + ' .messageDivs').length;
 	switch (tag) {
 		case "HR":
 			if (numDivs % 2 == 0)
@@ -318,7 +318,7 @@ if (combined)
 	share += "</span></span>";
 	var msg = $('#messages' + tag + ' div').first().html() + share + "</span>";
 	$('#messages' + tag + ' div').first().html(msg);
-	$('#messages' + tag + ' div').first().hide().show('slow');
+	$('#messages' + tag + ' div').first().show('fast');
 }
 
 function msgEdit(div) {
