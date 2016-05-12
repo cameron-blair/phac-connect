@@ -377,21 +377,14 @@ function msgDelete(div) {
 	var confirm = window.confirm("Do you want to delete the message?");
 	if (confirm) {
 		var msgID = $(div).parent().parent().parent().attr('id');
-		$('.' + msgID).remove();
+		$('.' + msgID).hide('fast');
+		//$('.' + msgID).remove();
 		socket.emit('delete message', msgID);
 	}
 	for(var i=msgsSave.length-1; i >= 0; i--) {
 		if (msgsSave[i].identifier == parseInt(msgID)) {
 			msgsSave.splice(i, 1);
 		}
-	}
-	$('#messagesALL').empty();
-	$('#messagesA').empty();
-	$('#messagesHR').empty();
-	$('#messagesPH').empty();
-
-	for(var i=msgsSave.length-1; i >= 0; i--){
-		handleMsg(msgsSave[i]);
 	}
 }
 
