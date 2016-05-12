@@ -174,19 +174,23 @@ e.preventDefault();
 	if ($('#m').val() !== "") {
 		msgText = $('#m').val();
 		msgText = msgText.replace(/<[^>]*>/g,"");
-		$("input[name='tags']:checked").each(function() {
-			tags.push($(this).val());
-		});
-		now = new Date();
-		image = userProfile.picture;
-		socket.emit('chat message', {user: username, msg: msgText, tags: tags, avatar: image, created: now});
-		$('#m').val('');
-		$('#chkHR').prop("checked", false);
-		$('#chkA').prop("checked", false);
-		$('#chkPH').prop("checked", false);
-		$('#imgHR').addClass("faded");
-		$('#imgA').addClass("faded");
-		$('#imgPH').addClass("faded");
+		msgText = msgText.replace(/&[^>]*;/g,"");
+		
+		if (msgText.trim()) {
+			$("input[name='tags']:checked").each(function() {
+				tags.push($(this).val());
+			});
+			now = new Date();
+			image = userProfile.picture;
+			socket.emit('chat message', {user: username, msg: msgText, tags: tags, avatar: image, created: now});
+			$('#m').val('');
+			$('#chkHR').prop("checked", false);
+			$('#chkA').prop("checked", false);
+			$('#chkPH').prop("checked", false);
+			$('#imgHR').addClass("faded");
+			$('#imgA').addClass("faded");
+			$('#imgPH').addClass("faded");
+		}
 	}
 	return false;
 });
@@ -217,7 +221,6 @@ function handleMsg(msg) {
 	var userMsg = msg.msg;
 	var date = msg.created;
 	date = date.substring(0,10) + ", " + date.substring(11,16);
-	userMsg = userMsg.replace(/&/g, "and");
 	uniqueID = msg.identifier + "";
 	if (tags.length == 0)
 		sendMessage('ALL', u, av, date, userMsg, false);
@@ -288,6 +291,7 @@ if (combined)
 	$('#messages' + tag + ' .messageDivs .msgSpan').first().html(htmlMsg);
 	var share = "<span style='margin-left:10px;'>";
 	var twitterMsg = userMsg.replace(/#/g, "%23");
+	twitterMsg = twitterMsg.replace(/&/g, "%26");
 	/*
 	Working on stripping hashtags and allow them to be clickable
 	var hashSplit = userMsg.split("");
@@ -306,7 +310,6 @@ if (combined)
 		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/edit.png'/><img class='msgDelete' onclick='msgDelete(this)' title='Click to delete this message.' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/delete.png'/>";
 	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
 	share += "<a  title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
-	console.log(userMsg);
 	share += userMsg + " - " + u + "(PHAC Connect // " + date + ")";
 	share += "'><img style='width:12px;height:12px;' src='images/mail.png'/></a> ";
 	share += "<img style='width:12px;height:12px;' title='Posted: " + date + "' src='images/time.png'/>";
@@ -417,14 +420,14 @@ function rotateColumn() {
 	}
 
 	if ($('#messagesA').css('display') === 'none') {
-		$('#columnSwitch').toggleClass('turn');
+		$('#columnSwitch').toggleClass('columnSwitchClick');
 		$('.slimScrollDiv').width('20%');
 		$('#messagesA').show('fast');
 		$('#messagesHR').show('fast');
 		$('#messagesPH').show('fast');
 	}
 	else {
-		$('#columnSwitch').toggleClass('turn');
+		$('#columnSwitch').toggleClass('columnSwitchClick');
 		$('.slimScrollDiv').width('0%');
 		$('.slimScrollDiv').eq(0).width('80%');
 		$('#messagesA').hide('fast');

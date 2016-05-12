@@ -161,6 +161,22 @@ ul {
 .checkboxes {
     display: none;
 }
+.columnSwitch {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+
+    -webkit-transition: 200ms linear all;
+    -moz-transition: 200ms linear all;
+    transition: 200ms linear all;
+}
+.columnSwitchClick {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
 .faded {
     opacity: 0.25;
 }
@@ -191,7 +207,4 @@ ul {
 }
 .tdPointer {
     cursor: pointer;
-}
-.turn {
-    transform: rotate(90deg);
 }
