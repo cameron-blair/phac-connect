@@ -34,6 +34,7 @@ function resize() {
 var msgsSave = [];
 var all = false;
 var stream = true;
+var filled = true;
 
 $('#messagesALL').slimScroll({
 	height: height + 'px',
@@ -239,24 +240,25 @@ function handleMsg(msg) {
 
 function sendMessage(tag, u, av, date, userMsg, combined, row) {
 	var styleString = "";
+	if (filled)
+		styleString = 'style="background-color:';
+	else
+		styleString = 'style="border-radius:3px;margin: 2px;border: 2px solid ';
 		numDivs = $('#messages' + tag + ' .messageDivs').length;
 	switch (tag) {
 		case "HR":
-			styleString = 'style="background-color:';
 			if (numDivs % 2 == 0)
 			styleString += '#EAF0CE"';
 			else
 			styleString += '#DDE3C1"';
 			break;
 		case "A":
-			styleString = 'style="background-color:';
 			if (numDivs % 2 == 0)
 			styleString += '#F3DAD8"';
 			else
 			styleString += '#E6CDCB"';
 			break;
 		case "PH":
-			styleString = 'style="background-color:';
 			if (numDivs % 2 == 0)
 			styleString += '#C1EDCC"';
 			else
@@ -266,9 +268,9 @@ function sendMessage(tag, u, av, date, userMsg, combined, row) {
 	if (tag === 'ALL') {
 	numDivs = $('#messagesALL .messageDivs').length;
 		if (numDivs % 2 == 0)
-			styleString = 'style="background-color:#BED8D4"';
+			styleString += '#BED8D4"';
 		else
-			styleString = 'style="background-color:#B1CBC7"';
+			styleString += '#B1CBC7"';
 	}
 	
 if (combined)
@@ -434,6 +436,23 @@ function rotateColumn() {
 		$('#messagesHR').hide('fast');
 		$('#messagesPH').hide('fast');
 	}	
+}
+
+function messageStyle() {
+	$('#messageStyle').toggleClass('messageStyle');
+	$('#messagesALL').empty();
+	$('#messagesA').empty();
+	$('#messagesHR').empty();
+	$('#messagesPH').empty();
+	
+	if (filled)
+		filled = false;
+	else
+		filled = true;
+
+	for(var i=msgsSave.length-1; i >= 0; i--){
+		handleMsg(msgsSave[i]);
+	}
 }
 
 function selectStream(context) {

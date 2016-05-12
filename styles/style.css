@@ -115,7 +115,7 @@ ul {
 #loginMsg {
     line-height: 55px;
     vertical-align: middle;
-    color: #ddd;
+    color: #e6e6e6;
     text-align: center;
     font-weight: bold;
 }
@@ -125,6 +125,14 @@ ul {
 #messagesALL {
     font-size: .8em;
     width: 100% !important;
+}
+#messageStyle {
+	width: 35px;
+	height: 25px;
+	background-color: #e6e6e6;
+	border-radius: 4px;
+	float:right;
+	margin:10px 5px 10px 5px;
 }
 #msgControl {
     width: 80%;
@@ -196,6 +204,11 @@ ul {
     margin: 0;
     line-height: 20px;
     padding: 4px 4px;
+}
+.messageStyle {
+	background-color: transparent !important;
+	border: #e6e6e6 solid 3px !important;
+	transition: all 300ms linear;
 }
 .overlay {
 	background-color: black !important;
