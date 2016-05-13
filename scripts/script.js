@@ -238,7 +238,7 @@ function handleMsg(msg) {
 	}
 }
 
-function sendMessage(tag, u, av, date, userMsg, combined, row) {
+function sendMessage(tag, u, av, date, userMsg, combined) {
 	var styleString = "";
 	if (filled)
 		styleString = 'style="display:none;background-color:';
@@ -273,13 +273,14 @@ function sendMessage(tag, u, av, date, userMsg, combined, row) {
 			styleString += '#B1CBC7"';
 	}
 	
-if (combined)
-	tag = "ALL";
+	if (combined)
+		tag = "ALL";
+		
 	var arr = u.split("@");
 	var name = arr[0];
-	var iden = '<span><span style="font-weight:bold;">' + name + '</span>: <span class="msgSpan">';
-	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:20px;width:20px;border-width:2px;border-style:solid;border-color:#686868;border-radius:25px;margin-right:5px;float:left;"/>' + iden;
-	$('#messages' + tag).prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</span>"));
+	var iden = '<div><span onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><div class="msgSpan">';
+	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:32px;width:32px;border-width:2px;border-style:solid;border-color:#686868;border-radius:25px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
+	$('#messages' + tag).prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</div>"));
 	var splitMsg = userMsg.split(" ");
 	for (var i = 0; i < splitMsg.length; i++) {
 		if (splitMsg[i].indexOf("www") != -1) {
@@ -375,15 +376,56 @@ function msgEditBlur(div) {
 
 function msgDelete(div) {
 	var confirm = window.confirm("Do you want to delete the message?");
+	var delAll = true;
+	var type = "";
 	if (confirm) {
 		var msgID = $(div).parent().parent().parent().attr('id');
-		$('.' + msgID).hide('fast');
-		//$('.' + msgID).remove();
-		socket.emit('delete message', msgID);
+		var color = $(div).parent().parent().parent().attr('style');
+		color = color.slice(-15);
+		color = color.slice(0,-2);
+		switch (color) {
+			case "177, 203, 199":
+			case "190, 216, 212":
+				type = "ALL";
+			break;
+			case "243, 218, 216":
+			case "230, 205, 203":
+				type = "A";
+			break;
+			case "234, 240, 206":
+			case "221, 227, 193":
+				type = "HR";
+			break;
+			case "180, 224, 191":
+			case "193, 237, 204":
+				type = "PH";
+			break;
+		}
+		if (type === "ALL") {
+			$('.' + msgID).hide('fast');
+			socket.emit('delete message', msgID);
+		}
+		else {
+			$(div).parent().parent().parent().hide('fast');
+			var newTags = [];
+			for(var i=msgsSave.length-1; i >= 0; i--) {
+				if (msgsSave[i].identifier == parseInt(msgID)) {
+					newTags = msgsSave[i].tags;
+					for (var j = 0; j < newTags.length; j++) {
+						if (newTags[j] === type)
+							delete newTags[j];
+					}
+				}
+			}
+			socket.emit('remove tag', msgID, newTags);
+			delAll = false;
+		}
 	}
-	for(var i=msgsSave.length-1; i >= 0; i--) {
-		if (msgsSave[i].identifier == parseInt(msgID)) {
-			msgsSave.splice(i, 1);
+	if (delAll) {
+		for(var i=msgsSave.length-1; i >= 0; i--) {
+			if (msgsSave[i].identifier == parseInt(msgID)) {
+				msgsSave.splice(i, 1);
+			}
 		}
 	}
 }
@@ -511,9 +553,18 @@ function reload() {
 }
 
 function showInfo(email,image) {
+	if (email === username) {
+		$('#dialog').dialog("close");
+		$('#personalImg').attr('src', image);
+		$('#personalOptions').html('<br/><br/><a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+		$('#personalEmail').html('<a href="mailto:' + username + '">' + username + '</a>');
+		$('#personalInfo').dialog("open");
+	}
+	else {
 	$('#personalInfo').dialog("close");
 	$('#userImg').attr('src', image);
 	$('#userOptions').html('');
 	$('#userEmail').html('<a href="mailto:' + email + '">' + email + '</a>');
 	$('#dialog').dialog("open");
+	}
 }

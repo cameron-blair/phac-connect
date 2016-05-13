@@ -119,6 +119,10 @@ ul {
     text-align: center;
     font-weight: bold;
 }
+#imgSpan {
+	float: right;
+	margin-right: 10px;
+}
 #messagesHR,
 #messagesA,
 #messagesPH,
@@ -202,13 +206,15 @@ ul {
 }
 .messageDivs {
     margin: 0;
-    line-height: 20px;
     padding: 4px 4px;
 }
 .messageStyle {
 	background-color: transparent !important;
 	border: #e6e6e6 solid 3px !important;
 	transition: all 300ms linear;
+}
+.msgSpan {
+	margin-left: 36px;
 }
 .overlay {
 	background-color: black !important;

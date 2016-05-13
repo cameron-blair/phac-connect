@@ -6,12 +6,12 @@ var jwt = require('express-jwt');
 var mongoose = require('mongoose');
 
 /* Deployment */
-server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
-mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
+//server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
+//mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
 
 /* Development */
-//server.listen(3001);
-//mongoose.connect('mongodb://localhost/messages');
+server.listen(3001);
+mongoose.connect('mongodb://localhost/messages');
 
 var jwtCheck = jwt({
   secret: new Buffer('HO_BSpKmYZWaYuXRbhuC0zbDUE6dWeMLkdqVTrOzvV8wmMnwBgj8vijMHPBsXVwe', 'base64'),
@@ -121,6 +121,15 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on('delete message', function(id){
 		Chat.remove({identifier: id}, function(err, result) {
+			if (err) {
+				console.log(err);
+			}
+			console.log(result);
+		});
+	});
+	
+	socket.on('remove tag', function(id, newTags){
+		Chat.update({identifier: id}, {$set:{tags:newTags}}, function(err, result) {
 			if (err) {
 				console.log(err);
 			}
