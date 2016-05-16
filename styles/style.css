@@ -213,6 +213,12 @@ ul {
 	border: #e6e6e6 solid 3px !important;
 	transition: all 300ms linear;
 }
+.msgImg {
+	padding-right: 3px;
+}
+.msgImgDiv {
+	margin-top:5px;
+}
 .msgSpan {
 	margin-left: 36px;
 }

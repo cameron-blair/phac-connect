@@ -282,16 +282,29 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:32px;width:32px;border-width:2px;border-style:solid;border-color:#686868;border-radius:25px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
 	$('#messages' + tag).prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</div>"));
 	var splitMsg = userMsg.split(" ");
+	var imgDiv = "";
 	for (var i = 0; i < splitMsg.length; i++) {
-		if (splitMsg[i].indexOf("www") != -1) {
-			if (splitMsg[i].indexOf("http") != -1)
-				splitMsg[i] = "<a target='_blank' href='" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
-			else
-				splitMsg[i] = "<a target='_blank' href='http://" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
+		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+			if (splitMsg[i].indexOf("http") != -1) {
+				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='100%' height='100%' /></a>";
+					splitMsg[i] = "";
+				}
+				else
+					splitMsg[i] = "<a target='_blank' href='" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
+				}
+			else {
+				if (splitMsg[i].indexOf('.png') != -1 || [i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+					imgDiv += "<a class='msgImgLink' href='http://" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='http://" + splitMsg[i] + "' width='100%' height='100%' /></a>";
+					splitMsg[i] = "";
+				}
+				else
+					splitMsg[i] = "<a target='_blank' href='http://" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
+			}
 		}
 	}
 	htmlMsg = splitMsg.join(" ");
-	$('#messages' + tag + ' .messageDivs .msgSpan').first().html(htmlMsg);
+	$('#messages' + tag + ' .messageDivs .msgSpan').first().html(htmlMsg + "<div class='msgImgDiv'>" + imgDiv + "</div>");
 	var share = "<span style='margin-left:10px;'>";
 	var twitterMsg = userMsg.replace(/#/g, "%23");
 	twitterMsg = twitterMsg.replace(/&/g, "%26");
@@ -327,9 +340,26 @@ function msgEdit(div) {
 	$(div).parent().find('img').hide();
 	$(div).parent().find('.msgCheck').show();
 	var msgText = $(div).parent().parent().parent().find('.msgSpan').html();
+	var imgText = "";
+	var imgTextReplaceArr = [];
+	if (msgText.indexOf('<div class="msgImgDiv">') != -1) {
+		imgText = msgText.slice(0, -6);
+		imgText = imgText.substring(imgText.indexOf('<div class="msgImgDiv">')+23,imgText.length);
+		var imgArr = imgText.split(" ");
+		for (var i = 0; i < imgArr.length; i++ ) {
+			if (imgArr[i].indexOf("href=") != -1)
+				imgTextReplaceArr.push(imgArr[i].substring(6,imgArr[i].length-1));
+		}
+		console.log(imgTextReplaceArr);
+	}
 	msgText = msgText.replace(/<[^>]*>/g,"");
 	var msgID = $(div).parent().parent().parent().attr('id');
-	var editText = "<input class='editingMsg' onblur='msgEditBlur(this)' type='textbox' value='" + msgText + "'/>";
+	var imgTextReplace = "";
+	if (imgTextReplaceArr.length > 0)
+		imgTextReplace = imgTextReplaceArr.join(" ");
+	if (msgText === "")
+		imgTextReplace = " " + imgTextReplace;
+	var editText = "<input class='editingMsg' onblur='msgEditBlur(this)' type='textbox' value='" + msgText + imgTextReplace + "'/>";
 	$(div).parent().parent().parent().find('.msgSpan').html(editText);
 	$(div).parent().parent().parent().find('.editingMsg').focus();
 }
@@ -338,12 +368,25 @@ function msgEditBlur(div) {
 	var msgText = $(div).val();
 	msgText = msgText.replace(/<[^>]*>/g,"");
 	var splitMsg = msgText.split(" ");
+	var imgDiv = "";
 	for (var i = 0; i < splitMsg.length; i++) {
-		if (splitMsg[i].indexOf("www") != -1) {
-			if (splitMsg[i].indexOf("http") != -1)
-				splitMsg[i] = "<a target='_blank' href='" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
-			else
-				splitMsg[i] = "<a target='_blank' href='http://" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
+		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+			if (splitMsg[i].indexOf("http") != -1) {
+				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='100%' height=100%' /></a>";
+					splitMsg[i] = "";
+				}
+				else
+					splitMsg[i] = "<a target='_blank' href='" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
+				}
+			else {
+				if (splitMsg[i].indexOf('.png') != -1 || [i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+					imgDiv += "<a class='msgImgLink' href='http://" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='http://" + splitMsg[i] + "' width='100%' height='100%' /></a>";
+					splitMsg[i] = "";
+				}
+				else
+					splitMsg[i] = "<a target='_blank' href='http://" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
+			}
 		}
 	}
 	var htmlMsg = splitMsg.join(" ");
@@ -354,7 +397,7 @@ function msgEditBlur(div) {
 	if (msgText !== "") {
 		socket.emit('edit message', msgID, msgText);
 		$('.' + msgID).each(function() {
-			$(this).find('.msgSpan').html(htmlMsg);
+			$(this).find('.msgSpan').html(htmlMsg + "<div class='msgImgDiv'>" + imgDiv + "</div>");
 		});
 		for(var i=msgsSave.length-1; i >= 0; i--) {
 			if (msgsSave[i].identifier == parseInt(msgID)) {
