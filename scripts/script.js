@@ -282,12 +282,13 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:32px;width:32px;border-width:2px;border-style:solid;border-color:#686868;border-radius:25px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
 	$('#messages' + tag).prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</div>"));
 	var splitMsg = userMsg.split(" ");
+	var newMsg = [];
 	var imgDiv = "";
 	for (var i = 0; i < splitMsg.length; i++) {
 		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 			if (splitMsg[i].indexOf("http") != -1) {
 				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
-					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='100%' height='100%' /></a>";
+					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height='100%' /></a>";
 					splitMsg[i] = "";
 				}
 				else
@@ -295,15 +296,19 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 				}
 			else {
 				if (splitMsg[i].indexOf('.png') != -1 || [i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
-					imgDiv += "<a class='msgImgLink' href='http://" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='http://" + splitMsg[i] + "' width='100%' height='100%' /></a>";
+					imgDiv += "<a class='msgImgLink' href='http://" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='http://" + splitMsg[i] + "' width='200px' height='100%' /></a>";
 					splitMsg[i] = "";
 				}
 				else
 					splitMsg[i] = "<a target='_blank' href='http://" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
 			}
+			if (splitMsg[i] !== "")
+				newMsg.push(splitMsg[i]);
 		}
+		else
+			newMsg.push(splitMsg[i]);
 	}
-	htmlMsg = splitMsg.join(" ");
+	htmlMsg = newMsg.join(" ");
 	$('#messages' + tag + ' .messageDivs .msgSpan').first().html(htmlMsg + "<div class='msgImgDiv'>" + imgDiv + "</div>");
 	var share = "<span style='margin-left:10px;'>";
 	var twitterMsg = userMsg.replace(/#/g, "%23");
@@ -350,14 +355,13 @@ function msgEdit(div) {
 			if (imgArr[i].indexOf("href=") != -1)
 				imgTextReplaceArr.push(imgArr[i].substring(6,imgArr[i].length-1));
 		}
-		console.log(imgTextReplaceArr);
 	}
 	msgText = msgText.replace(/<[^>]*>/g,"");
 	var msgID = $(div).parent().parent().parent().attr('id');
 	var imgTextReplace = "";
 	if (imgTextReplaceArr.length > 0)
 		imgTextReplace = imgTextReplaceArr.join(" ");
-	if (msgText === "")
+	if (msgText !== "" && imgTextReplace !== "")
 		imgTextReplace = " " + imgTextReplace;
 	var editText = "<input class='editingMsg' onblur='msgEditBlur(this)' type='textbox' value='" + msgText + imgTextReplace + "'/>";
 	$(div).parent().parent().parent().find('.msgSpan').html(editText);
@@ -368,12 +372,13 @@ function msgEditBlur(div) {
 	var msgText = $(div).val();
 	msgText = msgText.replace(/<[^>]*>/g,"");
 	var splitMsg = msgText.split(" ");
+	var newMsg = [];
 	var imgDiv = "";
 	for (var i = 0; i < splitMsg.length; i++) {
 		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 			if (splitMsg[i].indexOf("http") != -1) {
 				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
-					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='100%' height=100%' /></a>";
+					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height=100%' /></a>";
 					splitMsg[i] = "";
 				}
 				else
@@ -381,16 +386,19 @@ function msgEditBlur(div) {
 				}
 			else {
 				if (splitMsg[i].indexOf('.png') != -1 || [i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
-					imgDiv += "<a class='msgImgLink' href='http://" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='http://" + splitMsg[i] + "' width='100%' height='100%' /></a>";
+					imgDiv += "<a class='msgImgLink' href='http://" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='http://" + splitMsg[i] + "' width='200px' height='100%' /></a>";
 					splitMsg[i] = "";
 				}
 				else
 					splitMsg[i] = "<a target='_blank' href='http://" + splitMsg[i] + "'>" + splitMsg[i] + "</a>";
 			}
+			if (splitMsg[i] !== "")
+				newMsg.push(splitMsg[i]);
 		}
+		else
+			newMsg.push(splitMsg[i]);
 	}
-	var htmlMsg = splitMsg.join(" ");
-	htmlMsg = htmlMsg;
+	var htmlMsg = newMsg.join(" ");
 	$(div).parent().parent().parent().find('img').show();
 	$(div).parent().parent().parent().find('.msgCheck').hide();
 	var msgID = $(div).parent().parent().parent().attr('id');
