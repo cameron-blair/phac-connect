@@ -248,29 +248,29 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	switch (tag) {
 		case "HR":
 			if (numDivs % 2 == 0)
-			styleString += '#EAF0CE"';
+				styleString += '#ff8360"';
 			else
-			styleString += '#DDE3C1"';
+				styleString += '#ff9d7a"';
 			break;
 		case "A":
 			if (numDivs % 2 == 0)
-			styleString += '#F3DAD8"';
+				styleString += '#f7b267"';
 			else
-			styleString += '#E6CDCB"';
+				styleString += '#ffcc81"';
 			break;
 		case "PH":
 			if (numDivs % 2 == 0)
-			styleString += '#C1EDCC"';
+				styleString += '#79ce7b"';
 			else
-			styleString += '#B4E0BF"';
+				styleString += '#93e895"';
 			break;
 	}
 	if (tag === 'ALL') {
 	numDivs = $('#messagesALL .messageDivs').length;
 		if (numDivs % 2 == 0)
-			styleString += '#BED8D4"';
+			styleString += '#8eb8e5"';
 		else
-			styleString += '#B1CBC7"';
+			styleString += '#a8d2ff"';
 	}
 	
 	if (combined)
@@ -279,16 +279,21 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	var arr = u.split("@");
 	var name = arr[0];
 	var iden = '<div><span onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><div class="msgSpan">';
-	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:32px;width:32px;border-width:2px;border-style:solid;border-color:#686868;border-radius:25px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
+	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:32px;width:32px;border-width:2px;border-style:solid;border-color:#333;border-radius:25px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
 	$('#messages' + tag).prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</div>"));
 	var splitMsg = userMsg.split(" ");
 	var newMsg = [];
 	var imgDiv = "";
 	for (var i = 0; i < splitMsg.length; i++) {
+	var req = "";
 		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 			if (splitMsg[i].indexOf("http") != -1) {
 				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
-					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height='100%' /></a>";
+					req = $.get(splitMsg[i], function(data, status) {
+						return status;
+					});
+					if (req.readyState === 1)
+						imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height='100%' /></a>";
 					splitMsg[i] = "";
 				}
 				else
@@ -296,7 +301,11 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 				}
 			else {
 				if (splitMsg[i].indexOf('.png') != -1 || [i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
-					imgDiv += "<a class='msgImgLink' href='http://" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='http://" + splitMsg[i] + "' width='200px' height='100%' /></a>";
+					req = $.get(splitMsg[i], function(data, status) {
+						return status;
+					});
+					if (req.readyState === 1)
+						imgDiv += "<a class='msgImgLink' href='http://" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='http://" + splitMsg[i] + "' width='200px' height='100%' /></a>";
 					splitMsg[i] = "";
 				}
 				else
@@ -378,7 +387,11 @@ function msgEditBlur(div) {
 		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 			if (splitMsg[i].indexOf("http") != -1) {
 				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
-					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height=100%' /></a>";
+					req = $.get(splitMsg[i], function(data, status) {
+						return status;
+					});
+					if (req.readyState === 1)
+						imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height=100%' /></a>";
 					splitMsg[i] = "";
 				}
 				else
@@ -386,7 +399,11 @@ function msgEditBlur(div) {
 				}
 			else {
 				if (splitMsg[i].indexOf('.png') != -1 || [i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
-					imgDiv += "<a class='msgImgLink' href='http://" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='http://" + splitMsg[i] + "' width='200px' height='100%' /></a>";
+					req = $.get(splitMsg[i], function(data, status) {
+						return status;
+					});
+					if (req.readyState === 1)
+						imgDiv += "<a class='msgImgLink' href='http://" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='http://" + splitMsg[i] + "' width='200px' height='100%' /></a>";
 					splitMsg[i] = "";
 				}
 				else
@@ -435,20 +452,20 @@ function msgDelete(div) {
 		color = color.slice(-15);
 		color = color.slice(0,-2);
 		switch (color) {
-			case "177, 203, 199":
-			case "190, 216, 212":
+			case "142, 184, 229":
+			case "168, 210, 255":
 				type = "ALL";
 			break;
-			case "243, 218, 216":
-			case "230, 205, 203":
+			case "219, 80, 74":
+			case "245, 106, 100":
 				type = "A";
 			break;
-			case "234, 240, 206":
-			case "221, 227, 193":
+			case "255, 131, 96":
+			case "255, 157, 122":
 				type = "HR";
 			break;
-			case "180, 224, 191":
-			case "193, 237, 204":
+			case "121, 206, 123":
+			case "147, 232, 149":
 				type = "PH";
 			break;
 		}

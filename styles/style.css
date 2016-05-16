@@ -10,7 +10,7 @@
     box-sizing: border-box;
 }
 a:link {
-	color:#686868;
+	color:#333;
 }
 a:hover {
 	color: #333;
@@ -21,7 +21,7 @@ a:active {
 	text-decoration: none;
 }
 body {
-    color: #686868;
+    color: #333;
     margin-top: 105px;
     min-width: 1450px;
 }
@@ -32,7 +32,7 @@ fieldset {
     border-color: #bbb;
 }
 form {
-    background-color: #686868;
+    background-color: #333;
     padding-bottom: 0px;
     position: fixed;
     top: 50px;
@@ -78,7 +78,7 @@ ul {
 #banner {
     z-index: 1;
     color: #fff;
-    background-color: #686868;
+    background-color: #333;
     position: fixed;
     top: 0;
     width: 100%;
@@ -93,7 +93,7 @@ ul {
     width: 100px;
 }
 #btnSubmit {
-    color: #686868;
+    color: #333;
     height: 45px;
     margin-top: 5px;
 }
@@ -108,7 +108,7 @@ ul {
     display: none;
 }
 #legend {
-    background-color: #686868;
+    background-color: #333;
     font-size: .8em;
     font-weight: bold;
 }
