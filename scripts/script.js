@@ -248,15 +248,15 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	switch (tag) {
 		case "HR":
 			if (numDivs % 2 == 0)
-				styleString += '#ff8360"';
-			else
-				styleString += '#ff9d7a"';
-			break;
-		case "A":
-			if (numDivs % 2 == 0)
 				styleString += '#f7b267"';
 			else
 				styleString += '#ffcc81"';
+			break;
+		case "A":
+			if (numDivs % 2 == 0)
+				styleString += '#ff8360"';
+			else
+				styleString += '#ff9d7a"';
 			break;
 		case "PH":
 			if (numDivs % 2 == 0)
@@ -456,12 +456,12 @@ function msgDelete(div) {
 			case "168, 210, 255":
 				type = "ALL";
 			break;
-			case "219, 80, 74":
-			case "245, 106, 100":
-				type = "A";
-			break;
 			case "255, 131, 96":
 			case "255, 157, 122":
+				type = "A";
+			break;
+			case "219, 80, 74":
+			case "245, 106, 100":
 				type = "HR";
 			break;
 			case "121, 206, 123":
