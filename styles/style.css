@@ -155,6 +155,9 @@ ul {
 #msgControl {
     margin-left: 5px;
 }
+#searchResultsDiv {
+	font-size: .8em !important;
+}
 #twitterA,
 #twitter {
     width: 20%;

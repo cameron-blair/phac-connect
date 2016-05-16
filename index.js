@@ -119,6 +119,14 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('load history', msgs);
 	});
 	
+	socket.on('search tags', function(text){
+		var query = Chat.find({"msg": {'$regex': '.*' + text + '.*'}});
+			query.sort('-created').limit(250).exec(function(err,msgs) {
+		if(err) throw err;
+		socket.emit('show tags', msgs);
+		});
+	});
+	
 	socket.on('delete message', function(id){
 		Chat.remove({identifier: id}, function(err, result) {
 			if (err) {
