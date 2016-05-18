@@ -322,8 +322,14 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	var imgDiv = "";
 	for (var i = 0; i < splitMsg.length; i++) {
 		
-		if (splitMsg[i].charAt(0) === "#")
+		if (splitMsg[i].charAt(0) === "#") {
+			if (!(/^[a-zA-Z0-9]+$/.test(splitMsg[i].slice(1)))) {
+				alert("Search terms can only contain letters and numbers.");
+				$('#m').val(userMsg);
+				return;
+			}
 			splitMsg[i] = "<a style='cursor:pointer;font-weight:bold;' title='Search for category.' onclick='searchResults(\"" + splitMsg[i] + "\")'>" + splitMsg[i] + "</a>";
+		}
 		
 		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 			if (splitMsg[i].indexOf("http") != -1) {
@@ -564,8 +570,8 @@ function msgDelete(div) {
 			case "255, 157, 122":
 				type = "A";
 			break;
-			case "219, 80, 74":
-			case "245, 106, 100":
+			case "247, 178, 103":
+			case "255, 204, 129":
 				type = "HR";
 			break;
 			case "121, 206, 123":
