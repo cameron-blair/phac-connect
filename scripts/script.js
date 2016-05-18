@@ -192,6 +192,16 @@ e.preventDefault();
 		msgText = $('#m').val();
 		msgText = msgText.replace(/<[^>]*>/g,"");
 		msgText = msgText.replace(/&[^>]*;/g,"");
+		var splitMsg = msgText.split(" ");
+		for (var i = 0; i < splitMsg.length; i++) {
+			if (splitMsg[i].charAt(0) === "#") {
+				if (!(/^[a-zA-Z0-9]+$/.test(splitMsg[i].slice(1)))) {
+					alert("Search terms can only contain letters and numbers.");
+					$('#m').val(userMsg);
+					return;
+				}
+			}
+		}
 		
 		if (msgText.trim()) {
 			$("input[name='tags']:checked").each(function() {
@@ -323,11 +333,6 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	for (var i = 0; i < splitMsg.length; i++) {
 		
 		if (splitMsg[i].charAt(0) === "#") {
-			if (!(/^[a-zA-Z0-9]+$/.test(splitMsg[i].slice(1)))) {
-				alert("Search terms can only contain letters and numbers.");
-				$('#m').val(userMsg);
-				return;
-			}
 			splitMsg[i] = "<a style='cursor:pointer;font-weight:bold;' title='Search for category.' onclick='searchResults(\"" + splitMsg[i] + "\")'>" + splitMsg[i] + "</a>";
 		}
 		
