@@ -276,6 +276,8 @@ e.preventDefault();
 					$('#m').val(msgText);
 					return;
 				}
+				else
+					ga('send', 'event', 'Used hashtag', splitMsg[i]);
 			}
 			
 			if (splitMsg[i].indexOf('.png') != -1 || [i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
@@ -290,12 +292,16 @@ e.preventDefault();
 					$('#m').val(msgText);
 					return;
 					}
+				else
+					ga('send', 'event', 'Attached image', imgUrl);
 			}
 		}
 		
 		if (msgText.trim()) {
 			$("input[name='tags']:checked").each(function() {
-				tags.push($(this).val());
+				var tagName = $(this).val();
+				tags.push(tagName);
+				ga('send', 'event', 'Sent to stream', tagName);
 			});
 			now = new Date();
 			image = userProfile.picture;
@@ -715,6 +721,7 @@ function hideButton(span) {
 }
 
 function rotateColumn() {
+	ga('send', 'event', 'Toggle columns', context);
     if (all) {
 		$('td').attr("disabled",true);
 		all = false;
@@ -749,6 +756,7 @@ function rotateColumn() {
 }
 
 function messageStyle() {
+	ga('send', 'event', 'Toggle message style');
 	$('#messageStyle').toggleClass('messageStyle');
 	$('#messagesALL').empty();
 	$('#messagesA').empty();
@@ -766,6 +774,7 @@ function messageStyle() {
 }
 
 function selectStream(context) {
+	ga('send', 'event', 'Focus Stream', context);
 	if ($('#td' + context).css('display') !== 'none' && stream) {
 		$('#columnSwitch').hide("slow");
 		$('#tdALL').hide("fast");
@@ -827,6 +836,7 @@ function reload() {
 }
 
 function showInfo(email,image) {
+	ga('send', 'event', 'Show Info');
 	if (email === username) {
 		$('#dialog').dialog("close");
 		$('#personalImg').attr('src', image);
@@ -844,6 +854,7 @@ function showInfo(email,image) {
 }
 
 function searchResults(text) {
+	ga('send', 'event', 'Search tags');
 	socket.emit('search tags', text);
 	$('#personalInfo').dialog("close");
 	$('#dialog').dialog("close");
