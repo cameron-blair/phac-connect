@@ -35,6 +35,7 @@ var msgsSave = [];
 var all = false;
 var stream = true;
 var filled = true;
+var currentDiv;
 
 $('#messagesALL').slimScroll({
 	height: height + 'px',
@@ -69,7 +70,71 @@ $(document).ready(function() {
 			$('.ui-widget-overlay').removeClass('overlay');
 		},
 		autoOpen: false
-		});
+	});
+	$('#confirmDelete').dialog({
+		hide: 'fade',
+		show: 'fade',
+		modal: true,
+		draggable: false,
+		resizable: false,
+		open: function () {
+			$('.ui-widget-overlay').addClass('overlay');
+			$('.ui-widget-header').addClass('header');
+		},
+		close: function () {
+			$('.ui-widget-overlay').removeClass('overlay');
+		},
+		autoOpen: false,
+		buttons: {
+			"Confirm": function() {
+				$(this).dialog("close");
+				msgDeleteConfirm();
+			},
+			Cancel: function() {
+				$(this).dialog("close");
+			}
+		}
+	});
+	$('#errorImage').dialog({
+		hide: 'fade',
+		show: 'fade',
+		modal: true,
+		draggable: false,
+		resizable: false,
+		open: function () {
+			$('.ui-widget-overlay').addClass('overlay');
+			$('.ui-widget-header').addClass('header');
+		},
+		close: function () {
+			$('.ui-widget-overlay').removeClass('overlay');
+		},
+		autoOpen: false,
+		buttons: {
+			"OK": function() {
+				$(this).dialog("close");
+			}
+		}
+	});
+	$('#errorCategory').dialog({
+		hide: 'fade',
+		show: 'fade',
+		modal: true,
+		draggable: false,
+		resizable: false,
+		open: function () {
+			$('.ui-widget-overlay').addClass('overlay');
+			$('.ui-widget-header').addClass('header');
+		},
+		close: function () {
+			$('.ui-widget-overlay').removeClass('overlay');
+		},
+		autoOpen: false,
+		buttons: {
+			"OK": function() {
+				$(this).dialog("close");
+			}
+		}
+	});
 	$('#personalInfo').dialog({
 		hide: 'fade',
 		show: 'fade',
@@ -89,6 +154,9 @@ $(document).ready(function() {
 		hide: 'fade',
 		show: 'fade',
 		modal: true,
+		width: 500,
+		height: 500,
+		maxHeight: 500,
 		draggable: false,
 		resizable: false,
 		open: function () {
@@ -100,7 +168,7 @@ $(document).ready(function() {
 			$('#searchResultsDiv').html("");
 		},
 		autoOpen: false
-		});
+	});
 	setTimeout(function() {
 		$('#twitter-widget-0').height(height-3);
 		$('#twitterA').show('fast');
@@ -196,10 +264,24 @@ e.preventDefault();
 		for (var i = 0; i < splitMsg.length; i++) {
 			if (splitMsg[i].charAt(0) === "#") {
 				if (!(/^[a-zA-Z0-9]+$/.test(splitMsg[i].slice(1)))) {
-					alert("Search terms can only contain letters and numbers.");
-					$('#m').val(userMsg);
+					$('#errorCategory').dialog("open");
+					$('#m').val(msgText);
 					return;
 				}
+			}
+			
+			if (splitMsg[i].indexOf('.png') != -1 || [i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+				var imgUrl = "";
+				if (splitMsg[i].indexOf('http') == -1)
+					imgUrl = 'http://' + splitMsg[i];
+				else
+					imgUrl = splitMsg[i];
+				var checkImg = jQuery.ajax({type: "HEAD", url: imgUrl, async: false});
+				if (checkImg.status !== 200) {
+					$('#errorImage').dialog("open");
+					$('#m').val(msgText);
+					return;
+					}
 			}
 		}
 		
@@ -381,9 +463,9 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 function sendResults(tag, u, av, date, userMsg, combined) {
 	var styleString = "";
 	if (filled)
-		styleString = 'style="display:none;background-color:';
+		styleString = 'style="background-color:';
 	else
-		styleString = 'style="display:none;border-radius:3px;margin: 2px;border: 2px solid ';
+		styleString = 'style="border-radius:3px;margin: 2px;border: 2px solid ';
 	numDivs = $('#messages' + tag + ' .messageDivs').length;
 	switch (tag) {
 		case "HR":
@@ -456,7 +538,7 @@ function sendResults(tag, u, av, date, userMsg, combined) {
 	twitterMsg = twitterMsg.replace(/&/g, "%26");
 	share += "<span id=\"imgSpan\" style=\"opacity:0\">";
 	if (u === username)
-		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/edit.png'/><img class='msgDelete' onclick='msgDelete(this)' title='Click to delete this message.' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/delete.png'/>";
+		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/edit.png'/>";
 	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
 	share += "<a  title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
 	share += userMsg + " - " + u + "(PHAC Connect // " + date + ")";
@@ -465,7 +547,6 @@ function sendResults(tag, u, av, date, userMsg, combined) {
 	share += "</span></span>";
 	var msg = $('#searchResultsDiv div').first().html() + share + "</span>";
 	$('#searchResultsDiv div').first().html(msg);
-	$('#searchResultsDiv div').first().show('fast');
 }
 
 function msgEdit(div) {
@@ -558,51 +639,53 @@ function msgEditBlur(div) {
 }
 
 function msgDelete(div) {
-	var confirm = window.confirm("Do you want to delete the message?");
+	currentDiv = div;
+	$('#confirmDelete').dialog("open");
+}
+
+function msgDeleteConfirm() {
 	var delAll = true;
 	var type = "";
-	if (confirm) {
-		var msgID = $(div).parent().parent().parent().attr('id');
-		var color = $(div).parent().parent().parent().attr('style');
-		color = color.slice(-15);
-		color = color.slice(0,-2);
-		switch (color) {
-			case "142, 184, 229":
-			case "168, 210, 255":
-				type = "ALL";
-			break;
-			case "255, 131, 96":
-			case "255, 157, 122":
-				type = "A";
-			break;
-			case "247, 178, 103":
-			case "255, 204, 129":
-				type = "HR";
-			break;
-			case "121, 206, 123":
-			case "147, 232, 149":
-				type = "PH";
-			break;
-		}
-		if (type === "ALL") {
-			$('.' + msgID).hide('fast');
-			socket.emit('delete message', msgID);
-		}
-		else {
-			$(div).parent().parent().parent().hide('fast');
-			var newTags = [];
-			for(var i=msgsSave.length-1; i >= 0; i--) {
-				if (msgsSave[i].identifier == parseInt(msgID)) {
-					newTags = msgsSave[i].tags;
-					for (var j = 0; j < newTags.length; j++) {
-						if (newTags[j] === type)
-							delete newTags[j];
-					}
+	var msgID = $(currentDiv).parent().parent().parent().attr('id');
+	var color = $(currentDiv).parent().parent().parent().attr('style');
+	color = color.slice(-15);
+	color = color.slice(0,-2);
+	switch (color) {
+		case "142, 184, 229":
+		case "168, 210, 255":
+			type = "ALL";
+		break;
+		case "255, 131, 96":
+		case "255, 157, 122":
+			type = "A";
+		break;
+		case "247, 178, 103":
+		case "255, 204, 129":
+			type = "HR";
+		break;
+		case "121, 206, 123":
+		case "147, 232, 149":
+			type = "PH";
+		break;
+	}
+	if (type === "ALL") {
+		$('.' + msgID).hide('fast');
+		socket.emit('delete message', msgID);
+	}
+	else {
+		$(currentDiv).parent().parent().parent().hide('fast');
+		var newTags = [];
+		for(var i=msgsSave.length-1; i >= 0; i--) {
+			if (msgsSave[i].identifier == parseInt(msgID)) {
+				newTags = msgsSave[i].tags;
+				for (var j = 0; j < newTags.length; j++) {
+					if (newTags[j] === type)
+						delete newTags[j];
 				}
 			}
-			socket.emit('remove tag', msgID, newTags);
-			delAll = false;
 		}
+		socket.emit('remove tag', msgID, newTags);
+		delAll = false;
 	}
 	if (delAll) {
 		for(var i=msgsSave.length-1; i >= 0; i--) {
@@ -753,8 +836,9 @@ function showInfo(email,image) {
 }
 
 function searchResults(text) {
+	socket.emit('search tags', text);
 	$('#personalInfo').dialog("close");
 	$('#dialog').dialog("close");
 	$('#searchResults').dialog("open");
-	socket.emit('search tags', text);
+
 }
