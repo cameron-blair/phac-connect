@@ -85,15 +85,23 @@ $(document).ready(function() {
 			$('.ui-widget-overlay').removeClass('overlay');
 		},
 		autoOpen: false,
-		buttons: {
-			"Confirm": function() {
-				$(this).dialog("close");
-				msgDeleteConfirm();
-			},
-			Cancel: function() {
-				$(this).dialog("close");
-			}
-		}
+		buttons:
+			[
+				{
+					text: "Delete",
+					"class": 'deleteButton',
+					click: function() {
+						$(this).dialog("close");
+						msgDeleteConfirm();
+						}
+				},
+				{
+					text: "Cancel",
+					click: function() {
+						$(this).dialog("close");
+					}
+				}
+			]
 	});
 	$('#errorImage').dialog({
 		hide: 'fade',

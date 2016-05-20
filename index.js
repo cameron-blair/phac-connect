@@ -34,7 +34,10 @@ app.use('/index.html', jwtCheck);
 app.get('/', function(req, res) {
       res.sendFile(__dirname + '/index.html');  
     });
-	
+
+app.get('/images/alert.png', function(req, res){
+   res.sendFile(__dirname + '/images/alert.png');
+});
 
 app.get('/images/gov.png', function(req, res){
    res.sendFile(__dirname + '/images/gov.png');

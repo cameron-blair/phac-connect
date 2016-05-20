@@ -104,7 +104,7 @@ ul {
 #control {
     min-width: 600px;
 }
-#dialog, #personalInfo {
+#dialog, #personalInfo, #errorCategory, #errorImage, #confirmDelete {
     display: none;
 }
 #legend {
@@ -191,6 +191,14 @@ ul {
     -moz-transform: rotate(0deg);
     -ms-transform: rotate(0deg);
     transform: rotate(0deg);
+}
+.deleteButton {
+	color: #fff !important;
+	background-color: #f00 !important;
+	background-image: none !important;
+}
+.editingMsg {
+	width: 90%;
 }
 .faded {
     opacity: 0.25;
