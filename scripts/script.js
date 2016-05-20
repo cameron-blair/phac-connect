@@ -721,7 +721,12 @@ function hideButton(span) {
 }
 
 function rotateColumn() {
-	ga('send', 'event', 'Toggle columns', context);
+	var toggleString = "";
+	if (!all)
+		toggleString = "To single column.";
+	else
+		toggleString = "To multiple columns.";
+	ga('send', 'event', 'Toggle columns', toggleString);
     if (all) {
 		$('td').attr("disabled",true);
 		all = false;
@@ -756,7 +761,12 @@ function rotateColumn() {
 }
 
 function messageStyle() {
-	ga('send', 'event', 'Toggle message style');
+	var messageStyle = "";
+	if (filled)
+		messageStyle = "To border.";
+	else
+		messageStyle = "To filled."
+	ga('send', 'event', 'Toggle message style', messageStyle);
 	$('#messageStyle').toggleClass('messageStyle');
 	$('#messagesALL').empty();
 	$('#messagesA').empty();
