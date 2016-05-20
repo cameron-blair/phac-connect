@@ -194,7 +194,12 @@ var image = "";
 var uniqueID = "";
 $('#login').click(function(e) {
 	e.preventDefault();
+	lock.show({
+      icon:            'http://i.imgur.com/ppn0iya.png',
+      rememberLastLogin:  true
+    });
 	lock.show(function(err, profile, token) {
+		$('h1').html('Yes');
 		if (err) {
 			alert('There was an error');
 			alert(err);
@@ -846,7 +851,7 @@ function reload() {
 }
 
 function showInfo(email,image) {
-	ga('send', 'event', 'Show Info');
+	ga('send', 'event', 'Show Info', email);
 	if (email === username) {
 		$('#dialog').dialog("close");
 		$('#personalImg').attr('src', image);

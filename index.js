@@ -132,28 +132,19 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on('delete message', function(id){
 		Chat.remove({identifier: id}, function(err, result) {
-			if (err) {
-				console.log(err);
-			}
-			console.log(result);
+			if (err) throw err;
 		});
 	});
 	
 	socket.on('remove tag', function(id, newTags){
 		Chat.update({identifier: id}, {$set:{tags:newTags}}, function(err, result) {
-			if (err) {
-				console.log(err);
-			}
-			console.log(result);
+			if (err) throw err;
 		});
 	});
 	
 	socket.on('edit message', function(id, msgText){
 		Chat.update({identifier: id}, {$set:{msg:msgText}}, function(err, result) {
-			if (err) {
-				console.log(err);
-			}
-			console.log(result);
+			if (err) throw err;
 		});
 	});
 	

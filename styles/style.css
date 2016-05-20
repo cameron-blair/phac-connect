@@ -244,3 +244,13 @@ ul {
 .tdPointer {
     cursor: pointer;
 }
+#a0-lock .a0-primary {
+	color: #fff !important;
+}
+#a0-lock *{
+	font-family: Verdana, Tahoma !important;
+	color: #333 !important;
+}
+.a0-footer {
+	display: none !important;
+}
