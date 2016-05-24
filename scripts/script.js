@@ -8,8 +8,13 @@ $('#msgControl').width((width-250) + 'px');
 if (width < 1450) {
 	$('#btnControl').width('75px');
 	height = height - 17;
-	if (width <= 600)
+	if (width <= 600) {
 		$('#msgControl').width('350px');
+		$('#tdALL').prop('disabled', true);
+		$('#tdA').prop('disabled', true);
+		$('#tdHR').prop('disabled', true);
+		$('#tdPH').prop('disabled', true);
+	}
 }
 window.onresize = resize;
 
@@ -23,6 +28,34 @@ function resize() {
 		if (width <= 600)
 			$('#msgControl').width('350px');
 		}
+	if (width > 600) {
+		$('#tdALL').click(function() {
+			if (all)
+				rotateColumn();
+			selectStream('ALL');
+		});
+
+		$('#tdHR').click(function() {
+			if (all)
+				rotateColumn();
+			selectStream('HR');
+		});
+
+		$('#tdA').click(function() {
+			if (all)
+				rotateColumn();
+			selectStream('A');
+		});
+
+		$('#tdPH').click(function() {
+			if (all)
+				rotateColumn();
+			selectStream('PH');
+		});
+	}
+	
+	if (width <= 600)
+		height = height - 78;
 	$('#messagesALL').height(height + 'px');
 	$('#messagesPH').height(height + 'px');
 	$('#messagesA').height(height + 'px');
@@ -35,23 +68,27 @@ var msgsSave = [];
 var all = false;
 var stream = true;
 var filled = true;
-var currentDiv;
+
+var scrollWidth = '20%';
+
+if (width <= 600)
+	scrollWidth = '25%';
 
 $('#messagesALL').slimScroll({
 	height: height + 'px',
-	width: '20%'
+	width: scrollWidth
 });
 $('#messagesPH').slimScroll({
 	height: height + 'px',
-	width: '20%'
+	width: scrollWidth
 });
 $('#messagesA').slimScroll({
 	height: height + 'px',
-	width: '20%'
+	width: scrollWidth
 });
 $('#messagesHR').slimScroll({
 	height: height + 'px',
-	width: '20%'
+	width: scrollWidth
 });
 
 var lock = null;
@@ -59,7 +96,6 @@ $(document).ready(function() {
 	lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
 	var token = localStorage.getItem('userToken');
 	if (token) {
-	console.log("it got here");
 		lock.getProfile(token, function(err, profile) {
 		$('h1').html('Yes');
 		if (err) {
@@ -214,6 +250,8 @@ $(document).ready(function() {
 		$('#twitterA').show('fast');
 		$('#twitter').show('fast');
 	},3000);
+	if (width <= 600)
+		rotateColumn();
 });
 var userProfile;
 var msgText = "";
@@ -270,30 +308,6 @@ $('#liA').click(function() {
 $('#liPH').click(function() {
 	$('#imgPH').toggleClass("faded");
 	$('#chkPH').prop("checked", !$('#chkPH').prop("checked"));
-});
-
-$('#tdALL').click(function() {
-	if (all)
-		rotateColumn();
-	selectStream('ALL');
-});
-
-$('#tdHR').click(function() {
-	if (all)
-		rotateColumn();
-	selectStream('HR');
-});
-
-$('#tdA').click(function() {
-	if (all)
-		rotateColumn();
-	selectStream('A');
-});
-
-$('#tdPH').click(function() {
-	if (all)
-		rotateColumn();
-	selectStream('PH');
 });
 
 var socket = io();
@@ -383,6 +397,7 @@ socket.on('chat message', function(msg) {
 		notification.onclick = function() {
 			window.open('http://nodejs-phacconnect.rhcloud.com');
 		};
+		self.registration.showNotification(notification);
 	}
 });
 
@@ -599,9 +614,9 @@ function sendResults(tag, u, av, date, userMsg, combined) {
 	share += "<span id=\"imgSpan\" style=\"opacity:0\">";
 	if (u === username)
 		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/edit.png'/>";
-	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
+	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
 	share += "<a  title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
-	share += userMsg + " - " + u + "(PHAC Connect // " + date + ")";
+	share += userMsg + " - " + u + " (PHAC Connect " + date + ")";
 	share += "'><img style='width:12px;height:12px;' src='images/mail.png'/></a> ";
 	share += "<img style='width:12px;height:12px;' title='Posted: " + date + "' src='images/time.png'/>";
 	share += "</span></span>";
@@ -799,7 +814,15 @@ function rotateColumn() {
 	else {
 		$('#columnSwitch').toggleClass('columnSwitchClick');
 		$('.slimScrollDiv').width('0%');
-		$('.slimScrollDiv').eq(0).width('80%');
+		if (scrollWidth === '20%') {
+			$('.slimScrollDiv').eq(0).width('80%');
+		}
+		else {
+			$('.slimScrollDiv').eq(0).width('100%');
+			$('#legend').css('margin-bottom', '0px');
+			$('#messagesALL').height((height - 78) + 'px');
+			$('.slimScrollDiv').height((height - 78) + 'px');
+		}
 		$('#messagesA').hide('fast');
 		$('#messagesHR').hide('fast');
 		$('#messagesPH').hide('fast');
@@ -839,7 +862,10 @@ function selectStream(context) {
 		$('#tdHR').hide("fast");
 		$('#td' + context).stop();
 		$('#td' + context).show('fast');
-		$('#td' + context).css('width','80%');
+		var scrollDiv = '80%';
+		if (width <= 600)
+			scrollDiv = '100%';
+		$('#td' + context).css('width',scrollDiv);
 		$('.slimScrollDiv').width('0%');
 		$('#messagesALL').hide("fast");
 		$('#messagesA').hide("fast");
@@ -849,16 +875,16 @@ function selectStream(context) {
 		$('#messages' + context).show('fast');
 		switch(context) {
 			case "ALL":
-				$('.slimScrollDiv').eq(0).width('80%');
+				$('.slimScrollDiv').eq(0).width(scrollDiv);
 			break;
 			case "A":
-				$('.slimScrollDiv').eq(1).width('80%');
+				$('.slimScrollDiv').eq(1).width(scrollDiv);
 			break;
 			case "HR":
-				$('.slimScrollDiv').eq(2).width('80%');
+				$('.slimScrollDiv').eq(2).width(scrollDiv);
 			break;
 			case "PH":
-				$('.slimScrollDiv').eq(3).width('80%');
+				$('.slimScrollDiv').eq(3).width(scrollDiv);
 			break;
 		}
 		stream = false;
@@ -869,8 +895,11 @@ function selectStream(context) {
 		$('#tdA').show('fast');
 		$('#tdPH').show('fast');
 		$('#tdHR').show('fast');
-		$('.slimScrollDiv').width('20%');
-		$('#td' + context).css('width','20%');
+		var scrollDivWidth = '20%';
+		if (width <= 600)
+			scrollDivWidth = '100%';
+		$('.slimScrollDiv').width(scrollDivWidth);
+		$('#td' + context).css('width',scrollDivWidth);
 		$('#messagesALL').show('fast');
 		$('#messagesA').show('fast');
 		$('#messagesHR').show('fast');

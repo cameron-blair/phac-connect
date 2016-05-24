@@ -261,3 +261,27 @@ ul {
 .a0-footer {
 	display: none !important;
 }
+@media screen and (max-width: 600px) {
+	#columnSwitch {
+		display: none;
+	}
+	#twitter, #twitterA, #tdHT {
+		display: none !important;
+	}
+	#legend, table {
+		width: 600px;
+	}
+	td {
+		width: 600px;
+		display: inline-block;
+	}
+	.tdPointer {
+		cursor: default;
+	}
+	#messagesALL {
+		width: 600px !important;
+	}
+	body {
+		min-width: 600px !important;
+	}
+}
