@@ -16,6 +16,32 @@ if (width < 1450) {
 		$('#tdPH').prop('disabled', true);
 	}
 }
+
+if (width > 600) {
+	$('#tdALL').click(function() {
+		if (all)
+			rotateColumn();
+		selectStream('ALL');
+	});
+
+	$('#tdHR').click(function() {
+		if (all)
+			rotateColumn();
+		selectStream('HR');
+	});
+
+	$('#tdA').click(function() {
+		if (all)
+			rotateColumn();
+		selectStream('A');
+	});
+
+	$('#tdPH').click(function() {
+		if (all)
+			rotateColumn();
+		selectStream('PH');
+	});
+}
 window.onresize = resize;
 
 function resize() {
@@ -25,33 +51,13 @@ function resize() {
 	if (width < 1450) {
 		$('#btnControl').width('75px');
 		height = height - 17;
-		if (width <= 600)
+		if (width <= 600) {
 			$('#msgControl').width('350px');
+			$('#tdALL').prop('disabled', true);
+			$('#tdA').prop('disabled', true);
+			$('#tdHR').prop('disabled', true);
+			$('#tdPH').prop('disabled', true);
 		}
-	if (width > 600) {
-		$('#tdALL').click(function() {
-			if (all)
-				rotateColumn();
-			selectStream('ALL');
-		});
-
-		$('#tdHR').click(function() {
-			if (all)
-				rotateColumn();
-			selectStream('HR');
-		});
-
-		$('#tdA').click(function() {
-			if (all)
-				rotateColumn();
-			selectStream('A');
-		});
-
-		$('#tdPH').click(function() {
-			if (all)
-				rotateColumn();
-			selectStream('PH');
-		});
 	}
 	
 	if (width <= 600)
@@ -356,6 +362,7 @@ e.preventDefault();
 			now = new Date();
 			image = userProfile.picture;
 			socket.emit('chat message', {user: username, msg: msgText, tags: tags, avatar: image, created: now});
+			handleMsg({user: username, msg: msgText, tags: tags, avatar: image, created: now.toISOString()}, false);
 			$('#m').val('');
 			$('#chkHR').prop("checked", false);
 			$('#chkA').prop("checked", false);
