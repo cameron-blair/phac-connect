@@ -56,6 +56,38 @@ $('#messagesHR').slimScroll({
 
 var lock = null;
 $(document).ready(function() {
+	lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
+	var token = localStorage.getItem('userToken');
+	if (token) {
+	console.log("it got here");
+		lock.getProfile(token, function(err, profile) {
+		$('h1').html('Yes');
+		if (err) {
+			alert('There was an error');
+			alert(err);
+		} else {
+			$('#control').show('slow');
+			$('#loginMsg').hide('slow');
+			$('#banner button').hide('slow');
+			userToken = token;
+			localStorage.setItem('userToken', token);
+			userProfile = profile;
+			image = profile.picture.toString();
+			$('#profileIcon').attr('src', image);
+			$('#profileIcon').show("slow");
+			username = profile.email;
+			$('#messagesALL').empty();
+			$('#messagesA').empty();
+			$('#messagesHR').empty();
+			$('#messagesPH').empty();
+			for(var i=msgsSave.length-1; i >= 0; i--){
+				handleMsg(msgsSave[i]);
+			}
+		}
+	 });
+	}
+	if (Notification.permission !== 'granted')
+		$('#pushNotes').show();
 	$('#dialog').dialog({
 		hide: 'fade',
 		show: 'fade',
@@ -182,7 +214,6 @@ $(document).ready(function() {
 		$('#twitterA').show('fast');
 		$('#twitter').show('fast');
 	},3000);
-	lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
 });
 var userProfile;
 var msgText = "";
@@ -343,6 +374,16 @@ socket.on('show tags', function(msgs){
 socket.on('chat message', function(msg) {
 	msgsSave.unshift(msg);
 	handleMsg(msg, false);
+	if (Notification.permission === 'granted') {
+		var notification = new Notification('PHAC Connect',
+			{
+				icon: 'http://i.imgur.com/ppn0iya.png',
+				body: 'A new message has been shared.'
+			});
+		notification.onclick = function() {
+			window.open('http://nodejs-phacconnect.rhcloud.com');
+		};
+	}
 });
 
 function handleMsg(msg, search) {
@@ -847,6 +888,7 @@ $('#profileIcon').click(function() {
 });
 
 function reload() {
+	localStorage.removeItem('userToken');
 	location.reload();
 }
 
@@ -875,4 +917,15 @@ function searchResults(text) {
 	$('#dialog').dialog("close");
 	$('#searchResults').dialog("open");
 
+}
+
+function getPermission() {
+	if (!Notification) {
+		alert('Notifications are not compatible with this browser.');
+		return;
+	}
+	if (Notification.permission !== 'granted')
+		Notification.requestPermission();
+		
+	$('#pushNotes').hide('slow');
 }

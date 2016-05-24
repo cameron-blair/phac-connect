@@ -39,6 +39,10 @@ app.get('/images/alert.png', function(req, res){
    res.sendFile(__dirname + '/images/alert.png');
 });
 
+app.get('/images/push.png', function(req, res){
+   res.sendFile(__dirname + '/images/push.png');
+});
+
 app.get('/images/gov.png', function(req, res){
    res.sendFile(__dirname + '/images/gov.png');
 });

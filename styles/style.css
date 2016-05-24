@@ -146,6 +146,13 @@ ul {
     border-radius: 40px;
     overflow: hidden;
 }
+#pushNotes {
+	margin: 8px 10px 8px 5px;
+	display: none;
+}
+#columnSwitch {
+	margin: 8px 5px 8px 5px;
+}
 #tags {
     width: 130px;
     height: 45px;
