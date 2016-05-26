@@ -383,10 +383,11 @@ socket.on('chat message', function(msg) {
 	msgsSave.unshift(msg);
 	handleMsg(msg, false);
 	if (Notification.permission === 'granted') {
+		var user = msg.user.split("@")[0];
 		var notification = new Notification('PHAC Connect',
 			{
-				icon: 'http://i.imgur.com/ppn0iya.png',
-				body: 'A new message has been shared.'
+				icon: msg.avatar,
+				body: user + ' has shared a new message!'
 			});
 		notification.onclick = function() {
 			window.open('http://nodejs-phacconnect.rhcloud.com');
