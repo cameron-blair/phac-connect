@@ -2,82 +2,17 @@ $('button').button();
 $('#btnSubmit').button();
 $('#banner button').show("fast");
 
-var height = window.innerHeight - 131;
+var height = window.innerHeight - 110;
 var width = window.innerWidth;
-$('#msgControl').width((width-250) + 'px');
-if (width < 1450) {
-	$('#btnControl').width('75px');
-	height = height - 17;
-	if (width <= 600)
-		$('#msgControl').width('350px');
-}
-
-window.onresize = resize;
-
-function resize() {
-	height = window.innerHeight  - 131;
-	width = window.innerWidth;
-	$('#msgControl').width((width-250) + 'px');
-	if (width < 1450) {
-		$('#btnControl').width('75px');
-		height = height - 17;
-		if (width <= 600)
-			$('#msgControl').width('350px');
-	}
-	$('#messagesALL').height(height + 'px');
-	$('#messagesPH').height(height + 'px');
-	$('#messagesA').height(height + 'px');
-	$('#messagesHR').height(height + 'px');
-	$('.slimScrollDiv').height(height+'px');
-	$('#twitter-widget-0').height((height-3) + 'px');
-}
 
 var msgsSave = [];
-var all = false;
+var all = true;
 var stream = true;
 var filled = true;
 
-var scrollWidth = '20%';
-
 $('#messagesALL').slimScroll({
 	height: height + 'px',
-	width: scrollWidth
-});
-$('#messagesPH').slimScroll({
-	height: height + 'px',
-	width: scrollWidth
-});
-$('#messagesA').slimScroll({
-	height: height + 'px',
-	width: scrollWidth
-});
-$('#messagesHR').slimScroll({
-	height: height + 'px',
-	width: scrollWidth
-});
-
-$('#tdALL').click(function() {
-	if (all)
-		rotateColumn();
-	selectStream('ALL');
-});
-
-$('#tdHR').click(function() {
-	if (all)
-		rotateColumn();
-	selectStream('HR');
-});
-
-$('#tdA').click(function() {
-	if (all)
-		rotateColumn();
-	selectStream('A');
-});
-
-$('#tdPH').click(function() {
-	if (all)
-		rotateColumn();
-	selectStream('PH');
+	width: '100%'
 });
 
 var lock = null;
@@ -86,11 +21,13 @@ $(document).ready(function() {
 	var token = localStorage.getItem('userToken');
 	if (token) {
 		lock.getProfile(token, function(err, profile) {
-		$('h1').html('Yes');
 		if (err) {
 			alert('There was an error');
 			alert(err);
 		} else {
+			$('body').css('margin-top', '160px');
+			$('.slimScrollDiv').height(height-50);
+			$('#messagesALL').height(height-50);
 			$('#control').show('slow');
 			$('#loginMsg').hide('slow');
 			$('#banner button').hide('slow');
@@ -106,7 +43,7 @@ $(document).ready(function() {
 			$('#messagesHR').empty();
 			$('#messagesPH').empty();
 			for(var i=msgsSave.length-1; i >= 0; i--){
-				handleMsg(msgsSave[i]);
+				handleMsg(msgsSave[i], false);
 			}
 		}
 	 });
@@ -116,6 +53,8 @@ $(document).ready(function() {
 	$('#dialog').dialog({
 		hide: 'fade',
 		show: 'fade',
+		width: '100%',
+		height: 'auto',
 		modal: true,
 		draggable: false,
 		resizable: false,
@@ -131,6 +70,8 @@ $(document).ready(function() {
 	$('#confirmDelete').dialog({
 		hide: 'fade',
 		show: 'fade',
+		width: '100%',
+		height: 'auto',
 		modal: true,
 		draggable: false,
 		resizable: false,
@@ -164,6 +105,8 @@ $(document).ready(function() {
 		hide: 'fade',
 		show: 'fade',
 		modal: true,
+		width: '100%',
+		height: 'auto',
 		draggable: false,
 		resizable: false,
 		open: function () {
@@ -184,6 +127,8 @@ $(document).ready(function() {
 		hide: 'fade',
 		show: 'fade',
 		modal: true,
+		width: '100%',
+		height: 'auto',
 		draggable: false,
 		resizable: false,
 		open: function () {
@@ -204,6 +149,8 @@ $(document).ready(function() {
 		hide: 'fade',
 		show: 'fade',
 		modal: true,
+		width: '100%',
+		height: 'auto',
 		draggable: false,
 		resizable: false,
 		open: function () {
@@ -219,9 +166,9 @@ $(document).ready(function() {
 		hide: 'fade',
 		show: 'fade',
 		modal: true,
-		width: 500,
-		height: 500,
-		maxHeight: 500,
+		width: '100%',
+		height: height,
+		maxHeight: height,
 		draggable: false,
 		resizable: false,
 		open: function () {
@@ -234,11 +181,6 @@ $(document).ready(function() {
 		},
 		autoOpen: false
 	});
-	setTimeout(function() {
-		$('#twitter-widget-0').height(height-3);
-		$('#twitterA').show('fast');
-		$('#twitter').show('fast');
-	},3000);
 });
 var userProfile;
 var msgText = "";
@@ -249,6 +191,9 @@ var username = "Guest";
 var image = "";
 var uniqueID = "";
 $('#login').click(function(e) {
+	$('body').css('margin-top', '160px');
+	$('.slimScrollDiv').height(height-50);
+	$('#messagesALL').height(height-50);
 	e.preventDefault();
 	lock.show({
       icon:            'http://i.imgur.com/ppn0iya.png',
@@ -349,7 +294,9 @@ e.preventDefault();
 					highest = msgsSave[i].identifier;
 			}
 			highest++;
+			console.log(tags);
 			handleMsg({identifier: highest, user: username, msg: msgText, tags: tags, avatar: image, created: now.toISOString()}, false);
+			msgsSave.unshift({identifier: highest, user: username, msg: msgText, tags: tags, avatar: image, created: now.toISOString()});
 			$('#m').val('');
 			$('#chkHR').prop("checked", false);
 			$('#chkA').prop("checked", false);
@@ -419,18 +366,23 @@ function handleMsg(msg, search) {
 			sendResults('ALL', u, av, date, userMsg, false);
 		if (all) {
 			for (var i=0; i < tags.length; i++) {
-				if (!search)
-					sendMessage(tags[i], u, av, date, userMsg, true);
-				else
-					sendResults(tags[i], u, av, date, userMsg, true);
+				if (tags[i] !== null) {
+					if (!search)
+						sendMessage(tags[i], u, av, date, userMsg, true);
+					else
+						sendResults(tags[i], u, av, date, userMsg, true);
+				}
 			}
 		}
 		else {
-			for (var i=0; i < tags.length; i++)
-				if (!search)
-					sendMessage(tags[i], u, av, date, userMsg, false);
-				else
-					sendResults(tags[i], u, av, date, userMsg, false);
+			for (var i=0; i < tags.length; i++) {
+				if (tags[i] !== null) {
+					if (!search)
+						sendMessage(tags[i], u, av, date, userMsg, false);
+					else
+						sendResults(tags[i], u, av, date, userMsg, false);
+				}
+			}
 		}
 	}
 }
@@ -476,8 +428,8 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	var arr = u.split("@");
 	var name = arr[0];
 	var iden = '<div><span onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><div class="msgSpan">';
-	iden = '<img id="avatar" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:32px;width:32px;border-width:2px;border-style:solid;border-color:#333;border-radius:32px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
-	$('#messages' + tag).prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</div>"));
+	iden = '<img id="avatar" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:50px;width:50px;border-width:2px;border-style:solid;border-color:#333;border-radius:50px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
+	$('#messages' + tag).prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" ' + styleString + '>').html(iden + "</div>"));
 	var splitMsg = userMsg.split(" ");
 	var newMsg = [];
 	var imgDiv = "";
@@ -515,14 +467,14 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	var share = "<span style='margin-left:10px;'>";
 	var twitterMsg = userMsg.replace(/#/g, "%23");
 	twitterMsg = twitterMsg.replace(/&/g, "%26");
-	share += "<span id=\"imgSpan\" style=\"opacity:0\">";
+	share += "<span id=\"imgSpan\">";
 	if (u === username)
-		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/edit.png'/><img class='msgDelete' onclick='msgDelete(this)' title='Click to delete this message.' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/delete.png'/>";
-	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
+		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:20px;height:20px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:20px;height:20px;margin-right:4px;cursor:pointer;' src='images/edit.png'/><img class='msgDelete' onclick='msgDelete(this)' title='Click to delete this message.' style='width:20px;height:20px;margin-right:4px;cursor:pointer;' src='images/delete.png'/>";
+	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:20px;height:20px;' src='images/tweet.png'/></a> ";
 	share += "<a  title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
 	share += userMsg + " - " + u + "(PHAC Connect // " + date + ")";
-	share += "'><img style='width:12px;height:12px;' src='images/mail.png'/></a> ";
-	share += "<img style='width:12px;height:12px;' title='Posted: " + date + "' src='images/time.png'/>";
+	share += "'><img style='width:20px;height:20px;' src='images/mail.png'/></a> ";
+	share += "<img style='width:20px;height:20px;' title='Posted: " + date + "' src='images/time.png'/>";
 	share += "</span></span>";
 	var msg = $('#messages' + tag + ' div').first().html() + share + "</span>";
 	$('#messages' + tag + ' div').first().html(msg);
@@ -570,8 +522,8 @@ function sendResults(tag, u, av, date, userMsg, combined) {
 	var arr = u.split("@");
 	var name = arr[0];
 	var iden = '<div><span onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><div class="msgSpan">';
-	iden = '<img id="avatar" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:32px;width:32px;border-width:2px;border-style:solid;border-color:#333;border-radius:32px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
-	$('#searchResultsDiv').prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</div>"));
+	iden = '<img id="avatar" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:50px;width:50px;border-width:2px;border-style:solid;border-color:#333;border-radius:50px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
+	$('#searchResultsDiv').prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" ' + styleString + '>').html(iden + "</div>"));
 	var splitMsg = userMsg.split(" ");
 	var newMsg = [];
 	var imgDiv = "";
@@ -605,14 +557,14 @@ function sendResults(tag, u, av, date, userMsg, combined) {
 	var share = "<span style='margin-left:10px;'>";
 	var twitterMsg = userMsg.replace(/#/g, "%23");
 	twitterMsg = twitterMsg.replace(/&/g, "%26");
-	share += "<span id=\"imgSpan\" style=\"opacity:0\">";
+	share += "<span id=\"imgSpan\">";
 	if (u === username)
-		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/edit.png'/>";
-	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
+		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:20px;height:20px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:20px;height:20px;margin-right:4px;cursor:pointer;' src='images/edit.png'/>";
+	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect " + date + ")'><img style='width:20px;height:20px;' src='images/tweet.png'/></a> ";
 	share += "<a  title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
 	share += userMsg + " - " + u + " (PHAC Connect " + date + ")";
-	share += "'><img style='width:12px;height:12px;' src='images/mail.png'/></a> ";
-	share += "<img style='width:12px;height:12px;' title='Posted: " + date + "' src='images/time.png'/>";
+	share += "'><img style='width:20px;height:20px;' src='images/mail.png'/></a> ";
+	share += "<img style='width:20px;height:20px;' title='Posted: " + date + "' src='images/time.png'/>";
 	share += "</span></span>";
 	var msg = $('#searchResultsDiv div').first().html() + share + "</span>";
 	$('#searchResultsDiv div').first().html(msg);
@@ -724,7 +676,7 @@ function msgDeleteConfirm() {
 		case "168, 210, 255":
 			type = "ALL";
 		break;
-		case "255, 131, 96":
+		case "(255, 131, 96":
 		case "255, 157, 122":
 			type = "A";
 		break;
@@ -753,6 +705,7 @@ function msgDeleteConfirm() {
 				}
 			}
 		}
+		console.log(newTags);
 		socket.emit('remove tag', msgID, newTags);
 		delAll = false;
 	}
@@ -763,56 +716,6 @@ function msgDeleteConfirm() {
 			}
 		}
 	}
-}
-
-function showButton(span) {
-	$(span).find("#imgSpan").stop();
-	$(span).find("#imgSpan").fadeTo(200,0.6);
-}
-
-function hideButton(span) {
-	$(span).find("#imgSpan").stop();
-	$(span).find("#imgSpan").fadeTo(200,0);
-}
-
-function rotateColumn() {
-	var toggleString = "";
-	if (!all)
-		toggleString = "To single column.";
-	else
-		toggleString = "To multiple columns.";
-	ga('send', 'event', 'Toggle columns', toggleString);
-    if (all) {
-		$('td').attr("disabled",true);
-		all = false;
-		}
-	else {
-		all = true;
-		}
-	$('#messagesALL').empty();
-	$('#messagesA').empty();
-	$('#messagesHR').empty();
-	$('#messagesPH').empty();
-
-	for(var i=msgsSave.length-1; i >= 0; i--){
-		handleMsg(msgsSave[i], false);
-	}
-
-	if ($('#messagesA').css('display') === 'none') {
-		$('#columnSwitch').toggleClass('columnSwitchClick');
-		$('.slimScrollDiv').width('20%');
-		$('#messagesA').show('fast');
-		$('#messagesHR').show('fast');
-		$('#messagesPH').show('fast');
-	}
-	else {
-		$('#columnSwitch').toggleClass('columnSwitchClick');
-		$('.slimScrollDiv').width('0%');
-		$('.slimScrollDiv').eq(0).width('80%');
-		$('#messagesA').hide('fast');
-		$('#messagesHR').hide('fast');
-		$('#messagesPH').hide('fast');
-	}	
 }
 
 function messageStyle() {
@@ -835,58 +738,6 @@ function messageStyle() {
 
 	for(var i=msgsSave.length-1; i >= 0; i--){
 		handleMsg(msgsSave[i], false);
-	}
-}
-
-function selectStream(context) {
-	ga('send', 'event', 'Focus Stream', context);
-	if ($('#td' + context).css('display') !== 'none' && stream) {
-		$('#columnSwitch').hide("slow");
-		$('#tdALL').hide("fast");
-		$('#tdA').hide("fast");
-		$('#tdPH').hide("fast");
-		$('#tdHR').hide("fast");
-		$('#td' + context).stop();
-		$('#td' + context).show('fast');
-		var scrollDiv = '80%';
-		$('#td' + context).css('width',scrollDiv);
-		$('.slimScrollDiv').width('0%');
-		$('#messagesALL').hide("fast");
-		$('#messagesA').hide("fast");
-		$('#messagesHR').hide("fast");
-		$('#messagesPH').hide("fast");
-		$('#messages' + context).stop();
-		$('#messages' + context).show('fast');
-		switch(context) {
-			case "ALL":
-				$('.slimScrollDiv').eq(0).width(scrollDiv);
-			break;
-			case "A":
-				$('.slimScrollDiv').eq(1).width(scrollDiv);
-			break;
-			case "HR":
-				$('.slimScrollDiv').eq(2).width(scrollDiv);
-			break;
-			case "PH":
-				$('.slimScrollDiv').eq(3).width(scrollDiv);
-			break;
-		}
-		stream = false;
-	}
-	else {
-		$('#columnSwitch').show('slow');
-		$('#tdALL').show('fast');
-		$('#tdA').show('fast');
-		$('#tdPH').show('fast');
-		$('#tdHR').show('fast');
-		var scrollDivWidth = '20%';
-		$('.slimScrollDiv').width(scrollDivWidth);
-		$('#td' + context).css('width',scrollDivWidth);
-		$('#messagesALL').show('fast');
-		$('#messagesA').show('fast');
-		$('#messagesHR').show('fast');
-		$('#messagesPH').show('fast');
-		stream = true;
 	}
 }
 

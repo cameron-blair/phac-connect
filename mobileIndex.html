@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+
+<head>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  //Deploy
+  ga('create', 'UA-78101209-1', 'auto');
+  //Test
+  //ga('create', 'UA-78057570-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    <title>PHAC Connect</title>
+    <link href="styles/mobileStyle.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico?">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div id="dialog" title="User Info"><img id="userImg" style="float:left;height:auto;width:100%;" />
+        <div id="uInfoDiv" style="clear:both">
+            <p><strong>Email: </strong>
+            </p><span id="userEmail"></span><span id="userOptions"></span>
+        </div>
+    </div>
+    <div id="confirmDelete" title="Confirm Delete">
+            <p>Are you sure you want to delete this message?</p>
+    </div>
+    <div id="errorImage" title="Image Issue"><img src="/images/alert.png" style="float:right;margin:10px;" />
+            <p>One or more images are not valid.</p>
+    </div>
+    <div id="errorCategory" title="Category Issue"><img src="/images/alert.png" style="float:right;margin:10px;" />
+            <p>Search terms can only contain letters and numbers.</p>
+    </div>
+	<div id="personalInfo" title="My Info"><img id="personalImg" style="float:left;height:auto;width:100%;" />
+        <div id="personalInfoDiv" style="clear:both">
+            <p><strong>Email: </strong>
+            </p><span id="personalEmail"></span><span id="personalOptions"></span>
+        </div>
+    </div>
+	<div id="searchResults" title="Search Results">
+        <div id="searchResultsDiv" style="clear:both">
+        </div>
+    </div>
+    <script>
+        ! function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0],
+                p = /^http:/.test(d.location) ? 'http' : 'https';
+            if (!d.getElementById(id)) {
+                js = d.createElement(s);
+                js.id = id;
+                js.src = p + "://platform.twitter.com/widgets.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }
+        }(document, "script", "twitter-wjs");
+    </script>
+    <div id="banner"><span class="centerImg"></span><img src="images/gov.png" width="240px" height="23px" style="margin:5px;vertical-align:middle;" />
+        <button style="float:right;margin:5px;padding-left:5px;padding-right:5px;" id="login">Login</button>
+		<img title="Customize your profile." id="profileIcon" style="float:right;margin:3px;" height="40px" width="40px" />
+		<span title="Toggle message style." onclick="messageStyle()" id="messageStyle" class=""></span><img title="Enable push notifications." onclick="getPermission()" id="pushNotes" style="float:right;" src="images/push.png" height="28px" width="28px" />
+    </div>
+    <form action="" id="form">
+
+        <div id="loginMsg">Please login to send messages ...</div>
+
+        <div id="control" style="display:none">
+            <div id="msgControl">
+                <input id="m" autocomplete="off" maxlength="300" placeholder="Broadcast a message ..." />
+            </div>
+            <div id="tags" class="inlineCTRL">
+                <fieldset>
+                    <legend>[streams]</legend>
+                    <ul>
+                        <li id="liA">
+                            <input id="chkA" type="checkbox" name="tags" value="A" class="checkboxes" /><img id="imgA" class="inlineIMG faded" title="Announcements" style="margin-right:5px;" src="/images/tags/announcements.png" width="25px" height="25px" />
+                        </li>
+                        <li id="liHR">
+                            <input id="chkHR" type="checkbox" name="tags" value="HR" class="checkboxes" /><img id="imgHR" class="inlineIMG faded" title="Human Resources" style="margin-right:5px;" src="/images/tags/hr.png" width="25px" height="25px" />
+                        </li>
+                        <li id="liPH">
+                            <input id="chkPH" type="checkbox" name="tags" value="PH" class="checkboxes" /><img id="imgPH" class="inlineIMG faded" title="Public Health" src="/images/tags/publichealth.png" width="25px" height="25px" />
+                        </li>
+                    </ul>
+                </fieldset>
+            </div>
+            <div id="btnControl" class="inlineCTRL">
+                <input id="btnSubmit" type="submit" value="Submit" text="Send" />
+            </div>
+        </div>
+    </form>
+    <div id="messagesALL" class="inline"></div>
+
+    <script src="//cdn.auth0.com/js/lock-7.12.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="scripts/jquery.slimscroll.js"></script>
+    <script src="scripts/mobileScript.js"></script>
+</body>
+
+</html>

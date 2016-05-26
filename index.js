@@ -35,6 +35,10 @@ app.get('/', function(req, res) {
       res.sendFile(__dirname + '/index.html');  
     });
 
+	
+app.get('/mobileIndex.html', function(req, res) {
+      res.sendFile(__dirname + '/mobileIndex.html');  
+    });
 app.get('/images/alert.png', function(req, res){
    res.sendFile(__dirname + '/images/alert.png');
 });
@@ -55,12 +59,21 @@ app.get('/scripts/script.js', function(req, res){
    res.sendFile(__dirname + '/scripts/script.js');
 });
 
+app.get('/scripts/mobileScript.js', function(req, res){
+   res.sendFile(__dirname + '/scripts/mobileScript.js');
+});
+
+
 app.get('/scripts/jquery.slimscroll.js', function(req, res){
    res.sendFile(__dirname + '/scripts/jquery.slimscroll.js');
 });
 
 app.get('/styles/style.css', function(req, res){
    res.sendFile(__dirname + '/styles/style.css');
+});
+
+app.get('/styles/mobileStyle.css', function(req, res){
+   res.sendFile(__dirname + '/styles/mobileStyle.css');
 });
 
 app.get('/users/users.txt', function(req, res){
