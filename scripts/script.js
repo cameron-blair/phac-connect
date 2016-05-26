@@ -362,7 +362,13 @@ e.preventDefault();
 			now = new Date();
 			image = userProfile.picture;
 			socket.emit('chat message', {user: username, msg: msgText, tags: tags, avatar: image, created: now});
-			handleMsg({user: username, msg: msgText, tags: tags, avatar: image, created: now.toISOString()}, false);
+			var highest = 0;
+			for (var i = 0; i < msgsSave.length; i++) {
+				if (msgsSave[i].identifier > highest)
+					highest = msgsSave[i].identifier;
+			}
+			highest++;
+			handleMsg({identifier: highest, user: username, msg: msgText, tags: tags, avatar: image, created: now.toISOString()}, false);
 			$('#m').val('');
 			$('#chkHR').prop("checked", false);
 			$('#chkA').prop("checked", false);
@@ -489,7 +495,7 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	var arr = u.split("@");
 	var name = arr[0];
 	var iden = '<div><span onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><div class="msgSpan">';
-	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:32px;width:32px;border-width:2px;border-style:solid;border-color:#333;border-radius:25px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
+	iden = '<img id="avatar" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:32px;width:32px;border-width:2px;border-style:solid;border-color:#333;border-radius:32px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
 	$('#messages' + tag).prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</div>"));
 	var splitMsg = userMsg.split(" ");
 	var newMsg = [];
@@ -583,7 +589,7 @@ function sendResults(tag, u, av, date, userMsg, combined) {
 	var arr = u.split("@");
 	var name = arr[0];
 	var iden = '<div><span onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><div class="msgSpan">';
-	iden = '<img onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:32px;width:32px;border-width:2px;border-style:solid;border-color:#333;border-radius:25px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
+	iden = '<img id="avatar" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:32px;width:32px;border-width:2px;border-style:solid;border-color:#333;border-radius:32px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
 	$('#searchResultsDiv').prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" onmouseout="hideButton(this)" onmouseover="showButton(this)" ' + styleString + '>').html(iden + "</div>"));
 	var splitMsg = userMsg.split(" ");
 	var newMsg = [];

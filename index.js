@@ -164,7 +164,6 @@ io.sockets.on('connection', function(socket) {
 			var newMsg = new Chat({identifier: count, user: msg.user, msg: msg.msg, tags: msg.tags, avatar: msg.avatar, created: msg.created});
 			newMsg.save(function(err){
 				if(err) throw err;
-				//io.sockets.emit('chat message', newMsg);
 				socket.broadcast.emit('chat message', newMsg);
 			});		
 		});		

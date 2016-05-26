@@ -278,10 +278,37 @@ ul {
 	.tdPointer {
 		cursor: default;
 	}
+	#dialog, #confirmDelete, #errorImage, #errorCategory, #personalInfo {
+		font-size: 1.2em;
+	}
+	#m {
+		font-size: 1.2em;
+	}
 	#messagesALL {
+		font-size: 1.2em;
 		width: 600px !important;
+	}
+	#imgA, #imgHR, #imgPH {
+		width: 30px;
+		height: 30px;
+		margin-top: -3px;
+	}
+	#msgControl {
+		width: 330px !important;
+	}
+	#tags {
+		width: 150px !important;
+	}
+	#avatar {
+		width: 60px !important;
+		height: 60px !important;
+		border-radius: 60px !important;
 	}
 	body {
 		min-width: 600px !important;
+	}
+	#imgSpan img {
+		width: 20px !important;
+		height: 20px !important;
 	}
 }
