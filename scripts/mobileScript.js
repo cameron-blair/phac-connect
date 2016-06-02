@@ -404,9 +404,9 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	share += "</div></div>";
 	share+= "</div>";
 	share += "<div id='msgDeleteDiv'>";
-	share += "<div style='color:#333;background-color:#f00;margin:-5px;padding:5px;text-align:center;'><p>Delete this message?</p><div>";
-	share += "<img onclick='returnMsg(this)' style='opacity:0.6;width:40px;height:40px;margin-right:20px;' src='images/return.png'/>";
-	share += "<img class='msgDelete' onclick='msgDelete(this)' style='opacity:0.6;width:40px;height:40px;margin-right:20px;' src='images/delete.png'/>"
+	share += "<div style='color:#000;background-color:#f00;margin:-5px;padding:5px;text-align:center;'><p>Delete this message?</p><div>";
+	share += "<img onclick='returnMsg(this)' style='width:40px;height:40px;margin-right:20px;' src='images/return.png'/>";
+	share += "<img class='msgDelete' onclick='msgDelete(this)' style='width:40px;height:40px;margin-right:20px;' src='images/delete.png'/>"
 	share += "</div></div>";
 	share+= "</div>";	
 	var msg = $('#messages' + tag + ' div').first().html() + share;
