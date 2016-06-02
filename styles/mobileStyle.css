@@ -6,15 +6,15 @@
     box-sizing: border-box;
 }
 a:link {
-	color:#333;
+	color:#333 !important;
 }
 a:hover {
-	color: #333;
-	text-decoration: none;
+	color: #333 !important;
+	text-decoration: none !important;
 }
 a:active {
-	color: #000;
-	text-decoration: none;
+	color: #000 !important;
+	text-decoration: none !important;
 }
 body {
     color: #333;
@@ -24,7 +24,7 @@ fieldset {
     color: #fff;
     height: 50px;
     border-radius: 5px;
-    border-color: #bbb;
+    border: 2px #bbb solid !important;
 }
 form {
     background-color: #333;
@@ -81,6 +81,7 @@ ul {
 	width: 60px;
 }
 #btnControl {
+	margin-top: 5px;
 	float: right;
 	margin-right: 5px;
 }

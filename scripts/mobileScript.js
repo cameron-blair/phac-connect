@@ -86,7 +86,7 @@ $(document).ready(function() {
 	lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
 	var token = localStorage.getItem('userToken');
 	if (token) {
-		$('#messagesALL').height(height-176);
+		$('#messagesALL').height(height-181);
 		lock.getProfile(token, function(err, profile) {
 		if (err) {
 			alert('There was an error');
@@ -120,7 +120,7 @@ var userToken;
 var image = "";
 var uniqueID = "";
 $('#login').click(function(e) {
-	$('#messagesALL').height(height-176);
+	$('#messagesALL').height(height-181);
 	lock.show({
       icon:            'http://i.imgur.com/ppn0iya.png',
       rememberLastLogin:  true
@@ -152,17 +152,17 @@ $('#login').click(function(e) {
 	 
 });
 
-$('#liHR').click(function() {
+$('#liHR').on("click", function() {
 	$('#imgHR').toggleClass("faded");
 	$('#chkHR').prop("checked", !$('#chkHR').prop("checked"));
 });
 
-$('#liA').click(function() {
+$('#liA').on("click", function() {
 	$('#imgA').toggleClass("faded");
 	$('#chkA').prop("checked", !$('#chkA').prop("checked"));				
 });
 
-$('#liPH').click(function() {
+$('#liPH').on("click", function() {
 	$('#imgPH').toggleClass("faded");
 	$('#chkPH').prop("checked", !$('#chkPH').prop("checked"));
 });
