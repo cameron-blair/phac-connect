@@ -86,7 +86,7 @@ $(document).ready(function() {
 	lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
 	var token = localStorage.getItem('userToken');
 	if (token) {
-		$('#messagesALL').height(height-181);
+		$('#messagesALL').height(height-201);
 		lock.getProfile(token, function(err, profile) {
 		if (err) {
 			alert('There was an error');
@@ -120,7 +120,7 @@ var userToken;
 var image = "";
 var uniqueID = "";
 $('#login').click(function(e) {
-	$('#messagesALL').height(height-181);
+	$('#messagesALL').height(height-201);
 	lock.show({
       icon:            'http://i.imgur.com/ppn0iya.png',
       rememberLastLogin:  true
