@@ -521,6 +521,7 @@ function msgEdit(div) {
 
 function msgEditBlur(div) {
 	checkParents(div);
+	$(parentDiv).find('#returnIcon').hide();
 	$(parentDiv).find('.msgCheck').hide();
 	$(parentDiv).find('#msgIconDiv').css("height", "");
 	$(parentDiv).find('#msgIconDiv').css("padding-top", "");
