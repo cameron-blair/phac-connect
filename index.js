@@ -38,9 +38,22 @@ app.get('/', function(req, res) {
 	
 app.get('/mobileIndex.html', function(req, res) {
       res.sendFile(__dirname + '/mobileIndex.html');  
-    });
+});
+	
 app.get('/images/alert.png', function(req, res){
    res.sendFile(__dirname + '/images/alert.png');
+});
+
+app.get('/images/return.png', function(req, res){
+   res.sendFile(__dirname + '/images/return.png');
+});
+
+app.get('/images/key.png', function(req, res){
+   res.sendFile(__dirname + '/images/key.png');
+});
+
+app.get('/images/ellipsis.png', function(req, res){
+   res.sendFile(__dirname + '/images/ellipsis.png');
 });
 
 app.get('/images/push.png', function(req, res){

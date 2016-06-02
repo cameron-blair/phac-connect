@@ -1,36 +1,100 @@
-$('button').button();
-$('#btnSubmit').button();
 $('#banner button').show("fast");
-
-var height = window.innerHeight - 110;
-var width = window.innerWidth;
 
 var msgsSave = [];
 var all = true;
 var stream = true;
 var filled = true;
 
-$('#messagesALL').slimScroll({
-	height: height + 'px',
-	width: '100%'
+var height = window.innerHeight;
+var width = window.innerWidth;
+
+$('#searchResults').width(width-(width*.2));
+$('#searchResults').css("max-height", height-(height*.2));
+$('#searchResultsDiv').css("max-height", height-(height*.3));
+
+var parentDiv;
+var username = "Guest";
+
+function checkParents(div) {
+	if (!isNaN($(div).attr('id'))) {
+		parentDiv = div;
+		return;
+	}
+	else
+		checkParents($(div).parent()[0]);
+}
+
+$('#messagesALL').on('swipeleft', function(e) {
+	var div = e.target;
+	if ($(e.target).attr('id') !== 'messagesALL') {
+		checkParents(div);
+		if ($(parentDiv).find('#userName').html() === username.split("@")[0]) {
+			$(parentDiv).hide("slide", {direction: "left"}, function () {
+				$(parentDiv).find('#avatar').hide();
+				$(parentDiv).find('#msgTextDiv').hide();
+				$(parentDiv).find('#msgIconDiv').hide();
+				$(parentDiv).find('#msgOptions').hide();
+				$(parentDiv).find('#msgEditDiv').hide();
+				$(parentDiv).slideToggle();
+				$(parentDiv).find('#msgDeleteDiv').show("fast");
+			});
+		}
+	}
 });
+
+$('#messagesALL').on('swiperight', function(e) {
+	var div = e.target;
+	if ($(e.target).attr('id') !== 'messagesALL') {
+		checkParents(div);
+		if ($(parentDiv).find('#userName').html() === username.split("@")[0]) {
+			$(parentDiv).hide("slide", {direction: "right"}, function () {
+				$(parentDiv).find('#msgOptions').hide();
+				msgEdit(div);
+				$(parentDiv).slideToggle();
+			});
+		}
+	}
+});
+
+function getMsgInfo(div) {
+	checkParents(div);
+	$(parentDiv).find('#avatar').hide();
+	$(parentDiv).find('#msgTextDiv').hide();
+	$(parentDiv).find('#msgIconDiv').hide();
+	$(parentDiv).find('#msgOptions').show("fast");
+}
+
+function returnMsg(div) {
+	checkParents(div);
+	$(parentDiv).find('#msgOptions').hide();
+	$(parentDiv).find('#msgDeleteDiv').hide();
+	$(parentDiv).find('#msgEditDiv').hide();
+	$(parentDiv).hide(function() {
+		$(parentDiv).find('#avatar').show();
+		$(parentDiv).find('#msgTextDiv').show();
+		$(parentDiv).find('#msgIconDiv').show();
+		$(parentDiv).show("fast");
+	});
+}
+
+$('#messagesALL').height(height - 110);
+
+$.mobile.loading().hide();
 
 var lock = null;
 $(document).ready(function() {
 	lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
 	var token = localStorage.getItem('userToken');
 	if (token) {
+		$('#messagesALL').height(height-176);
 		lock.getProfile(token, function(err, profile) {
 		if (err) {
 			alert('There was an error');
 			alert(err);
 		} else {
-			$('body').css('margin-top', '160px');
-			$('.slimScrollDiv').height(height-50);
-			$('#messagesALL').height(height-50);
 			$('#control').show('slow');
 			$('#loginMsg').hide('slow');
-			$('#banner button').hide('slow');
+			$('#login').hide('slow');
 			userToken = token;
 			localStorage.setItem('userToken', token);
 			userProfile = profile;
@@ -39,9 +103,6 @@ $(document).ready(function() {
 			$('#profileIcon').show("slow");
 			username = profile.email;
 			$('#messagesALL').empty();
-			$('#messagesA').empty();
-			$('#messagesHR').empty();
-			$('#messagesPH').empty();
 			for(var i=msgsSave.length-1; i >= 0; i--){
 				handleMsg(msgsSave[i], false);
 			}
@@ -50,164 +111,28 @@ $(document).ready(function() {
 	}
 	if (Notification.permission !== 'granted')
 		$('#pushNotes').show();
-	$('#dialog').dialog({
-		hide: 'fade',
-		show: 'fade',
-		width: '100%',
-		height: 'auto',
-		modal: true,
-		draggable: false,
-		resizable: false,
-		open: function () {
-			$('.ui-widget-overlay').addClass('overlay');
-			$('.ui-widget-header').addClass('header');
-		},
-		close: function () {
-			$('.ui-widget-overlay').removeClass('overlay');
-		},
-		autoOpen: false
-	});
-	$('#confirmDelete').dialog({
-		hide: 'fade',
-		show: 'fade',
-		width: '100%',
-		height: 'auto',
-		modal: true,
-		draggable: false,
-		resizable: false,
-		open: function () {
-			$('.ui-widget-overlay').addClass('overlay');
-			$('.ui-widget-header').addClass('header');
-		},
-		close: function () {
-			$('.ui-widget-overlay').removeClass('overlay');
-		},
-		autoOpen: false,
-		buttons:
-			[
-				{
-					text: "Delete",
-					"class": 'deleteButton',
-					click: function() {
-						$(this).dialog("close");
-						msgDeleteConfirm();
-						}
-				},
-				{
-					text: "Cancel",
-					click: function() {
-						$(this).dialog("close");
-					}
-				}
-			]
-	});
-	$('#errorImage').dialog({
-		hide: 'fade',
-		show: 'fade',
-		modal: true,
-		width: '100%',
-		height: 'auto',
-		draggable: false,
-		resizable: false,
-		open: function () {
-			$('.ui-widget-overlay').addClass('overlay');
-			$('.ui-widget-header').addClass('header');
-		},
-		close: function () {
-			$('.ui-widget-overlay').removeClass('overlay');
-		},
-		autoOpen: false,
-		buttons: {
-			"OK": function() {
-				$(this).dialog("close");
-			}
-		}
-	});
-	$('#errorCategory').dialog({
-		hide: 'fade',
-		show: 'fade',
-		modal: true,
-		width: '100%',
-		height: 'auto',
-		draggable: false,
-		resizable: false,
-		open: function () {
-			$('.ui-widget-overlay').addClass('overlay');
-			$('.ui-widget-header').addClass('header');
-		},
-		close: function () {
-			$('.ui-widget-overlay').removeClass('overlay');
-		},
-		autoOpen: false,
-		buttons: {
-			"OK": function() {
-				$(this).dialog("close");
-			}
-		}
-	});
-	$('#personalInfo').dialog({
-		hide: 'fade',
-		show: 'fade',
-		modal: true,
-		width: '100%',
-		height: 'auto',
-		draggable: false,
-		resizable: false,
-		open: function () {
-			$('.ui-widget-overlay').addClass('overlay');
-			$('.ui-widget-header').addClass('header');
-		},
-		close: function () {
-			$('.ui-widget-overlay').removeClass('overlay');
-		},
-		autoOpen: false
-		});
-	$('#searchResults').dialog({
-		hide: 'fade',
-		show: 'fade',
-		modal: true,
-		width: '100%',
-		height: height,
-		maxHeight: height,
-		draggable: false,
-		resizable: false,
-		open: function () {
-			$('.ui-widget-overlay').addClass('overlay');
-			$('.ui-widget-header').addClass('header');
-		},
-		close: function () {
-			$('.ui-widget-overlay').removeClass('overlay');
-			$('#searchResultsDiv').html("");
-		},
-		autoOpen: false
-	});
 });
 var userProfile;
 var msgText = "";
 var tags = [];
 var now = "";
 var userToken;
-var username = "Guest";
 var image = "";
 var uniqueID = "";
 $('#login').click(function(e) {
-	$('body').css('margin-top', '160px');
-	$('.slimScrollDiv').height(height-50);
-	$('#messagesALL').height(height-50);
-	e.preventDefault();
+	$('#messagesALL').height(height-176);
 	lock.show({
       icon:            'http://i.imgur.com/ppn0iya.png',
       rememberLastLogin:  true
     });
 	lock.show(function(err, profile, token) {
-		$('h1').html('Yes');
 		if (err) {
 			alert('There was an error');
 			alert(err);
 		} else {
 			$('#control').show('slow');
 			$('#loginMsg').hide('slow');
-			$('#banner button').hide('slow');
+			$('#login').hide('slow');
 			userToken = token;
 			localStorage.setItem('userToken', token);
 			userProfile = profile;
@@ -254,7 +179,7 @@ e.preventDefault();
 		for (var i = 0; i < splitMsg.length; i++) {
 			if (splitMsg[i].charAt(0) === "#") {
 				if (!(/^[a-zA-Z0-9]+$/.test(splitMsg[i].slice(1)))) {
-					$('#errorCategory').dialog("open");
+					$('#errorCategory').popup("open");
 					$('#m').val(msgText);
 					return;
 				}
@@ -270,7 +195,7 @@ e.preventDefault();
 					imgUrl = splitMsg[i];
 				var checkImg = jQuery.ajax({type: "HEAD", url: imgUrl, async: false});
 				if (checkImg.status !== 200) {
-					$('#errorImage').dialog("open");
+					$('#errorImage').popup("open");
 					$('#m').val(msgText);
 					return;
 					}
@@ -294,7 +219,6 @@ e.preventDefault();
 					highest = msgsSave[i].identifier;
 			}
 			highest++;
-			console.log(tags);
 			handleMsg({identifier: highest, user: username, msg: msgText, tags: tags, avatar: image, created: now.toISOString()}, false);
 			msgsSave.unshift({identifier: highest, user: username, msg: msgText, tags: tags, avatar: image, created: now.toISOString()});
 			$('#m').val('');
@@ -321,6 +245,7 @@ socket.on('load history', function(msgs){
 });
 
 socket.on('show tags', function(msgs){
+	$('#searchResultsDiv').empty();
 	for(var i=msgs.length-1; i >= 0; i--){
 		handleMsg(msgs[i], true);
 	}
@@ -338,7 +263,6 @@ socket.on('chat message', function(msg) {
 		notification.onclick = function() {
 			window.open('http://nodejs-phacconnect.rhcloud.com');
 		};
-		self.registration.showNotification(notification);
 	}
 });
 
@@ -427,7 +351,7 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 		
 	var arr = u.split("@");
 	var name = arr[0];
-	var iden = '<div><span onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><div class="msgSpan">';
+	var iden = '<div id="msgTextDiv"><span id="userName" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><div class="msgSpan">';
 	iden = '<img id="avatar" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:50px;width:50px;border-width:2px;border-style:solid;border-color:#333;border-radius:50px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
 	$('#messages' + tag).prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" ' + styleString + '>').html(iden + "</div>"));
 	var splitMsg = userMsg.split(" ");
@@ -464,19 +388,28 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	}
 	htmlMsg = newMsg.join(" ");
 	$('#messages' + tag + ' .messageDivs .msgSpan').first().html(htmlMsg + "<div class='msgImgDiv'>" + imgDiv + "</div>");
-	var share = "<span style='margin-left:10px;'>";
+	var share = "<div id='msgIconDiv'><span style='margin-left:10px;'>";
 	var twitterMsg = userMsg.replace(/#/g, "%23");
 	twitterMsg = twitterMsg.replace(/&/g, "%26");
 	share += "<span id=\"imgSpan\">";
-	if (u === username)
-		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:20px;height:20px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:20px;height:20px;margin-right:4px;cursor:pointer;' src='images/edit.png'/><img class='msgDelete' onclick='msgDelete(this)' title='Click to delete this message.' style='width:20px;height:20px;margin-right:4px;cursor:pointer;' src='images/delete.png'/>";
-	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:20px;height:20px;' src='images/tweet.png'/></a> ";
+	share += "<img id='returnIcon' onclick='reloadReturn()' style='display:none;opacity:0.6;width:40px;height:40px;margin-right:20px;' src='images/return.png'/><img class='msgCheck' onclick='msgEditBlur(this)' style='display:none;width:40px;height:40px;margin-right:20px;' src='images/checkmark.png'/><img onclick='getMsgInfo(this)' style='opacity:0.6;width:auto;height:20px;' src='images/ellipsis.png'/>";
+	share += "</span></span></div>";
+	share += "<div id='msgOptions'>";
+	share += "<div style='margin:5px;text-align:center;'><p>Posted: " + date + "</p><div>";
+	share += "<img onclick='returnMsg(this)' style='opacity:0.6;width:40px;height:40px;margin-right:20px;' src='images/return.png'/>";
+	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='opacity:0.6;width:40px;height:40px;margin-right:20px;' src='images/tweet.png'/></a> ";
 	share += "<a  title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
 	share += userMsg + " - " + u + "(PHAC Connect // " + date + ")";
-	share += "'><img style='width:20px;height:20px;' src='images/mail.png'/></a> ";
-	share += "<img style='width:20px;height:20px;' title='Posted: " + date + "' src='images/time.png'/>";
-	share += "</span></span>";
-	var msg = $('#messages' + tag + ' div').first().html() + share + "</span>";
+	share += "'><img style='opacity:0.6;width:40px;height:40px;' src='images/mail.png'/></a> ";
+	share += "</div></div>";
+	share+= "</div>";
+	share += "<div id='msgDeleteDiv'>";
+	share += "<div style='color:#333;background-color:#f00;margin:-5px;padding:5px;text-align:center;'><p>Delete this message?</p><div>";
+	share += "<img onclick='returnMsg(this)' style='opacity:0.6;width:40px;height:40px;margin-right:20px;' src='images/return.png'/>";
+	share += "<img class='msgDelete' onclick='msgDelete(this)' style='opacity:0.6;width:40px;height:40px;margin-right:20px;' src='images/delete.png'/>"
+	share += "</div></div>";
+	share+= "</div>";	
+	var msg = $('#messages' + tag + ' div').first().html() + share;
 	$('#messages' + tag + ' div').first().html(msg);
 	$('#messages' + tag + ' div').first().show('fast');
 }
@@ -521,8 +454,7 @@ function sendResults(tag, u, av, date, userMsg, combined) {
 		
 	var arr = u.split("@");
 	var name = arr[0];
-	var iden = '<div><span onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><div class="msgSpan">';
-	iden = '<img id="avatar" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:50px;width:50px;border-width:2px;border-style:solid;border-color:#333;border-radius:50px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
+	var iden = '<div><span onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><div class="msgSpan" style="margin-left:0">';
 	$('#searchResultsDiv').prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" ' + styleString + '>').html(iden + "</div>"));
 	var splitMsg = userMsg.split(" ");
 	var newMsg = [];
@@ -554,27 +486,11 @@ function sendResults(tag, u, av, date, userMsg, combined) {
 	}
 	htmlMsg = newMsg.join(" ");
 	$('#searchResultsDiv .messageDivs .msgSpan').first().html(htmlMsg + "<div class='msgImgDiv'>" + imgDiv + "</div>");
-	var share = "<span style='margin-left:10px;'>";
-	var twitterMsg = userMsg.replace(/#/g, "%23");
-	twitterMsg = twitterMsg.replace(/&/g, "%26");
-	share += "<span id=\"imgSpan\">";
-	if (u === username)
-		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:20px;height:20px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:20px;height:20px;margin-right:4px;cursor:pointer;' src='images/edit.png'/>";
-	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect " + date + ")'><img style='width:20px;height:20px;' src='images/tweet.png'/></a> ";
-	share += "<a  title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
-	share += userMsg + " - " + u + " (PHAC Connect " + date + ")";
-	share += "'><img style='width:20px;height:20px;' src='images/mail.png'/></a> ";
-	share += "<img style='width:20px;height:20px;' title='Posted: " + date + "' src='images/time.png'/>";
-	share += "</span></span>";
-	var msg = $('#searchResultsDiv div').first().html() + share + "</span>";
-	$('#searchResultsDiv div').first().html(msg);
 }
 
 function msgEdit(div) {
-	$(div).hide();
-	$(div).parent().find('img').hide();
-	$(div).parent().find('.msgCheck').show();
-	var msgText = $(div).parent().parent().parent().find('.msgSpan').html();
+	checkParents(div);
+	var msgText = $(parentDiv).find('.msgSpan').first().html();
 	var imgText = "";
 	var imgTextReplaceArr = [];
 	if (msgText.indexOf('<div class="msgImgDiv">') != -1) {
@@ -587,21 +503,28 @@ function msgEdit(div) {
 		}
 	}
 	msgText = msgText.replace(/<[^>]*>/g,"");
-	var msgID = $(div).parent().parent().parent().attr('id');
+	var msgID = $(parentDiv).attr('id');
 	var imgTextReplace = "";
 	if (imgTextReplaceArr.length > 0)
 		imgTextReplace = imgTextReplaceArr.join(" ");
 	if (msgText !== "" && imgTextReplace !== "")
 		imgTextReplace = " " + imgTextReplace;
-	var editText = "<input class='editingMsg' onblur='msgEditBlur(this)' type='textbox' value='" + msgText + imgTextReplace + "'/>";
-	$(div).parent().parent().parent().find('.msgSpan').html(editText);
-	$(div).parent().parent().parent().find('.editingMsg').focus();
+	$(parentDiv).find('.msgCheck').show();
+	$(parentDiv).find('#returnIcon').show();
+	var editText = "<input class='editingMsg' type='textbox' value='" + msgText + imgTextReplace + "'/>";
+	$(parentDiv).find('.msgSpan').html(editText);
+	$(parentDiv).find('#msgIconDiv').css("height", "50px");
+	$(parentDiv).find('#msgIconDiv').css("padding-top", "5px");
 }
 
 
 
 function msgEditBlur(div) {
-	var msgText = $(div).val();
+	checkParents(div);
+	$(parentDiv).find('.msgCheck').hide();
+	$(parentDiv).find('#msgIconDiv').css("height", "");
+	$(parentDiv).find('#msgIconDiv').css("padding-top", "");
+	var msgText = $(parentDiv).find('.editingMsg').val();
 	msgText = msgText.replace(/<[^>]*>/g,"");
 	var splitMsg = msgText.split(" ");
 	var newMsg = [];
@@ -633,9 +556,7 @@ function msgEditBlur(div) {
 			newMsg.push(splitMsg[i]);
 	}
 	var htmlMsg = newMsg.join(" ");
-	$(div).parent().parent().parent().find('img').show();
-	$(div).parent().parent().parent().find('.msgCheck').hide();
-	var msgID = $(div).parent().parent().parent().attr('id');
+	var msgID = $(parentDiv).attr('id');
 	if (msgText !== "") {
 		socket.emit('edit message', msgID, msgText);
 		$('.' + msgID).each(function() {
@@ -660,15 +581,11 @@ function msgEditBlur(div) {
 }
 
 function msgDelete(div) {
-	currentDiv = div;
-	$('#confirmDelete').dialog("open");
-}
-
-function msgDeleteConfirm() {
+	checkParents(div);
 	var delAll = true;
 	var type = "";
-	var msgID = $(currentDiv).parent().parent().parent().attr('id');
-	var color = $(currentDiv).parent().parent().parent().attr('style');
+	var msgID = $(parentDiv).attr('id');
+	var color = $(parentDiv).attr('style');
 	color = color.slice(-15);
 	color = color.slice(0,-2);
 	switch (color) {
@@ -694,7 +611,7 @@ function msgDeleteConfirm() {
 		socket.emit('delete message', msgID);
 	}
 	else {
-		$(currentDiv).parent().parent().parent().hide('fast');
+		$(parentDiv).hide('fast');
 		var newTags = [];
 		for(var i=msgsSave.length-1; i >= 0; i--) {
 			if (msgsSave[i].identifier == parseInt(msgID)) {
@@ -705,7 +622,6 @@ function msgDeleteConfirm() {
 				}
 			}
 		}
-		console.log(newTags);
 		socket.emit('remove tag', msgID, newTags);
 		delAll = false;
 	}
@@ -742,11 +658,11 @@ function messageStyle() {
 }
 
 $('#profileIcon').click(function() {
-	$('#dialog').dialog("close");
+	$('#dialog').popup("close");
 	$('#personalImg').attr('src', image);
 	$('#personalOptions').html('<br/><br/><a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
 	$('#personalEmail').html('<a href="mailto:' + username + '">' + username + '</a>');
-	$('#personalInfo').dialog("open");
+	$('#personalInfo').popup("open");
 });
 
 function reload() {
@@ -754,30 +670,41 @@ function reload() {
 	location.reload();
 }
 
+function reloadReturn() {
+	$('#messagesALL').empty();
+	$('#messagesA').empty();
+	$('#messagesHR').empty();
+	$('#messagesPH').empty();
+
+	for(var i=msgsSave.length-1; i >= 0; i--){
+		handleMsg(msgsSave[i], false);
+	}
+}
+
 function showInfo(email,image) {
 	ga('send', 'event', 'Show Info', email);
 	if (email === username) {
-		$('#dialog').dialog("close");
+		$('#dialog').popup("close");
 		$('#personalImg').attr('src', image);
 		$('#personalOptions').html('<br/><br/><a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
 		$('#personalEmail').html('<a href="mailto:' + username + '">' + username + '</a>');
-		$('#personalInfo').dialog("open");
+		$('#personalInfo').popup("open");
 	}
 	else {
-	$('#personalInfo').dialog("close");
+	$('#personalInfo').popup("close");
 	$('#userImg').attr('src', image);
 	$('#userOptions').html('');
 	$('#userEmail').html('<a href="mailto:' + email + '">' + email + '</a>');
-	$('#dialog').dialog("open");
+	$('#dialog').popup("open");
 	}
 }
 
 function searchResults(text) {
 	ga('send', 'event', 'Search tags');
 	socket.emit('search tags', text);
-	$('#personalInfo').dialog("close");
-	$('#dialog').dialog("close");
-	$('#searchResults').dialog("open");
+	$('#personalInfo').popup("close");
+	$('#dialog').popup("close");
+	$('#searchResults').popup("open");
 
 }
 

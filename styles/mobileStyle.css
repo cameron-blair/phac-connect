@@ -17,7 +17,7 @@ a:active {
 }
 body {
     color: #333;
-    margin-top: 110px;
+	background-color: #333;
 }
 fieldset {
     color: #fff;
@@ -28,8 +28,6 @@ fieldset {
 form {
     background-color: #333;
     padding-bottom: 0px;
-    position: fixed;
-    top: 50px;
     width: 100%;
 	padding-bottom: 5px;
 }
@@ -70,37 +68,53 @@ ul {
     font-size: .6em;
 }
 #banner {
-    z-index: 1;
     color: #fff;
     background-color: #333;
-    position: fixed;
-    top: 0;
     width: 100%;
     height: 50px;
 }
 #banner button {
     height: 35px;
     display: none;
+	color: #333;
+	width: 60px;
 }
 #btnControl {
-    width: 100px;
 	float: right;
 	margin-right: 5px;
+}
+#btnControl, #tags {
+margin-bottom: .5em;
+margin-left: .5em;
+margin-right: .5em;
 }
 #btnSubmit {
     color: #333;
     height: 45px;
-    margin-top: 5px;
 }
 #btnSubmit::-moz-focus-inner {
     border: 0;
     padding: 0;
 }
+#btnSubmit:active {
+	background-color: #bbb;
+}
+#btnSubmit {
+	border-radius: 10px;
+	border: 0;
+	font-weight: bold;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+#commandDiv {
+}
 #control {
+	background-color: #333;
 	width: 100%;
 }
-#dialog, #personalInfo, #errorCategory, #errorImage, #confirmDelete {
-    display: none;
+#dialog, #personalInfo, #errorCategory, #errorImage, #confirmDelete , #searchResults {
+	padding: 5px;
+	width: 100%;
 }
 #legend {
     background-color: #333;
@@ -121,6 +135,8 @@ ul {
 #messagesALL {
     font-size: 1.2em;
     width: 100% !important;
+	overflow: scroll;
+	background-color: #fff !important;
 }
 #messageStyle {
 	width: 35px;
@@ -151,11 +167,17 @@ ul {
     width: 130px;
     height: 45px;
 }
-#tags,
 #btnControl {
-    margin-left: 5px;
+	float: right;
+}
+#msgOptions, #msgDeleteDiv {
+	display: none;
+	width:100%;
+	height:100%
 }
 #searchResultsDiv {
+	overflow: scroll;
+	height: 100%;
 }
 #uInfoDiv, #personalInfoDiv {
     padding-top: 10px;
@@ -175,7 +197,7 @@ ul {
 }
 .editingMsg {
 	width: 90%;
-	font-size: 1.2em;
+	font-size: 1em;
 }
 .faded {
     opacity: 0.25;
@@ -208,12 +230,10 @@ ul {
 	margin-top:5px;
 }
 .msgSpan {
-	margin-left: 36px;
+	margin-left: 55px;
 }
-.overlay {
-	background-color: black !important;
-	background-image: none !important;
-	opacity: 0.8 !important;
+.ui-mobile-viewport, .ui-overlay-a, .ui-page, .ui-page-theme-a, .ui-page-active {
+	background-color: #333 !important;
 }
 .slimScrollDiv {
     float: left;
@@ -230,4 +250,10 @@ ul {
 }
 .a0-footer {
 	display: none !important;
+}
+@media screen and (max-width: 350px) {
+	#bannerContainer {
+		overflow: hidden;
+		width:60px;
+	}
 }

@@ -384,10 +384,27 @@ socket.on('chat message', function(msg) {
 	handleMsg(msg, false);
 	if (Notification.permission === 'granted') {
 		var user = msg.user.split("@")[0];
+		var newTags = msg.tags;
+		var catString = "";
+		if (newTags.length > 0) {
+			if (newTags.length === 1)
+				catString += '\nStream: ';
+			else
+				catString += '\nStreams: ';
+			for (var i = 0; i < newTags.length; i++) {
+				if (newTags[i] === "A")
+					newTags[i] = "Announcements";
+				if (newTags[i] === "PH")
+					newTags[i] = "Public Health";
+				if (newTags[i] === "HR")
+					newTags[i] = "Human Resources";
+			}
+			catString += newTags.join(", ");
+		}
 		var notification = new Notification('PHAC Connect',
 			{
 				icon: msg.avatar,
-				body: user + ' has shared a new message!'
+				body: user + ' has shared a new message!' + catString
 			});
 		notification.onclick = function() {
 			window.open('http://nodejs-phacconnect.rhcloud.com');
