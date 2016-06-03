@@ -25,7 +25,7 @@ body {
 }
 fieldset {
     color: #fff;
-    height: 65px;
+    height: 60px;
     border-radius: 5px;
     border: 2px #bbb solid !important;
 }
@@ -50,9 +50,8 @@ legend {
     border-color: #ddd;
 }
 li {
-    line-height: 8px;
-    margin: 4px;
-    vertical-align: middle;
+	display: inline-block;
+	width: auto;
 }
 table {
     left: 0;
@@ -65,11 +64,11 @@ td {
     width: 20%;
 }
 ul {
-    cursor: pointer;
     list-style-type: none;
     margin-left: 10px;
-    padding: 0;
-    font-size: .6em;
+}
+.ui-checkbox {
+	margin: 0 !important;
 }
 #banner {
     color: #fff;
@@ -89,7 +88,6 @@ ul {
 	margin-right: 5px;
 }
 #btnControl, #tags {
-margin-bottom: .5em;
 margin-left: .5em;
 margin-right: .5em;
 }
@@ -105,7 +103,7 @@ margin-right: .5em;
     height: 45px;
 	border-radius: 10px;
 	border: 0;
-	margin-top: 10px;
+	margin-top: 5px;
 	font-weight: bold;
 	padding-left: 10px;
 	padding-right: 10px;
@@ -139,7 +137,7 @@ margin-right: .5em;
 #messagesALL {
     font-size: 1.2em;
     width: 100% !important;
-	overflow: scroll;
+	overflow: auto;
 	background-color: #fff !important;
 }
 #messageStyle {
@@ -168,11 +166,11 @@ margin-right: .5em;
 	margin: 8px 5px 8px 5px;
 }
 #tags {
-	width: 170px;
-    height: 65px;
+	width: 175px;
+    height: 60px;
 }
 #btnControl {
-	height: 65px;
+	height: 60px;
 	float: right;
 }
 #msgOptions, #msgDeleteDiv {
@@ -193,7 +191,7 @@ margin-right: .5em;
     vertical-align: middle;
 }
 .checkboxes {
-    display: none;
+	display: none;
 }
 .deleteButton {
 	color: #fff !important;
@@ -201,7 +199,7 @@ margin-right: .5em;
 	background-image: none !important;
 }
 .editingMsg {
-	width: 90%;
+	width: 80%;
 	font-size: 1em;
 }
 .faded {
@@ -211,13 +209,11 @@ margin-right: .5em;
 	background: none !important;
 	border: none !important;
 }
-.inlineCTRL,
-.inlineIMG {
+.inlineCTRL {
     float: left;
     width: auto;
 }
 .messageDivs {
-    margin: 0;
     padding: 4px 4px;
 }
 .messageStyle {

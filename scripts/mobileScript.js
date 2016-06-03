@@ -4,6 +4,7 @@ var msgsSave = [];
 var all = true;
 var stream = true;
 var filled = true;
+var username = "Guest";
 
 var height = window.innerHeight;
 var width = window.innerWidth;
@@ -12,8 +13,23 @@ $('#searchResults').width(width-(width*.2));
 $('#searchResults').css("max-height", height-(height*.2));
 $('#searchResultsDiv').css("max-height", height-(height*.3));
 
+$(window).on("orientationchange", function() {
+	window.setTimeout(function() {
+	height = window.innerHeight;
+	width = window.innerWidth;
+
+	$('#searchResults').width(width-(width*.2));
+	$('#searchResults').css("max-height", height-(height*.2));
+	$('#searchResultsDiv').css("max-height", height-(height*.3));
+	
+	if (username === "Guest")
+		$('#messagesALL').height(height - 110);
+	else
+		$('#messagesALL').height(height - 188);
+	}, 200);
+});
+
 var parentDiv;
-var username = "Guest";
 
 function checkParents(div) {
 	if (!isNaN($(div).attr('id'))) {
@@ -28,8 +44,10 @@ $('#messagesALL').on('swipeleft', function(e) {
 	var div = e.target;
 	if ($(e.target).attr('id') !== 'messagesALL') {
 		checkParents(div);
+		$(parentDiv).css("margin-bottom", "-8px");
 		if ($(parentDiv).find('#userName').html() === username.split("@")[0]) {
 			$(parentDiv).hide("slide", {direction: "left"}, function () {
+				$(parentDiv).css("margin-bottom", "");
 				$(parentDiv).find('#avatar').hide();
 				$(parentDiv).find('#msgTextDiv').hide();
 				$(parentDiv).find('#msgIconDiv').hide();
@@ -46,9 +64,13 @@ $('#messagesALL').on('swiperight', function(e) {
 	var div = e.target;
 	if ($(e.target).attr('id') !== 'messagesALL') {
 		checkParents(div);
+		$(parentDiv).css("margin-bottom", "-8px");
 		if ($(parentDiv).find('#userName').html() === username.split("@")[0]) {
 			$(parentDiv).hide("slide", {direction: "right"}, function () {
+				$(parentDiv).css("margin-bottom", "");
 				$(parentDiv).find('#msgOptions').hide();
+				$(parentDiv).find('.editingMsg').show();
+				$(parentDiv).find('.msgSpan').hide();
 				msgEdit(div);
 				$(parentDiv).slideToggle();
 			});
@@ -70,6 +92,12 @@ function returnMsg(div) {
 	$(parentDiv).find('#msgDeleteDiv').hide();
 	$(parentDiv).find('#msgEditDiv').hide();
 	$(parentDiv).hide(function() {
+		$(parentDiv).find('#msgIconDiv').css("height", "");
+		$(parentDiv).find('#msgIconDiv').css("padding-top", "");
+		$(parentDiv).find('.msgSpan').show();
+		$(parentDiv).find('.editingMsg').hide();
+		$(parentDiv).find('.msgCheck').hide();
+		$(parentDiv).find('#returnIcon').hide();
 		$(parentDiv).find('#avatar').show();
 		$(parentDiv).find('#msgTextDiv').show();
 		$(parentDiv).find('#msgIconDiv').show();
@@ -86,7 +114,7 @@ $(document).ready(function() {
 	lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
 	var token = localStorage.getItem('userToken');
 	if (token) {
-		$('#messagesALL').height(height-201);
+		$('#messagesALL').height(height-188);
 		lock.getProfile(token, function(err, profile) {
 		if (err) {
 			alert('There was an error');
@@ -120,7 +148,7 @@ var userToken;
 var image = "";
 var uniqueID = "";
 $('#login').click(function(e) {
-	$('#messagesALL').height(height-201);
+	$('#messagesALL').height(height-188);
 	lock.show({
       icon:            'http://i.imgur.com/ppn0iya.png',
       rememberLastLogin:  true
@@ -351,7 +379,7 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 		
 	var arr = u.split("@");
 	var name = arr[0];
-	var iden = '<div id="msgTextDiv"><span id="userName" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><div class="msgSpan">';
+	var iden = '<div id="msgTextDiv"><span id="userName" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="font-weight:bold;cursor:pointer;">' + name + '</span><br/><input class="editingMsg" style="display:none" type="textbox"/><div class="msgSpan">';
 	iden = '<img id="avatar" onclick="showInfo(\'' + u + '\',\'' + av  + '\')" src="' + av + '" style="height:50px;width:50px;border-width:2px;border-style:solid;border-color:#333;border-radius:50px;margin-right:5px;float:left;cursor:pointer;"/>' + iden;
 	$('#messages' + tag).prepend($('<div id="' + uniqueID + '" class="messageDivs ' + uniqueID + '" ' + styleString + '>').html(iden + "</div>"));
 	var splitMsg = userMsg.split(" ");
@@ -392,7 +420,7 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	var twitterMsg = userMsg.replace(/#/g, "%23");
 	twitterMsg = twitterMsg.replace(/&/g, "%26");
 	share += "<span id=\"imgSpan\">";
-	share += "<img id='returnIcon' onclick='reloadReturn()' style='display:none;opacity:0.6;width:40px;height:40px;margin-right:20px;' src='images/return.png'/><img class='msgCheck' onclick='msgEditBlur(this)' style='display:none;width:40px;height:40px;margin-right:20px;' src='images/checkmark.png'/><img onclick='getMsgInfo(this)' style='opacity:0.6;width:auto;height:20px;' src='images/ellipsis.png'/>";
+	share += "<img id='returnIcon' onclick='returnMsg(this)' style='display:none;opacity:0.6;width:40px;height:40px;margin-right:20px;' src='images/return.png'/><img class='msgCheck' onclick='msgEditBlur(this)' style='display:none;width:40px;height:40px;margin-right:20px;' src='images/checkmark.png'/><img onclick='getMsgInfo(this)' style='opacity:0.6;width:auto;height:20px;' src='images/ellipsis.png'/>";
 	share += "</span></span></div>";
 	share += "<div id='msgOptions'>";
 	share += "<div style='margin:5px;text-align:center;'><p>Posted: " + date + "</p><div>";
@@ -511,8 +539,8 @@ function msgEdit(div) {
 		imgTextReplace = " " + imgTextReplace;
 	$(parentDiv).find('.msgCheck').show();
 	$(parentDiv).find('#returnIcon').show();
-	var editText = "<input class='editingMsg' type='textbox' value='" + msgText + imgTextReplace + "'/>";
-	$(parentDiv).find('.msgSpan').html(editText);
+	var editText = msgText + imgTextReplace;
+	$(parentDiv).find('.editingMsg').val(editText);
 	$(parentDiv).find('#msgIconDiv').css("height", "50px");
 	$(parentDiv).find('#msgIconDiv').css("padding-top", "5px");
 }
