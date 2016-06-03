@@ -44,8 +44,8 @@ $('#messagesALL').on('swipeleft', function(e) {
 	var div = e.target;
 	if ($(e.target).attr('id') !== 'messagesALL') {
 		checkParents(div);
-		$(parentDiv).css("margin-bottom", "-8px");
 		if ($(parentDiv).find('#userName').html() === username.split("@")[0]) {
+			$(parentDiv).css("margin-bottom", "-8px");
 			$(parentDiv).hide("slide", {direction: "left"}, function () {
 				$(parentDiv).css("margin-bottom", "");
 				$(parentDiv).find('#avatar').hide();
@@ -64,8 +64,8 @@ $('#messagesALL').on('swiperight', function(e) {
 	var div = e.target;
 	if ($(e.target).attr('id') !== 'messagesALL') {
 		checkParents(div);
-		$(parentDiv).css("margin-bottom", "-8px");
 		if ($(parentDiv).find('#userName').html() === username.split("@")[0]) {
+			$(parentDiv).css("margin-bottom", "-8px");
 			$(parentDiv).hide("slide", {direction: "right"}, function () {
 				$(parentDiv).css("margin-bottom", "");
 				$(parentDiv).find('#msgOptions').hide();
