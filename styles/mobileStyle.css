@@ -25,9 +25,8 @@ body {
 }
 fieldset {
     color: #fff;
-    height: 60px;
     border-radius: 5px;
-    border: 2px #bbb solid !important;
+    border: 2px #fff solid !important;
 }
 form {
     background-color: #333;

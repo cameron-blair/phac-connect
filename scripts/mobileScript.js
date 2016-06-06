@@ -303,7 +303,9 @@ function handleMsg(msg, search) {
 	var tags = msg.tags;
 	var userMsg = msg.msg;
 	var date = msg.created;
-	date = date.substring(0,10) + ", " + date.substring(11,16);
+	var time = date.substring(11,16);
+	time = (parseInt(time.substring(0,2)) - 4) + time.substring(2) + " ET";
+	date = date.substring(0,10) + ", " + time;
 	uniqueID = msg.identifier + "";
 	if (tags.length == 0) {
 		if (!search)
@@ -596,6 +598,9 @@ function msgEditBlur(div) {
 				msgsSave[i].msg = msgText;
 			}
 		}
+		$(parentDiv).find('.editingMsg').val("");
+		$(parentDiv).find('.editingMsg').hide();
+		$(parentDiv).find('.msgSpan').show();
 	}
 	else {
 		$('#messagesALL').empty();
