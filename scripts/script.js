@@ -150,7 +150,6 @@ $(document).ready(function() {
 		open: function () {
 			$('.ui-widget-overlay').addClass('overlay');
 			$('.ui-widget-header').addClass('header');
-			$('.ui-button-text').css('display','none');
 		},
 		close: function () {
 			$('.ui-widget-overlay').removeClass('overlay');
