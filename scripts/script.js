@@ -2,6 +2,8 @@ $('button').button();
 $('#btnSubmit').button();
 $('#banner button').show("fast");
 
+var allowPush = false;
+
 var height = window.innerHeight - 131;
 var width = window.innerWidth;
 $('#msgControl').width((width-250) + 'px');
@@ -80,48 +82,59 @@ $('#tdPH').click(function() {
 	selectStream('PH');
 });
 
+function checkToken() {
+	var address = window.location.href;
+	if (address.indexOf("#") != -1) {
+		address = address.split("#")[1];
+		var token = address.split("=")[1];
+		socket.emit('save token', username, token);
+	}
+}
+
 var lock = null;
 $(document).ready(function() {
 	lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
 	var token = localStorage.getItem('userToken');
 	if (token) {
 		lock.getProfile(token, function(err, profile) {
-		$('h1').html('Yes');
-		if (err) {
-			alert('There was an error');
-			alert(err);
-		} else {
-			$('#control').show('slow');
-			$('#loginMsg').hide('slow');
-			$('#banner button').hide('slow');
-			userToken = token;
-			localStorage.setItem('userToken', token);
-			userProfile = profile;
-			image = profile.picture.toString();
-			$('#profileIcon').attr('src', image);
-			$('#profileIcon').show("slow");
-			username = profile.email;
-			$('#messagesALL').empty();
-			$('#messagesA').empty();
-			$('#messagesHR').empty();
-			$('#messagesPH').empty();
-			for(var i=msgsSave.length-1; i >= 0; i--){
-				handleMsg(msgsSave[i]);
+			if (err) {
+			} else {
+				$('#control').show('slow');
+				$('#loginMsg').hide('slow');
+				$('#banner button').hide('slow');
+				userToken = token;
+				localStorage.setItem('userToken', token);
+				userProfile = profile;
+				image = profile.picture.toString();
+				$('#profileIcon').attr('src', image);
+				$('#profileIcon').show("slow");
+				username = profile.email;
+				$('#messagesALL').empty();
+				$('#messagesA').empty();
+				$('#messagesHR').empty();
+				$('#messagesPH').empty();
+				
+				for(var i=msgsSave.length-1; i >= 0; i--){
+					handleMsg(msgsSave[i]);
+				}
+				
+				socket.emit('check push', username);
 			}
-		}
-	 });
+			
+	checkToken();
+		});
 	}
-	if (Notification.permission !== 'granted')
-		$('#pushNotes').show();
 	$('#dialog').dialog({
 		hide: 'fade',
 		show: 'fade',
+		width: 450,
 		modal: true,
 		draggable: false,
 		resizable: false,
 		open: function () {
 			$('.ui-widget-overlay').addClass('overlay');
 			$('.ui-widget-header').addClass('header');
+			$('.ui-button-text').css('display','none');
 		},
 		close: function () {
 			$('.ui-widget-overlay').removeClass('overlay');
@@ -137,6 +150,7 @@ $(document).ready(function() {
 		open: function () {
 			$('.ui-widget-overlay').addClass('overlay');
 			$('.ui-widget-header').addClass('header');
+			$('.ui-button-text').css('display','none');
 		},
 		close: function () {
 			$('.ui-widget-overlay').removeClass('overlay');
@@ -169,6 +183,7 @@ $(document).ready(function() {
 		open: function () {
 			$('.ui-widget-overlay').addClass('overlay');
 			$('.ui-widget-header').addClass('header');
+			$('.ui-button-text').css('display','none');
 		},
 		close: function () {
 			$('.ui-widget-overlay').removeClass('overlay');
@@ -189,6 +204,7 @@ $(document).ready(function() {
 		open: function () {
 			$('.ui-widget-overlay').addClass('overlay');
 			$('.ui-widget-header').addClass('header');
+			$('.ui-button-text').css('display','none');
 		},
 		close: function () {
 			$('.ui-widget-overlay').removeClass('overlay');
@@ -201,6 +217,7 @@ $(document).ready(function() {
 		}
 	});
 	$('#personalInfo').dialog({
+		width: 450,
 		hide: 'fade',
 		show: 'fade',
 		modal: true,
@@ -209,6 +226,7 @@ $(document).ready(function() {
 		open: function () {
 			$('.ui-widget-overlay').addClass('overlay');
 			$('.ui-widget-header').addClass('header');
+			$('.ui-button-text').css('display','none');
 		},
 		close: function () {
 			$('.ui-widget-overlay').removeClass('overlay');
@@ -227,6 +245,7 @@ $(document).ready(function() {
 		open: function () {
 			$('.ui-widget-overlay').addClass('overlay');
 			$('.ui-widget-header').addClass('header');
+			$('.ui-button-text').css('display','none');
 		},
 		close: function () {
 			$('.ui-widget-overlay').removeClass('overlay');
@@ -255,10 +274,7 @@ $('#login').click(function(e) {
       rememberLastLogin:  true
     });
 	lock.show(function(err, profile, token) {
-		$('h1').html('Yes');
 		if (err) {
-			alert('There was an error');
-			alert(err);
 		} else {
 			$('#control').show('slow');
 			$('#loginMsg').hide('slow');
@@ -277,6 +293,7 @@ $('#login').click(function(e) {
 			for(var i=msgsSave.length-1; i >= 0; i--){
 				handleMsg(msgsSave[i]);
 			}
+			socket.emit('check push', username);
 		}
 	 });
 	 
@@ -362,6 +379,27 @@ e.preventDefault();
 	return false;
 });
 
+function savePushWords() {
+	var words = $('.pushWords');
+	var wordsArr = [];
+	$(words).each(function() {
+		wordsArr.push($(this).text());
+	});
+	socket.emit("save push words", username, wordsArr);
+}
+
+function addWord() {
+	var newWord = $('#pushNoteWords').val();
+	$('#pushNoteWords').val("");
+	$('#notesContent').append('<div class="pushWords" onclick="removeWord(this)">' + newWord + '</div>');
+	savePushWords();
+}
+
+function removeWord(div) {
+	$(div).remove();
+	savePushWords();
+}
+
 socket.on('connect', function() {}).emit('authenticate', {
 	token: userToken
 });
@@ -379,10 +417,21 @@ socket.on('show tags', function(msgs){
 	}
 });
 
+socket.on('allow push', function(){
+	allowPush = true;
+});
+
+socket.on('show push words', function(words){
+	$('#notesContent').html('<input id="pushNoteWords" type="text" placeholder="Enter word to follow" value=""/> <button id="addButton" onclick="addWord()">+</button><br/>');
+	for (var i = 0; i < words.length; i++) {
+		$('#notesContent').append('<div class="pushWords" onclick="removeWord(this)">' + words[i] + '</div>');
+	}
+});
+
 socket.on('chat message', function(msg) {
 	msgsSave.unshift(msg);
 	handleMsg(msg, false);
-	if (Notification.permission === 'granted') {
+	/*if (Notification.permission === 'granted') {
 		var user = msg.user.split("@")[0];
 		var newTags = msg.tags;
 		var catString = "";
@@ -410,7 +459,7 @@ socket.on('chat message', function(msg) {
 			window.open('http://nodejs-phacconnect.rhcloud.com');
 		};
 		self.registration.showNotification(notification);
-	}
+	}*/
 });
 
 function handleMsg(msg, search) {
@@ -537,12 +586,12 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 	twitterMsg = twitterMsg.replace(/&/g, "%26");
 	share += "<span id=\"imgSpan\" style=\"opacity:0\">";
 	if (u === username)
-		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/edit.png'/><img class='msgDelete' onclick='msgDelete(this)' title='Click to delete this message.' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/delete.png'/>";
-	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
+		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:16px;height:16px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:16px;height:16px;margin-right:4px;cursor:pointer;' src='images/edit.png'/><img class='msgDelete' onclick='msgDelete(this)' title='Click to delete this message.' style='width:16px;height:16px;margin-right:4px;cursor:pointer;' src='images/delete.png'/>";
+	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect // " + date + ")'><img style='width:16px;height:16px;' src='images/tweet.png'/></a> ";
 	share += "<a  title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
 	share += userMsg + " - " + u + "(PHAC Connect // " + date + ")";
-	share += "'><img style='width:12px;height:12px;' src='images/mail.png'/></a> ";
-	share += "<img style='width:12px;height:12px;' title='Posted: " + date + "' src='images/time.png'/>";
+	share += "'><img style='width:16px;height:16px;' src='images/mail.png'/></a> ";
+	share += "<img style='width:16px;height:16px;' title='Posted: " + date + "' src='images/time.png'/>";
 	share += "</span></span>";
 	var msg = $('#messages' + tag + ' div').first().html() + share + "</span>";
 	$('#messages' + tag + ' div').first().html(msg);
@@ -627,12 +676,12 @@ function sendResults(tag, u, av, date, userMsg, combined) {
 	twitterMsg = twitterMsg.replace(/&/g, "%26");
 	share += "<span id=\"imgSpan\" style=\"opacity:0\">";
 	if (u === username)
-		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:12px;height:12px;margin-right:4px;cursor:pointer;' src='images/edit.png'/>";
-	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect " + date + ")'><img style='width:12px;height:12px;' src='images/tweet.png'/></a> ";
+		share += "<img class='msgCheck' title='Click to save changes.' style='display:none;width:16px;height:16px;margin-right:4px;cursor:pointer;' src='images/checkmark.png'/><img class='msgEdit' title='Click to edit this message.' onclick='msgEdit(this)' style='width:16px;height:16px;margin-right:4px;cursor:pointer;' src='images/edit.png'/>";
+	share += "<a target='_blank' title ='Share via Twitter' href='https://twitter.com/intent/tweet?&text=" + twitterMsg + " - " + u + " (%40PHAC_Connect " + date + ")'><img style='width:16px;height:16px;' src='images/tweet.png'/></a> ";
 	share += "<a  title='Share via Email' href='mailto:?subject=PHAC Connect&body=";
 	share += userMsg + " - " + u + " (PHAC Connect " + date + ")";
-	share += "'><img style='width:12px;height:12px;' src='images/mail.png'/></a> ";
-	share += "<img style='width:12px;height:12px;' title='Posted: " + date + "' src='images/time.png'/>";
+	share += "'><img style='width:16px;height:16px;' src='images/mail.png'/></a> ";
+	share += "<img style='width:16px;height:16px;' title='Posted: " + date + "' src='images/time.png'/>";
 	share += "</span></span>";
 	var msg = $('#searchResultsDiv div').first().html() + share + "</span>";
 	$('#searchResultsDiv div').first().html(msg);
@@ -913,10 +962,21 @@ function selectStream(context) {
 $('#profileIcon').click(function() {
 	$('#dialog').dialog("close");
 	$('#personalImg').attr('src', image);
-	$('#personalOptions').html('<br/><br/><a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+	if (allowPush) {
+			$('#personalOptions').html('<a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+			notesContent();
+		}
+		else {
+			$('#personalOptions').html('<a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+			$('#notesContent').html('Allow PHAC Connect to send notifications with <a href="https://www.pushbullet.com/authorize?client_id=hNeDLXhFEM02fbzKwQrSBIEKQJcYMpAK&redirect_uri=http%3A%2F%2Fnodejs-phacconnect.rhcloud.com%2F&response_type=token&scope=everything">PushBullet.</a>');
+		}
 	$('#personalEmail').html('<a href="mailto:' + username + '">' + username + '</a>');
 	$('#personalInfo').dialog("open");
 });
+
+function notesContent() {
+	socket.emit('push words', username);
+}
 
 function reload() {
 	localStorage.removeItem('userToken');
@@ -928,7 +988,14 @@ function showInfo(email,image) {
 	if (email === username) {
 		$('#dialog').dialog("close");
 		$('#personalImg').attr('src', image);
-		$('#personalOptions').html('<br/><br/><a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+		if (allowPush) {
+			$('#personalOptions').html('<a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+			notesContent();
+		}
+		else {
+			$('#personalOptions').html('<a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+			$('#notesContent').html('Allow PHAC Connect to send notifications with <a href="https://www.pushbullet.com/authorize?client_id=hNeDLXhFEM02fbzKwQrSBIEKQJcYMpAK&redirect_uri=http%3A%2F%2Fnodejs-phacconnect.rhcloud.com%2F&response_type=token&scope=everything">PushBullet.</a>');
+		}
 		$('#personalEmail').html('<a href="mailto:' + username + '">' + username + '</a>');
 		$('#personalInfo').dialog("open");
 	}
@@ -949,7 +1016,7 @@ function searchResults(text) {
 	$('#searchResults').dialog("open");
 
 }
-
+/*
 function getPermission() {
 	if (!Notification) {
 		alert('Notifications are not compatible with this browser.');
@@ -960,3 +1027,4 @@ function getPermission() {
 		
 	$('#pushNotes').hide('slow');
 }
+*/

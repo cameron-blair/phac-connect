@@ -254,3 +254,32 @@ margin-right: .5em;
 		width:60px;
 	}
 }
+.pushWords {
+	border: 1px solid #1868A7;
+	border-radius: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-top: 5px;
+	margin-right: 5px;
+	display: inline-block;
+	cursor: pointer;
+}
+.pushWords::after {
+	color: #1868A7;
+	content: " -";
+}
+#notesContent {
+	max-height: 110px;
+	overflow-y: scroll;
+}
+#notesContent::-webkit-scrollbar {
+	display: none;
+}
+#addButton {
+	background-color: transparent;
+	border: none;
+	color: #1FCE19;
+	font-weight: bold;
+	font-size: 1.5em;
+	cursor: pointer;
+}

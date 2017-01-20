@@ -4,14 +4,15 @@ var io = require('socket.io').listen(server);
 var socketioJwt = require('socketio-jwt');
 var jwt = require('express-jwt');
 var mongoose = require('mongoose');
+var PushBullet = require('pushbullet');
 
 /* Deployment */
-server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
-mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
+//server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
+//mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
 
 /* Development */
-//server.listen(3001);
-//mongoose.connect('mongodb://localhost/messages');
+server.listen(3001);
+mongoose.connect('mongodb://localhost/messages');
 
 var jwtCheck = jwt({
   secret: new Buffer('HO_BSpKmYZWaYuXRbhuC0zbDUE6dWeMLkdqVTrOzvV8wmMnwBgj8vijMHPBsXVwe', 'base64'),
@@ -28,6 +29,14 @@ var chatSchema = mongoose.Schema({
 	});
 	
 var Chat = mongoose.model('Message', chatSchema);
+
+var userSchema = mongoose.Schema({
+	user: String,
+	pushToken: String,
+	subscriptions: [String]
+	});
+	
+var Users = mongoose.model('User', userSchema);
 
 app.use('/index.html', jwtCheck);
 
@@ -152,8 +161,47 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('load history', msgs);
 	});
 	
+	socket.on('save token', function(username, token){
+		Users.find({"user":username}, function(e,r) {
+			if (r.length > 0) {
+				Users.update({user: username}, {$set:{pushToken:token}}, function(err, result) {
+					if (err) throw err;
+				});
+			}
+			else {
+				var newUser = new Users({user: username, pushToken: token, subscriptions: []});
+				newUser.save(function(err){
+					if(err) throw err;
+				});	
+			}
+			socket.emit('allow push');
+		});
+	});
+	
+	socket.on('check push', function(username){
+		Users.find({"user":username}, function(e,r) {
+			if (r.length > 0) {
+				if (r.pushToken !== "")
+					socket.emit('allow push');
+			}
+		});
+	});
+	
+	socket.on('push words', function(text){
+		var query = Users.find({"user": text}).findOne().exec(function (e, user) {
+		if(e) throw e;
+			socket.emit('show push words', user.subscriptions);
+		});
+	});
+	
+	socket.on('save push words', function(username, pushWords){
+		Users.update({user: username}, {$set:{subscriptions:pushWords}}, function(err, result) {
+			if (err) throw err;
+		});
+	});
+	
 	socket.on('search tags', function(text){
-		var query = Chat.find({"msg": {'$regex': '.*' + text + '.*'}});
+		var query = Chat.find({"msg": {'$regex': new RegExp(text, "i")}});
 			query.sort('-created').limit(250).exec(function(err,msgs) {
 		if(err) throw err;
 		socket.emit('show tags', msgs);
@@ -187,6 +235,7 @@ io.sockets.on('connection', function(socket) {
 				count = msgOne.identifier;
 				count++;
 			}
+			sendPushNotes(msg.user, msg.msg);
 			var newMsg = new Chat({identifier: count, user: msg.user, msg: msg.msg, tags: msg.tags, avatar: msg.avatar, created: msg.created});
 			newMsg.save(function(err){
 				if(err) throw err;
@@ -194,4 +243,25 @@ io.sockets.on('connection', function(socket) {
 			});		
 		});		
 	});
+	
+	function sendPushNotes(user, msg) {
+		Users.find({}, function(e, r) {
+			for (var i = 0; i < r.length; i++) {
+				var match = false;
+				var subs = r[i].subscriptions;
+				for (var j = 0; j < subs.length; j++) {
+					if (msg.indexOf(subs[j]) != -1 && subs[j] !== "")
+						match = true;
+				}
+				if (match && r[i].pushToken !== "" && r[i].user !== user) {
+					var token = r[i].pushToken;
+					var userPush = new PushBullet(token);
+					userPush.devices(function(err, response) {
+						userPush.note({}, "PHAC Connect", user.split("@")[0] + ": " + msg, function(e, r) {
+						});
+					});
+				}
+			}
+		});
+	}
 });

@@ -1,5 +1,7 @@
 $('#banner button').show("fast");
 
+var allowPush = false;
+
 var msgsSave = [];
 var all = true;
 var stream = true;
@@ -46,16 +48,16 @@ $('#messagesALL').on('swipeleft', function(e) {
 		checkParents(div);
 		if ($(parentDiv).find('#userName').html() === username.split("@")[0]) {
 			$(parentDiv).css("margin-bottom", "-8px");
-			$(parentDiv).hide("slide", {direction: "left"}, function () {
+//			$(parentDiv).hide("slide", {direction: "left"}, function () {
 				$(parentDiv).css("margin-bottom", "");
 				$(parentDiv).find('#avatar').hide();
 				$(parentDiv).find('#msgTextDiv').hide();
 				$(parentDiv).find('#msgIconDiv').hide();
 				$(parentDiv).find('#msgOptions').hide();
 				$(parentDiv).find('#msgEditDiv').hide();
-				$(parentDiv).slideToggle();
-				$(parentDiv).find('#msgDeleteDiv').show("fast");
-			});
+//				$(parentDiv).slideToggle();
+				$(parentDiv).find('#msgDeleteDiv').show();
+//			});
 		}
 	}
 });
@@ -66,14 +68,14 @@ $('#messagesALL').on('swiperight', function(e) {
 		checkParents(div);
 		if ($(parentDiv).find('#userName').html() === username.split("@")[0]) {
 			$(parentDiv).css("margin-bottom", "-8px");
-			$(parentDiv).hide("slide", {direction: "right"}, function () {
+//			$(parentDiv).hide("slide", {direction: "right"}, function () {
 				$(parentDiv).css("margin-bottom", "");
 				$(parentDiv).find('#msgOptions').hide();
 				$(parentDiv).find('.editingMsg').show();
 				$(parentDiv).find('.msgSpan').hide();
 				msgEdit(div);
-				$(parentDiv).slideToggle();
-			});
+//				$(parentDiv).slideToggle();
+//			});
 		}
 	}
 });
@@ -83,7 +85,7 @@ function getMsgInfo(div) {
 	$(parentDiv).find('#avatar').hide();
 	$(parentDiv).find('#msgTextDiv').hide();
 	$(parentDiv).find('#msgIconDiv').hide();
-	$(parentDiv).find('#msgOptions').show("fast");
+	$(parentDiv).find('#msgOptions').show();
 }
 
 function returnMsg(div) {
@@ -91,7 +93,7 @@ function returnMsg(div) {
 	$(parentDiv).find('#msgOptions').hide();
 	$(parentDiv).find('#msgDeleteDiv').hide();
 	$(parentDiv).find('#msgEditDiv').hide();
-	$(parentDiv).hide(function() {
+//	$(parentDiv).hide(function() {
 		$(parentDiv).find('#msgIconDiv').css("height", "");
 		$(parentDiv).find('#msgIconDiv').css("padding-top", "");
 		$(parentDiv).find('.msgSpan').show();
@@ -101,13 +103,22 @@ function returnMsg(div) {
 		$(parentDiv).find('#avatar').show();
 		$(parentDiv).find('#msgTextDiv').show();
 		$(parentDiv).find('#msgIconDiv').show();
-		$(parentDiv).show("fast");
-	});
+		$(parentDiv).show();
+//	});
 }
 
 $('#messagesALL').height(height - 110);
 
 $.mobile.loading().hide();
+
+function checkToken() {
+	var address = window.location.href;
+	if (address.indexOf("#") != -1) {
+		address = address.split("#")[1];
+		var token = address.split("=")[1];
+		socket.emit('save token', username, token);
+	}
+}
 
 var lock = null;
 $(document).ready(function() {
@@ -117,8 +128,6 @@ $(document).ready(function() {
 		$('#messagesALL').height(height-188);
 		lock.getProfile(token, function(err, profile) {
 		if (err) {
-			alert('There was an error');
-			alert(err);
 		} else {
 			$('#control').show('slow');
 			$('#loginMsg').hide('slow');
@@ -134,11 +143,11 @@ $(document).ready(function() {
 			for(var i=msgsSave.length-1; i >= 0; i--){
 				handleMsg(msgsSave[i], false);
 			}
+			socket.emit('check push', username);
 		}
+		checkToken();
 	 });
 	}
-	if (Notification.permission !== 'granted')
-		$('#pushNotes').show();
 });
 var userProfile;
 var msgText = "";
@@ -155,8 +164,6 @@ $('#login').click(function(e) {
     });
 	lock.show(function(err, profile, token) {
 		if (err) {
-			alert('There was an error');
-			alert(err);
 		} else {
 			$('#control').show('slow');
 			$('#loginMsg').hide('slow');
@@ -175,6 +182,7 @@ $('#login').click(function(e) {
 			for(var i=msgsSave.length-1; i >= 0; i--){
 				handleMsg(msgsSave[i]);
 			}
+			socket.emit('check push', username);
 		}
 	 });
 	 
@@ -261,6 +269,27 @@ e.preventDefault();
 	return false;
 });
 
+function savePushWords() {
+	var words = $('.pushWords');
+	var wordsArr = [];
+	$(words).each(function() {
+		wordsArr.push($(this).text());
+	});
+	socket.emit("save push words", username, wordsArr);
+}
+
+function addWord() {
+	var newWord = $('#pushNoteWords').val();
+	$('#pushNoteWords').val("");
+	$('#notesContent').append('<div class="pushWords" onclick="removeWord(this)">' + newWord + '</div>');
+	savePushWords();
+}
+
+function removeWord(div) {
+	$(div).remove();
+	savePushWords();
+}
+
 socket.on('connect', function() {}).emit('authenticate', {
 	token: userToken
 });
@@ -273,16 +302,26 @@ socket.on('load history', function(msgs){
 });
 
 socket.on('show tags', function(msgs){
-	$('#searchResultsDiv').empty();
 	for(var i=msgs.length-1; i >= 0; i--){
 		handleMsg(msgs[i], true);
+	}
+});
+
+socket.on('allow push', function(){
+	allowPush = true;
+});
+
+socket.on('show push words', function(words){
+	$('#notesContent').html('<input id="pushNoteWords" type="text" placeholder="Enter word to follow" value=""/> <button id="addButton" onclick="addWord()">+</button><br/>');
+	for (var i = 0; i < words.length; i++) {
+		$('#notesContent').append('<div class="pushWords" onclick="removeWord(this)">' + words[i] + '</div>');
 	}
 });
 
 socket.on('chat message', function(msg) {
 	msgsSave.unshift(msg);
 	handleMsg(msg, false);
-	if (Notification.permission === 'granted') {
+/*	if (Notification.permission === 'granted') {
 		var notification = new Notification('PHAC Connect',
 			{
 				icon: 'http://i.imgur.com/ppn0iya.png',
@@ -292,6 +331,7 @@ socket.on('chat message', function(msg) {
 			window.open('http://nodejs-phacconnect.rhcloud.com');
 		};
 	}
+*/
 });
 
 function handleMsg(msg, search) {
@@ -694,10 +734,21 @@ function messageStyle() {
 $('#profileIcon').click(function() {
 	$('#dialog').popup("close");
 	$('#personalImg').attr('src', image);
-	$('#personalOptions').html('<br/><br/><a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+	if (allowPush) {
+			$('#personalOptions').html('<a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+			notesContent();
+		}
+		else {
+			$('#personalOptions').html('<a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+			$('#notesContent').html('Allow PHAC Connect to send notifications with <a href="https://www.pushbullet.com/authorize?client_id=hNeDLXhFEM02fbzKwQrSBIEKQJcYMpAK&redirect_uri=http%3A%2F%2Fnodejs-phacconnect.rhcloud.com%2F&response_type=token&scope=everything">PushBullet.</a>');
+		}
 	$('#personalEmail').html('<a href="mailto:' + username + '">' + username + '</a>');
 	$('#personalInfo').popup("open");
 });
+
+function notesContent() {
+	socket.emit('push words', username);
+}
 
 function reload() {
 	localStorage.removeItem('userToken');
@@ -720,7 +771,14 @@ function showInfo(email,image) {
 	if (email === username) {
 		$('#dialog').popup("close");
 		$('#personalImg').attr('src', image);
-		$('#personalOptions').html('<br/><br/><a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+		if (allowPush) {
+			$('#personalOptions').html('<a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+			notesContent();
+		}
+		else {
+			$('#personalOptions').html('<a href="http://www.gravatar.com/" target="_blank"><button>Change Picture</button></a>&nbsp;<button onclick="reload()">Logout</button>');
+			$('#notesContent').html('Allow PHAC Connect to send notifications with <a href="https://www.pushbullet.com/authorize?client_id=hNeDLXhFEM02fbzKwQrSBIEKQJcYMpAK&redirect_uri=http%3A%2F%2Fnodejs-phacconnect.rhcloud.com%2F&response_type=token&scope=everything">PushBullet.</a>');
+		}
 		$('#personalEmail').html('<a href="mailto:' + username + '">' + username + '</a>');
 		$('#personalInfo').popup("open");
 	}
@@ -742,6 +800,7 @@ function searchResults(text) {
 
 }
 
+/*
 function getPermission() {
 	if (!Notification) {
 		alert('Notifications are not compatible with this browser.');
@@ -752,3 +811,4 @@ function getPermission() {
 		
 	$('#pushNotes').hide('slow');
 }
+*/

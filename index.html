@@ -10,9 +10,9 @@
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
   //Deploy
-  ga('create', 'UA-78101209-1', 'auto');
+  //ga('create', 'UA-78101209-1', 'auto');
   //Test
-  //ga('create', 'UA-78057570-1', 'auto');
+  ga('create', 'UA-78057570-1', 'auto');
   ga('send', 'pageview');
 
 </script>
@@ -32,7 +32,7 @@
 
 <body>
     <div id="dialog" title="User Info"><img id="userImg" style="float:left;height:200px;width:200px;" />
-        <div id="uInfoDiv" style="clear:both">
+        <div id="uInfoDiv" style="float:left">
             <p><strong>Email: </strong>
             </p><span id="userEmail"></span><span id="userOptions"></span>
         </div>
@@ -47,9 +47,10 @@
             <p>Search terms can only contain letters and numbers.</p>
     </div>
 	<div id="personalInfo" title="My Info"><img id="personalImg" style="float:left;height:200px;width:200px;" />
-        <div id="personalInfoDiv" style="clear:both">
-            <p><strong>Email: </strong>
-            </p><span id="personalEmail"></span><span id="personalOptions"></span>
+        <div id="personalInfoDiv" style="float:left;width:200px">
+		<span id="personalOptions"></span><br/><br/>
+            <strong>Email</strong>: <span id="personalEmail"></span><br/><br/>
+			<strong>Notifications</strong>:<br/><div id="notesContent"></div>
         </div>
     </div>
 	<div id="searchResults" title="Search Results">
@@ -69,7 +70,7 @@
         }(document, "script", "twitter-wjs");
     </script>
     <div id="banner"><span class="centerImg"></span><img src="images/gov.png" width="240px" height="23px" style="margin:5px;vertical-align:middle;" />
-        <button style="float:right;margin:5px;padding-left:5px;padding-right:5px;" id="login">Login</button><img title="Customize your profile." id="profileIcon" style="float:right;margin:3px;" height="40px" width="40px" /><img title="Toggle single column or multiple columns." onclick="rotateColumn()" id="columnSwitch" class="columnSwitch" style="float:right;" src="images/columnSwitch.png" height="30px" width="30px" /><span title="Toggle message style." onclick="messageStyle()" id="messageStyle" class=""></span><img title="Enable push notifications." onclick="getPermission()" id="pushNotes" style="float:right;" src="images/push.png" height="28px" width="28px" />
+        <button style="float:right;margin:5px;padding-left:5px;padding-right:5px;" id="login">Login</button><img title="Customize your profile." id="profileIcon" style="float:right;margin:3px;" height="40px" width="40px" /><img title="Toggle single column or multiple columns." onclick="rotateColumn()" id="columnSwitch" class="columnSwitch" style="float:right;" src="images/columnSwitch.png" height="30px" width="30px" /><span title="Toggle message style." onclick="messageStyle()" id="messageStyle" class=""></span>
     </div>
     <form action="" id="form">
 
