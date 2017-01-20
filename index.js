@@ -7,12 +7,12 @@ var mongoose = require('mongoose');
 var PushBullet = require('pushbullet');
 
 /* Deployment */
-//server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
-//mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
+server.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1');
+mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
 
 /* Development */
-server.listen(3001);
-mongoose.connect('mongodb://localhost/messages');
+//server.listen(3001);
+//mongoose.connect('mongodb://localhost/messages');
 
 var jwtCheck = jwt({
   secret: new Buffer('HO_BSpKmYZWaYuXRbhuC0zbDUE6dWeMLkdqVTrOzvV8wmMnwBgj8vijMHPBsXVwe', 'base64'),
