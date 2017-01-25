@@ -77,6 +77,10 @@ app.get('/images/columnSwitch.png', function(req, res){
    res.sendFile(__dirname + '/images/columnSwitch.png');
 });
 
+app.get('/json/manifest.json', function(req, res){
+   res.sendFile(__dirname + '/json/manifest.json');
+});
+
 app.get('/scripts/script.js', function(req, res){
    res.sendFile(__dirname + '/scripts/script.js');
 });
@@ -116,6 +120,10 @@ app.get('/images/edit.png', function(req, res){
 
 app.get('/images/favicon.ico', function(req, res){
    res.sendFile(__dirname + '/images/favicon.ico');
+});
+
+app.get('/images/mapleleaf.png', function(req, res){
+   res.sendFile(__dirname + '/images/mapleleaf.png');
 });
 
 app.get('/images/tags/hr.png', function(req, res){
