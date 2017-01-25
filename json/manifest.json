@@ -1,0 +1,14 @@
+{
+  "short_name": "PHAC Connect",
+  "name": "PHAC Connect",
+  "icons": [
+    {
+      "src": "../images/mapleleaf.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/mobileIndex.html",
+  "display": "standalone",
+  "orientation": "landscape"
+}
