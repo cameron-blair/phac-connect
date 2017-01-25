@@ -14,8 +14,8 @@ function hideAddressBar()
   }
 }
 
-window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
-window.addEventListener("orientationchange", hideAddressBar );
+//window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
+//window.addEventListener("orientationchange", hideAddressBar );
 
 $('#banner button').show("fast");
 
@@ -35,6 +35,7 @@ $('#searchResults').css("max-height", height-(height*.2));
 $('#searchResultsDiv').css("max-height", height-(height*.3));
 
 $(window).on("orientationchange", function() {
+	setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
 	window.setTimeout(function() {
 	height = window.innerHeight;
 	width = window.innerWidth;
@@ -141,6 +142,7 @@ function checkToken() {
 
 var lock = null;
 $(document).ready(function() {
+	setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
 	lock = new Auth0Lock('TjWERMTxpeB9snWo1rSRjLrEhPNNWziz', 'phacconnect.auth0.com');
 	var token = localStorage.getItem('userToken');
 	if (token) {
