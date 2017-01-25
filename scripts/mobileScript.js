@@ -1,3 +1,22 @@
+// hideAddressBar()
+// Author: mhammonds on GitHub
+// https://gist.github.com/mhammonds/1190492
+
+function hideAddressBar()
+{
+  if(!window.location.hash)
+  {
+      if(document.height < window.outerHeight)
+      {
+          document.body.style.height = (window.outerHeight + 50) + 'px';
+      }
+      setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
+  }
+}
+
+window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
+window.addEventListener("orientationchange", hideAddressBar );
+
 $('#banner button').show("fast");
 
 var allowPush = false;
@@ -433,7 +452,7 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 			splitMsg[i] = "<a style='cursor:pointer;font-weight:bold;' title='Search for category.' onclick='searchResults(\"" + splitMsg[i] + "\")'>" + splitMsg[i] + "</a>";
 		}
 		
-		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+		if (splitMsg[i].indexOf("http") != -1 || splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 			if (splitMsg[i].indexOf("http") != -1) {
 				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height='100%' /></a>";
@@ -531,7 +550,7 @@ function sendResults(tag, u, av, date, userMsg, combined) {
 	var imgDiv = "";
 	for (var i = 0; i < splitMsg.length; i++) {
 
-		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+		if (splitMsg[i].indexOf("http") != -1 || splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 			if (splitMsg[i].indexOf("http") != -1) {
 				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height='100%' /></a>";
@@ -603,7 +622,7 @@ function msgEditBlur(div) {
 	for (var i = 0; i < splitMsg.length; i++) {
 		if (splitMsg[i].charAt(0) === "#")
 			splitMsg[i] = "<a style='cursor:pointer;font-weight:bold;' title='Search for category.' onclick='searchResults(\"" + splitMsg[i] + "\")'>" + splitMsg[i] + "</a>";
-		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+		if (splitMsg[i].indexOf("http") != -1 || splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 			if (splitMsg[i].indexOf("http") != -1) {
 				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height=100%' /></a>";

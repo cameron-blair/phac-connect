@@ -555,7 +555,7 @@ function sendMessage(tag, u, av, date, userMsg, combined) {
 			splitMsg[i] = "<a style='cursor:pointer;font-weight:bold;' title='Search for category.' onclick='searchResults(\"" + splitMsg[i] + "\")'>" + splitMsg[i] + "</a>";
 		}
 		
-		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+		if (splitMsg[i].indexOf("http") != -1 || splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 			if (splitMsg[i].indexOf("http") != -1) {
 				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height='100%' /></a>";
@@ -645,7 +645,7 @@ function sendResults(tag, u, av, date, userMsg, combined) {
 	var imgDiv = "";
 	for (var i = 0; i < splitMsg.length; i++) {
 
-		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+		if (splitMsg[i].indexOf("http") != -1 || splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 			if (splitMsg[i].indexOf("http") != -1) {
 				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height='100%' /></a>";
@@ -725,7 +725,7 @@ function msgEditBlur(div) {
 	for (var i = 0; i < splitMsg.length; i++) {
 		if (splitMsg[i].charAt(0) === "#")
 			splitMsg[i] = "<a style='cursor:pointer;font-weight:bold;' title='Search for category.' onclick='searchResults(\"" + splitMsg[i] + "\")'>" + splitMsg[i] + "</a>";
-		if (splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
+		if (splitMsg[i].indexOf("http") != -1 || splitMsg[i].indexOf("www") != -1 || splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 			if (splitMsg[i].indexOf("http") != -1) {
 				if (splitMsg[i].indexOf('.png') != -1 || splitMsg[i].indexOf('.gif') != -1 || splitMsg[i].indexOf('.jpg') != -1) {
 					imgDiv += "<a class='msgImgLink' href='" + splitMsg[i] + "' target='_blank'><img class='msgImg' src='" + splitMsg[i] + "' width='200px' height=100%' /></a>";
